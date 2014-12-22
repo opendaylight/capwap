@@ -1,0 +1,6 @@
+# UUID                                  	Group Name
+#
+5622f3f913ed9826e3e5fe8c9a873f1e9b4aae27	Non-Interactive capwap users
+global:Anonymous-Users                  	Anonymous Users
+global:Registered-Users                 	Registered Users
+ldap:cn=gerrit-capwap-committers,ou=Groups,dc=opendaylight,dc=org	ldap/gerrit-capwap-committers
