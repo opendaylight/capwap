@@ -1,0 +1,39 @@
+This program and the accompanying materials are made available under the
+terms of the Eclipse Public License v1.0 which accompanies this distribution,
+and is available at http://www.eclipse.org/legal/epl-v10.html
+
+DIRECTORY ORGANIZATION
+======================
+
+common:
+	Common networking concepts, shared between the protocols
+
+parser:
+	capwap packet parser artifact
+
+wtpdiscover:
+	This module is responsible for handling Discover request messages. and also respond with Discover response message. 
+
+dtlsmgr:
+	Its responsibility is to listen for DTLSListen command.
+
+wtpmgr:
+	WTP management thread
+
+parent:
+	TBD
+
+features:
+	TBD
+
+
+HOW TO BUILD
+============
+In order to build it's required to have JDK 1.7+ and Maven 3+, to get
+a build going it's needed to:
+
+1) Go in the root directory and run
+   "mvn clean install"
+
+2) After successful completion, look for org.opendaylight.capwap artifacts
+   in your local maven repository.

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vi: set et smarttab sw=4 tabstop=4: -->
+<!--
+ This program and the accompanying materials are made available under the
+ terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ and is available at http://www.eclipse.org/legal/epl-v10.html
+-->
+<snapshot>
+  <configuration>
+    <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+      <modules xmlns="urn:opendaylight:params:xml:ns:yang:controller:config">
+        <module>
+          <type xmlns:prefix="urn:opendaylight:capwap:dtls-mgr-impl">
+            prefix:dtls-mgr-impl
+          </type>
+          <name>dtls-mgr-impl</name>
+          <capwap-dtlsmgr-config-test-var1>74</capwap-dtlsmgr-config-test-var1>
+          <!-- all possible values for observe-addresses-from (give comma separated values)
+            <observe-addresses-from>arp,ipv,ipv6</observe-addresses-from>-->
+
+          <notification-service>
+            <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">
+              binding:binding-notification-service
+            </type>
+            <name>binding-notification-broker</name>
+          </notification-service>
+          <data-broker>
+            <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-async-data-broker</type>
+            <name>binding-data-broker</name>
+          </data-broker>
+        </module>
+      </modules>
+    </data>
+  </configuration>
+
+  <required-capabilities>
+    <capability>urn:opendaylight:capwap:dtls-mgr-impl?module=dtls-mgr-impl&amp;revision=2014-05-28</capability>
+  </required-capabilities>
+</snapshot>
+

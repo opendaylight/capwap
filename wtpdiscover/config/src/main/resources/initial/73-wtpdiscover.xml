@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vi: set et smarttab sw=4 tabstop=4: -->
+<!--
+ This program and the accompanying materials are made available under the
+ terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ and is available at http://www.eclipse.org/legal/epl-v10.html
+-->
+<snapshot>
+  <configuration>
+    <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+      <modules xmlns="urn:opendaylight:params:xml:ns:yang:controller:config">
+        <module>
+          <type xmlns:prefix="urn:opendaylight:capwap:wtp-discover-impl">
+            prefix:wtp-discover-impl
+          </type>
+          <name>wtp-discover-impl</name>
+          <capwap-wtpdiscover-config-test-var1>73</capwap-wtpdiscover-config-test-var1>
+
+          <notification-service>
+            <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">
+              binding:binding-notification-service
+            </type>
+            <name>binding-notification-broker</name>
+          </notification-service>
+          <data-broker>
+            <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-async-data-broker</type>
+            <name>binding-data-broker</name>
+          </data-broker>
+          <rpc-registry>
+            <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-rpc-registry</type>
+            <name>binding-rpc-broker</name>
+          </rpc-registry>
+        </module>
+      </modules>
+    </data>
+  </configuration>
+
+  <required-capabilities>
+    <capability>urn:opendaylight:capwap:wtp-discover-impl?module=wtp-discover-impl&amp;revision=2014-05-28</capability>
+  </required-capabilities>
+</snapshot>
+

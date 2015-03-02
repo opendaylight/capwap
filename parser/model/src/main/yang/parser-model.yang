@@ -1,0 +1,9 @@
+module parser {
+    yang-version 1;
+    namespace "urn:opendaylight:capwap:parser-model";
+    prefix "parser";
+
+    revision "2015-01-05" {
+        description "Initial revision of parser model";
+    }
+}

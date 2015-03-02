@@ -1,0 +1,35 @@
+module parser-impl {
+    yang-version 1;
+    namespace "urn:opendaylight:capwap:parser-impl";
+    prefix "parser-impl";
+
+    import config { prefix config; revision-date 2013-04-05; }
+    import opendaylight-md-sal-binding { prefix mdsal; revision-date 2013-10-28;}
+
+    description
+        "Service definition for parser project";
+
+    revision "2014-12-10" {
+        description
+            "Initial revision";
+    }
+
+    identity parser {
+        base config:module-type;
+        config:java-name-prefix Parser;
+    }
+
+    augment "/config:modules/config:module/config:configuration" {
+        case parser {
+            when "/config:modules/config:module/config:type = 'parser'";
+            container notification-service {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity mdsal:binding-notification-service;
+                    }
+                }
+            }
+        }
+    }
+}

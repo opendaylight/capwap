@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="capwap-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0">
+  <repository>mvn:org.opendaylight.controller/features-flow/${mdsal.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.controller/features-restconf/${mdsal.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.dlux/features-dlux/${dlux.version}/xml/features</repository>
+  <feature name='odl-capwap-all' description="OpenDaylight :: CAPWAP :: All" version='${project.version}'>
+    <feature version="${project.version}">odl-capwap-accesscontroller</feature>
+  </feature>
+  <feature name='odl-capwap-accesscontroller' description="OpenDaylight :: CAPWAP :: AccessController" version='${project.version}'>
+    <bundle>mvn:org.opendaylight.capwap.common/common-impl/${project.version}</bundle>
+    <configfile finalname="${config.configfile.directory}/${config.common.configfile}">mvn:org.opendaylight.capwap.common/common-config/${project.version}/xml/config</configfile>
+  </feature>
+  <feature name='odl-capwap-accesscontroller-rest' description="OpenDaylight :: CAPWAP :: AccessController" version='${project.version}'>
+    <feature version="${project.version}">odl-capwap-accesscontroller</feature>
+    <feature version="${mdsal.version}">odl-restconf</feature>
+  </feature>
+  <feature name='odl-capwap-accesscontroller-ui' description="OpenDaylight :: CAPWAP :: AccessController" version='${project.version}'>
+    <feature version="${project.version}">odl-capwap-accesscontroller-rest</feature>
+    <feature version="${mdsal.version}">odl-mdsal-apidocs</feature>
+    <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
+    <feature version="${dlux.version}">odl-dlux-core</feature>
+  </feature>
+  <feature name='odl-capwap-common' description="OpenDaylight :: CAPWAP :: Common" version='${project.version}'>
+    <bundle>mvn:org.opendaylight.capwap.common/common-model/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.capwap.common/common-impl/${project.version}</bundle>
+    <configfile finalname="${config.configfile.directory}/${config.common.configfile}">mvn:org.opendaylight.capwap.common/common-config/${project.version}/xml/config</configfile>
+  </feature>
+  <feature name='odl-capwap-parser' description="OpenDaylight :: CAPWAP :: Parser" version='${project.version}'>
+    <bundle>mvn:org.opendaylight.capwap.parser/parser-model/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.capwap.parser/parser-impl/${project.version}</bundle>
+    <configfile finalname="${config.configfile.directory}/${config.parser.configfile}">mvn:org.opendaylight.capwap.parser/parser-config/${project.version}/xml/config</configfile>
+  </feature>
+  <feature name='odl-capwap-wtpdiscover' description="OpenDaylight :: CAPWAP :: Wtpdiscover" version='${project.version}'>
+    <bundle>mvn:org.opendaylight.capwap.wtpdiscover/wtpdiscover-model/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.capwap.wtpdiscover/wtpdiscover-impl/${project.version}</bundle>
+    <configfile finalname="${config.configfile.directory}/${config.wtpdiscover.configfile}">mvn:org.opendaylight.capwap.wtpdiscover/wtpdiscover-config/${project.version}/xml/config</configfile>
+  </feature>
+  <feature name='odl-capwap-dtlsmgr' description="OpenDaylight :: CAPWAP :: DTLSmgr" version='${project.version}'>
+    <bundle>mvn:org.opendaylight.capwap.dtlsmgr/dtlsmgr-model/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.capwap.dtlsmgr/dtlsmgr-impl/${project.version}</bundle>
+    <configfile finalname="${config.configfile.directory}/${config.dtlsmgr.configfile}">mvn:org.opendaylight.capwap.dtlsmgr/dtlsmgr-config/${project.version}/xml/config</configfile>
+  </feature>
+  <feature name='odl-capwap-wtpmgr' description="OpenDaylight :: CAPWAP :: Wtpmgr" version='${project.version}'>
+    <bundle>mvn:org.opendaylight.capwap.wtpmgr/wtpmgr-model/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.capwap.wtpmgr/wtpmgr-impl/${project.version}</bundle>
+    <configfile finalname="${config.configfile.directory}/${config.wtpmgr.configfile}">mvn:org.opendaylight.capwap.wtpmgr/wtpmgr-config/${project.version}/xml/config</configfile>
+  </feature>
+</features>
