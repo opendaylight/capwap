@@ -1,0 +1,76 @@
+module capwap-impl {
+    yang-version 1;
+    namespace "urn:opendaylight:capwap:impl";
+    prefix "capwap-impl";
+
+    import config { prefix config; revision-date 2013-04-05; }
+    import opendaylight-md-sal-binding { prefix mdsal; revision-date 2013-10-28;}
+    import capwap { prefix capwap; revision-date 2015-02-17;}
+
+    description
+        "Service definition for capwap plugin";
+
+    revision "2015-02-17" {
+        description
+            "Initial revision";
+    }
+
+    identity capwap-impl {
+        base config:module-type;
+        config:java-name-prefix CapwapImpl;
+    }
+
+    container capwap-ac-root {
+        uses capwap:capwap-ac;
+        description
+            "CAPWAP AC Root data structure.";
+    }
+
+    augment "/config:modules/config:module/config:configuration" {
+        case capwap-impl {
+            when "/config:modules/config:module/config:type = 'capwap-impl'";
+
+            leaf max-discovered-wtps {
+                type int32;
+                default 100;
+                description "maximum number of WTPs which can be discovered and information maintained";
+            }
+
+            container broker {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity mdsal:binding-broker-osgi-registry;
+                    }
+                }
+            }
+
+            container rpc-registry {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity mdsal:binding-rpc-registry;
+                    }
+                }
+            }
+
+            container notification-service {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity mdsal:binding-notification-service;
+                    }
+                }
+            }
+
+            container data-broker {
+                uses config:service-ref {
+                    refine type {
+                        mandatory false;
+                        config:required-identity mdsal:binding-async-data-broker;
+                    }
+                }
+            }
+        }
+    }
+}

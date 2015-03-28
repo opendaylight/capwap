@@ -1,9 +1,0 @@
-module wtpdiscover {
-    yang-version 1;
-    namespace "urn:opendaylight:capwap:wtpdiscover-model";
-    prefix "wtpdiscover";
-
-    revision "2015-01-05" {
-        description "Initial revision of wtpdiscover model";
-    }
-}

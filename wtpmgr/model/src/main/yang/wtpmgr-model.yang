@@ -1,9 +1,0 @@
-module wtpmgr {
-    yang-version 1;
-    namespace "urn:opendaylight:capwap:wtpmgr-model";
-    prefix "wtpmgr";
-
-    revision "2015-01-05" {
-        description "Initial revision of wtpmgr model";
-    }
-}

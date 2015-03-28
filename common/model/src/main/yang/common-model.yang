@@ -1,9 +1,0 @@
-module common {
-    yang-version 1;
-    namespace "urn:opendaylight:capwap:common-model";
-    prefix "common";
-
-    revision "2015-01-05" {
-        description "Initial revision of common model";
-    }
-}

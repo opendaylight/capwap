@@ -1,0 +1,575 @@
+module capwap {
+    yang-version 1;
+    namespace "urn:opendaylight:capwap:model";
+    prefix "capwap";
+
+    description
+        "This module contains the base data model of a CAPWAP 
+        message types, Protocol messages and data structures maintained by 
+        CAPWAP Access Controller (AC). It rolls up the definitions 
+        contained in RFC5415 and RFC5416.
+
+        This program and the accompanying materials are made available
+        under the terms of the Eclipse Public License v1.0 which
+        accompanies this distribution, and is available at
+        http://www.eclipse.org/legal/epl-v10.html";
+
+    revision "2015-02-17" {
+        description
+            "Initial revision.";
+        reference "RFC5415";
+    }
+
+    typedef capwap-version {
+        type enumeration {
+	    enum "default" {
+	        value 0;
+	    }
+        }
+    }
+
+    typedef vendor-id {
+        type uint32;
+    }
+
+    typedef capwap-pkt-type {
+        description "CAPWAP packet type";
+	type uint8 {
+	    range "0..15";
+	}
+    }
+
+    typedef capwap-control-msg-type {
+        description "Values of CAPWAP Control Message Type";
+	type uint32 {
+	    range "1..26";
+	}
+    }
+
+    typedef capwap-control-msg-element-type {
+        description "Values of CAPWAP Control Message Element Type";
+	type uint16 {
+	    range "1..49";
+	}
+    }
+
+    grouping capwap-preamble {
+        description "Capwap Preamble";
+
+        leaf version {
+            type capwap-version;
+        }
+
+        leaf type {
+            type capwap-pkt-type;
+        }
+    }
+
+    typedef capwap-header-hlen {
+        description "CAPWAP Header HLEN";
+	type uint8 {
+	    range "0..31";
+	}
+    }
+
+    typedef capwap-header-rid {
+        description "CAPWAP Header RID";
+	type uint8 {
+	    range "0..31";
+	}
+    }
+
+    typedef capwap-header-wbid {
+        description "CAPWAP Header WBID";
+	type uint8 {
+	    range "0..31";
+	}
+    }
+
+    typedef capwap-header-flag {
+        description "CAPWAP Header FLAG";
+	type uint8 {
+	    range "0..7";
+	}
+    }
+
+    typedef capwap-header-fragmentoffset {
+        description "CAPWAP Header Fragment Offset";
+	type uint16 {
+	    range "0..8191";
+	}
+    }
+
+    typedef capwap-header-rsvd {
+        description "CAPWAP Header RSVD";
+	type uint8 {
+	    range "0..7";
+	}
+    }
+
+    grouping wireless-specific-info {
+
+        leaf wsi-length {
+            type uint8;
+        }
+
+        leaf wsi-value {
+            type binary;
+        }
+    }
+
+    grouping msg-element-hdr {
+
+        leaf length {
+            type uint8;
+        }
+
+        leaf value {
+            type binary;
+        }
+    }
+
+    grouping radio-mac-addr {
+
+        leaf length {
+            type uint8;
+        }
+
+        leaf value {
+            type binary;
+        }
+    }
+
+    grouping capwap-header {
+        description "Capwap Header";
+
+        uses capwap-preamble;
+
+        leaf hlen {
+	    type capwap-header-hlen;
+	    mandatory true;
+        }
+
+        leaf rid {
+	    type capwap-header-rid;
+	    mandatory true;
+        }
+
+        leaf t-flag {
+            type boolean;
+            description "T Flag";
+	    mandatory true;
+        }
+
+        leaf f-flag {
+            type boolean;
+            description "F Flag";
+	    mandatory true;
+        }
+
+        leaf l-flag {
+            type boolean;
+            description "L Flag";
+	    mandatory true;
+        }
+
+        leaf w-flag {
+            type boolean;
+            description "W Flag";
+	    mandatory true;
+        }
+
+        leaf m-flag {
+            type boolean;
+            description "M Flag";
+	    mandatory true;
+        }
+
+        leaf k-flag {
+            type boolean;
+            description "K Flag";
+	    mandatory true;
+        }
+
+        leaf flag {
+	    type capwap-header-flag;
+	    mandatory true;
+        }
+
+        leaf fragmentid {
+            type uint16;
+            description "Fragment ID";
+	    mandatory true;
+        }
+
+        leaf fo {
+            type capwap-header-fragmentoffset;
+            description "Fragment Offset";
+	    mandatory true;
+        }
+
+        leaf rsvd {
+            type capwap-header-rsvd;
+            description "RSVD";
+	    mandatory true;
+        }
+
+        uses radio-mac-addr;
+
+        uses wireless-specific-info;
+
+        leaf payload {
+	    type binary;
+            description "Payload";
+        }
+
+    }
+
+    grouping capwap-control-header {
+        description "Capwap Control Header";
+
+        leaf message-type {
+	    type uint32;
+        }
+
+        leaf seq-number {
+	    type uint8;
+        }
+
+        leaf msg-elem-length {
+	    type uint16;
+        }
+
+        leaf flags {
+	    type uint8;
+        }
+
+        leaf message-elements {
+	    type binary;
+        }
+    }
+
+    grouping ac-info-sub-element {
+        description "AC Information Sub-element";
+
+        leaf vendorid {
+            type vendor-id;
+        }
+        leaf type {
+            type uint16;
+        }
+        leaf length {
+            type uint16;
+        }
+        leaf data {
+            type binary;
+        }
+    }
+
+    grouping ac-descriptor-dtls-policy {
+        description "AC Descriptor DTLS Policy";
+
+        leaf rsvd {
+            type uint8 {
+	        range "0..31";
+            }
+        }
+
+        leaf D {
+            type boolean;
+        }
+
+        leaf C {
+            type boolean;
+        }
+
+        leaf R {
+            type boolean;
+        }
+    }
+
+    grouping ac-descriptor {
+        description "AC Descriptor";
+
+        uses msg-element-hdr;
+
+        leaf stations {
+            type uint16;
+        }
+
+        leaf limit {
+            type uint16;
+        }
+
+        leaf active-wtp {
+            type uint16;
+        }
+
+        leaf max-wtp {
+            type uint16;
+        }
+
+        leaf security {
+            type uint8;
+        }
+
+        leaf r-mac-field {
+            type uint8;
+        }
+
+        leaf resvd1 {
+            type uint8;
+        }
+
+        uses ac-descriptor-dtls-policy;
+
+        leaf info-sub-elements {
+            type binary;
+        }
+    }
+
+    grouping wtp-board-data-se {
+        description "WTP Board Data Sub-Element";
+
+        leaf type {
+            type uint16 {
+                range "0..4";
+            }
+        }
+
+        leaf length {
+            type uint16 {
+                range "1..1024";
+            }
+        }
+
+        leaf value {
+            type binary;
+        }
+    }
+
+    grouping wtp-board-data {
+        description "WTP Board Data Message Element";
+
+        leaf vendorid {
+            type vendor-id;
+        }
+
+        uses wtp-board-data-se;
+    }
+
+    grouping wtp-descriptor-se {
+        description "WTP Descriptor Sub Element";
+
+        leaf vendorid {
+            type vendor-id;
+        }
+
+        leaf type {
+            type uint16 {
+                range 0..4;
+            }
+        }
+
+        leaf length {
+            type uint16 {
+                range 1..1024;
+            }
+        }
+
+        leaf value {
+            type binary;
+        }
+    }
+
+    grouping wtp-encryption-se {
+        description "WTP Encryption Sub Element";
+
+        leaf resvd {
+            type uint8 {
+                range 0..7;
+            }
+        }
+
+        leaf wbid {
+            type uint8 {
+                range 0..31;
+            }
+        }
+
+        leaf capabilities {
+            type uint16;
+        }
+    }
+
+    grouping wtp-descriptor {
+        description "WTP Descriptor Message Element";
+
+        leaf max-radios {
+            type uint8;
+        }
+
+        leaf radios-in-use {
+            type uint8;
+        }
+
+        leaf num-encrypt {
+            type uint8;
+        }
+
+        uses wtp-encryption-se;
+
+        uses wtp-descriptor-se;
+    }
+
+    grouping wtp-frame-tunnel-mode {
+        description "WTP Frame Tunnel Mode Message Element";
+
+        leaf rsvd {
+            type uint8 {
+                range "0..15";
+            }
+        }
+
+        leaf bit-n {
+            type boolean;
+        }
+
+        leaf bit-e {
+            type boolean;
+        }
+
+        leaf bit-l {
+            type boolean;
+        }
+
+        leaf bit-r {
+            type boolean;
+        }
+    }
+
+    grouping wtp-mac-type {
+        description "WTP MAC Type Message Element";
+
+        leaf mac-type {
+            type uint8 {
+                range "0..2";
+            }
+        }
+    }
+
+    grouping wtp-discovery-type {
+	reference "RFC5415";
+        description "WTP Discovery Type Message Element";
+
+        leaf discovery-type {
+            type uint8 {
+                range 0..4;
+            }
+        }
+    }
+
+    grouping wtp-radio-info {
+	reference "RFC5416";
+        description "802.11 WTP Radio Information Message Element";
+
+        leaf radio-id {
+            type uint8 {
+                range 1..31;
+            }
+        }
+
+        leaf rsvd {
+            type uint8 {
+                range 0..7;
+            }
+        }
+
+        leaf rsvd1 {
+            type uint16;
+        }
+
+        leaf rsvd2 {
+            type uint8;
+        }
+
+        leaf rsvd3 {
+            type uint8 {
+                range 0..15;
+            }
+        }
+
+        leaf type-n {
+            type boolean;
+        }
+
+        leaf type-g {
+            type boolean;
+        }
+
+        leaf type-a {
+            type boolean;
+        }
+
+        leaf type-b {
+            type boolean;
+        }
+    }
+
+    grouping discovered-wtp {
+
+        container board-data {
+            uses wtp-board-data;
+        }
+
+        container descriptor {
+            uses wtp-descriptor;
+        }
+
+        container frame-tunnel-mode {
+            uses wtp-frame-tunnel-mode;
+        }
+
+        container mac-type {
+   	    uses wtp-mac-type;
+        }
+
+        container radio-info {
+       	    uses wtp-radio-info;
+        }
+
+        container discovery-type {
+       	    uses wtp-discovery-type;
+        }
+    }
+
+    grouping capwap-ac {
+        description "CAPWAP Access-Controller Root structure, which holds 
+                     data of all the discovered WTPs. In future this will 
+                     be enhanced to include list of ongoing DTLS sessions, 
+                     established WTP sessions, etc";
+
+        leaf ac-name {
+            config true;
+
+            type string;
+        }
+
+	list discovered-wtps {
+            config false;
+
+            key ipv4-addr;
+
+            leaf ipv4-addr {
+                type string;
+            }
+
+            uses discovered-wtp;
+	}
+    }
+
+    notification new-discovered-wtp {
+        description "Indicates newly discovered wtp.";
+       	uses discovered-wtp;
+    } 
+}

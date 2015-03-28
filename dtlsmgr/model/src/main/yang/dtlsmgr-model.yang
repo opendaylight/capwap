@@ -1,9 +1,0 @@
-module dtlsmgr {
-    yang-version 1;
-    namespace "urn:opendaylight:capwap:dtlsmgr-model";
-    prefix "dtlsmgr";
-
-    revision "2015-01-05" {
-        description "Initial revision of dtlsmgr model";
-    }
-}

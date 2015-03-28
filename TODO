@@ -1,10 +1,18 @@
-1. Features files
- - Features file content needs to be properly thought out
- - Review surely required
-2. Yang Files
- - Started with common (50% complete)
- - Started with Parser (30% complete)
- - Not started with Wtp-Discover
- - Not started with DTLS-Manager
- - Not started with WTP-Manager
-3. No testing done
+1. api directory status
+ .src/main/yang - capwap.yang is complete
+
+2. impl directory status
+ .src/main/yang - capwap-impl.yang is complete.
+ .src/main/config - default-config.xml is complete
+ .src/main/java/org/opendaylight/capwap - ODLCapwapACProvider.java created. content to be filled. TBD
+ .src/main/java/org/opendaylight/yang - this directory path has to get generated and checkedin. Complete. 
+                                      - Generated file has to be updated to call ODLCapwapACProvider. Complete. 
+3. karaf directory status
+ .pom.xml - DONE.
+
+4. artificats directory status
+ .pom.xml - DONE.
+
+5. features directory status
+ .pom.xml - DONE. Nothing pending.
+ .src/main/features/features.xml - DONE.
