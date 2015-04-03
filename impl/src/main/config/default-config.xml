@@ -6,10 +6,7 @@ terms of the Eclipse Public License v1.0 which accompanies this distribution,
 and is available at http://www.eclipse.org/legal/epl-v10.html
 -->
 <snapshot>
-  <required-capabilities>
-  </required-capabilities>
   <configuration>
-
     <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
       <modules xmlns="urn:opendaylight:params:xml:ns:yang:controller:config">
         <module>
@@ -19,8 +16,29 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
            <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-broker-osgi-registry</type>
            <name>binding-osgi-broker</name>
           </broker>
+
+          <notification-service>
+           <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding"> binding:binding-notification-service </type>
+           <name>binding-notification-broker</name>
+          </notification-service>
+
+          <data-broker>
+           <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-async-data-broker</type>
+           <name>binding-data-broker</name>
+          </data-broker>
+
+          <rpc-registry>
+              <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-rpc-registry</type>
+              <name>binding-rpc-broker</name>
+          </rpc-registry>
+
         </module>
       </modules>
     </data>
   </configuration>
+
+  <required-capabilities>
+        <capability>urn:opendaylight:capwap:impl?module=capwap-impl&amp;revision=2015-02-17</capability>
+        <capability>urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding?module=opendaylight-md-sal-binding&amp;revision=2013-10-28</capability>
+  </required-capabilities>
 </snapshot>
