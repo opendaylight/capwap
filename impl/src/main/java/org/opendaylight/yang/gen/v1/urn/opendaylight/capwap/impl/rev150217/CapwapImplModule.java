@@ -24,7 +24,7 @@ public class CapwapImplModule extends org.opendaylight.yang.gen.v1.urn.opendayli
     @Override
     public java.lang.AutoCloseable createInstance() {
         //Below code is manually added
-        ODLCapwapACProvider provider = new ODLCapwapACProvider();
+        ODLCapwapACProvider provider = new ODLCapwapACProvider(getDataBrokerDependency());
         getBrokerDependency().registerProvider(provider);
         return provider;
     }
