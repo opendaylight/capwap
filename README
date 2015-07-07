@@ -5,25 +5,24 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 DIRECTORY ORGANIZATION
 ======================
 
-common:
-	Common networking concepts, shared between the protocols
+api  artifacts  features  impl  karaf
 
-parser:
-	capwap packet parser artifact
+api:
+	This directory contains yang modules for CAPWAP REST APIs
 
-wtpdiscover:
-	This module is responsible for handling Discover request messages. and also respond with Discover response message. 
-
-dtlsmgr:
-	Its responsibility is to listen for DTLSListen command.
-
-wtpmgr:
-	WTP management thread
-
-parent:
+arrtifacts:
 	TBD
 
 features:
+	TBD
+
+impl:
+	This is the directory which contains generated code as well as manually added code.
+
+impl/src/main/java/org/opendaylight/capwap:
+	Manually added code.
+
+karaf:
 	TBD
 
 

@@ -1,18 +1,14 @@
-1. api directory status
- .src/main/yang - capwap.yang is complete
+Be Release TODO List
+====================
 
-2. impl directory status
- .src/main/yang - capwap-impl.yang is complete.
- .src/main/config - default-config.xml is complete
- .src/main/java/org/opendaylight/capwap - ODLCapwapACProvider.java created. content to be filled. TBD
- .src/main/java/org/opendaylight/yang - this directory path has to get generated and checkedin. Complete. 
-                                      - Generated file has to be updated to call ODLCapwapACProvider. Complete. 
-3. karaf directory status
- .pom.xml - DONE.
+Revisit REST API (i.e. yang) (Vaibhav?)
+Yang for CAPWAP protocol messages serialization/de-serialization (This was done in a hardcoded way in Lithium) (Vaibhav?)
+Software Design document (Navin?)
+CAPWAP protocol state machine implementation in JAVA (without DTLS) (Navin?)
+Understand and develop CAPWAP AC Configuration support
+Understand and develop RESTCONF RPC and Notification support in CAPWAP AC
+Develop Java Libray to allow CAPWAP AC update Operational DB as per REST API (Mahesh?)
+Understand and complete Sonar Integration for reporting code coverage 
+Develop CSITs for integration testing utilizing opencapwap
+Manual integration testing with hardware network devices
 
-4. artificats directory status
- .pom.xml - DONE.
-
-5. features directory status
- .pom.xml - DONE. Nothing pending.
- .src/main/features/features.xml - DONE.
