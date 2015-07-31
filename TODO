@@ -1,8 +1,9 @@
 Be Release TODO List
 ====================
 
-Revisit REST API (i.e. yang) (Vaibhav?)
-Yang for CAPWAP protocol messages serialization/de-serialization (This was done in a hardcoded way in Lithium) (Vaibhav?)
+Migrate existing UDP Socket code to use Netty IO (Mahesh?)
+Revisit REST API (i.e. yang)
+Yang for CAPWAP protocol messages serialization/de-serialization (This was done in a hardcoded way in Lithium)
 Software Design document (Navin?)
 CAPWAP protocol state machine implementation in JAVA (without DTLS) (Navin?)
 Understand and develop CAPWAP AC Configuration support
