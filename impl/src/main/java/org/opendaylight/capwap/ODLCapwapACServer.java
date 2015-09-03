@@ -8,62 +8,55 @@
 
 package org.opendaylight.capwap;
 
+import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.DatagramPacket;
+import io.netty.channel.socket.nio.NioDatagramChannel;
+
 import java.net.InetAddress;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.SocketException;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.common.api.data.OptimisticLockFailedException;
-import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
-import org.opendaylight.controller.sal.binding.api.NotificationProviderService;
-
-import org.opendaylight.yangtools.yang.binding.DataObject;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.impl.rev150217.CapwapAcRoot;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtps;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtpsBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtpsKey;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.discovered.wtp.Descriptor;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.discovered.wtp.DescriptorBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.common.RpcError;
-import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
-import org.opendaylight.yangtools.yang.common.RpcError.ErrorType;
-import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.util.concurrent.AsyncFunction;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.SettableFuture;
-
-import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtps;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtpsKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtpsBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.discovered.wtp.Descriptor;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.discovered.wtp.DescriptorBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.impl.rev150217.CapwapAcRoot;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.impl.rev150217.CapwapAcRootBuilder;
 
 
 public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(ODLCapwapACServer.class);
+    
+    private class CapwapPacketHandler extends SimpleChannelInboundHandler<DatagramPacket> {
+        @Override
+        protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket packet) throws Exception {
 
-    private final DatagramSocket socket;
+            final InetAddress srcAddr = packet.sender().getAddress();
+            final ByteBuf buf = packet.content();
+            final int rcvPktLength = buf.readableBytes();
+            final byte[] rcvPktBuf = new byte[rcvPktLength];
+            buf.readBytes(rcvPktBuf);
+
+            rcvPktProcessing(rcvPktBuf, rcvPktLength, srcAddr);
+        }
+    }
+    
     private final int port;
-    private static boolean run_server;
+	private final NioEventLoopGroup group = new NioEventLoopGroup();
 
     private DataBroker dataProvider;
 
@@ -74,8 +67,6 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
 
     public ODLCapwapACServer(DataBroker dataProvider) throws SocketException {
         this.port = 5246;
-        this.socket = new DatagramSocket(port);
-        this.run_server = true;
 	this.dataProvider = dataProvider;
     }
 
@@ -88,25 +79,17 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
     @Override
     public void start() throws Exception {
 
-        byte buffer[] = new byte[2048];
-	byte rcvPktBuf[];
-        int rcvPktLength;
-        InetAddress srcAddr;
-
-        while (run_server) {
-            DatagramPacket data = new DatagramPacket(buffer, buffer.length);
-            socket.receive(data);
-	    rcvPktBuf = data.getData();
-            rcvPktLength = data.getLength();
-	    srcAddr = data.getAddress();
-	    rcvPktProcessing (rcvPktBuf, rcvPktLength, srcAddr);
-        }
-        socket.close();
+        final Bootstrap b = new Bootstrap();
+        b.group(group);
+        b.channel(NioDatagramChannel.class);
+        b.option(ChannelOption.SO_BROADCAST, true);
+        b.handler(new CapwapPacketHandler());
+        b.bind(port).sync().channel().closeFuture().await();
     }
 
     @Override
     public void close() throws Exception {
-        run_server = false;
+		group.shutdownGracefully();
     }
 
     private Descriptor generateWtpDescriptor ( int Index ) {
