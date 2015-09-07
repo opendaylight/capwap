@@ -10,7 +10,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0">
   <repository>mvn:org.opendaylight.yangtools/features-yangtools/${yangtools.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.controller/features-mdsal/${mdsal.version}/xml/features</repository>
-  <repository>mvn:org.opendaylight.controller/features-restconf/${mdsal.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.netconf/features-restconf/${restconf.version}/xml/features</repository>
   <feature name='odl-capwap-api' version='${project.version}' description='OpenDaylight :: CAPWAP :: API '>
     <feature version='${yangtools.version}'>odl-yangtools-models</feature>
     <bundle>mvn:org.opendaylight.capwap/capwap-api/${project.version}</bundle>
@@ -23,6 +23,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
   <feature name='odl-capwap-ac-rest' version='${project.version}' description='OpenDaylight :: CAPWAP :: AccessController :: REST'>
     <feature version="${project.version}">odl-capwap-impl</feature>
-    <feature version="${mdsal.version}">odl-restconf</feature>
+    <feature version="${restconf.version}">odl-restconf</feature>
   </feature>
 </features>
