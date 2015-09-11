@@ -12,12 +12,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.controller/features-mdsal/{{VERSION}}/xml/features</repository>
   <repository>mvn:org.opendaylight.mdsal.model/features-mdsal-model/{{VERSION}}/xml/features</repository>
   <repository>mvn:org.opendaylight.netconf/features-restconf/{{VERSION}}/xml/features</repository>
+  <repository>mvn:org.opendaylight.usc/usc-features/{{VERSION}}/xml/features</repository>
   <feature name='odl-capwap-api' version='${project.version}' description='OpenDaylight :: CAPWAP :: API '>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <bundle>mvn:org.opendaylight.capwap/capwap-api/{{VERSION}}</bundle>
   </feature>
   <feature name='odl-capwap-impl' version='${project.version}' description='OpenDaylight :: CAPWAP :: Impl '>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+    <feature version='${usc.version}'>odl-usc-channel</feature>
     <feature version='${project.version}'>odl-capwap-api</feature>
     <bundle>mvn:org.opendaylight.capwap/capwap-impl/{{VERSION}}</bundle>
     <configfile finalname="default-config.xml">mvn:org.opendaylight.capwap/capwap-impl/{{VERSION}}/xml/config</configfile>

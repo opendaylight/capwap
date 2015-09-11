@@ -10,12 +10,17 @@ package org.opendaylight.capwap;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -23,6 +28,7 @@ import java.net.SocketException;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.usc.manager.UscSecureServiceImpl;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.impl.rev150217.CapwapAcRoot;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtps;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtpsBuilder;
@@ -41,6 +47,12 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(ODLCapwapACServer.class);
     
+    public static enum SecurityType {
+        NONE, DTLS, USC
+    }
+
+    private static final SecurityType security = SecurityType.NONE;
+
     private class CapwapPacketHandler extends SimpleChannelInboundHandler<DatagramPacket> {
         @Override
         protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket packet) throws Exception {
@@ -83,7 +95,20 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
         b.group(group);
         b.channel(NioDatagramChannel.class);
         b.option(ChannelOption.SO_BROADCAST, true);
-        b.handler(new CapwapPacketHandler());
+        b.handler(new ChannelInitializer<NioDatagramChannel>() {
+            @Override
+            public void initChannel(final NioDatagramChannel ch) throws Exception {
+
+                ChannelPipeline p = ch.pipeline();
+                if (security == SecurityType.DTLS) {
+                    p.addLast(new LoggingHandler("CapwapACServer Log 2", LogLevel.TRACE));
+                    ChannelHandler dtlsHandler = UscSecureServiceImpl.getInstance().getUdpServerHandler(ch);
+                    p.addLast(dtlsHandler);
+                }
+                p.addLast(new LoggingHandler("CapwapACServer Log 1", LogLevel.TRACE));
+                p.addLast(new CapwapPacketHandler());
+            }
+        });
         b.bind(port).sync().channel().closeFuture().await();
     }
 
