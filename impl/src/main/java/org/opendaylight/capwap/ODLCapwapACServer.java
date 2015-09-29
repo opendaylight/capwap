@@ -28,7 +28,7 @@ import java.net.SocketException;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.usc.manager.UscSecureServiceImpl;
+import org.opendaylight.usc.plugin.UscPluginUdp;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.impl.rev150217.CapwapAcRoot;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtps;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtpsBuilder;
@@ -102,7 +102,7 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
                 ChannelPipeline p = ch.pipeline();
                 if (security == SecurityType.DTLS) {
                     p.addLast(new LoggingHandler("CapwapACServer Log 2", LogLevel.TRACE));
-                    ChannelHandler dtlsHandler = UscSecureServiceImpl.getInstance().getUdpServerHandler(ch);
+                    ChannelHandler dtlsHandler = UscPluginUdp.getSecureServerHandler(ch);
                     p.addLast(dtlsHandler);
                 }
                 p.addLast(new LoggingHandler("CapwapACServer Log 1", LogLevel.TRACE));
