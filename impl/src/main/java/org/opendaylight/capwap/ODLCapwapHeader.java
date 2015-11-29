@@ -8,7 +8,7 @@
 
 package org.opendaylight.capwap;
 
-import java.nio.ByteBuffer;
+import io.netty.buffer.ByteBuf;
 
 import org.opendaylight.capwap.ODLCapwapConsts;
 
@@ -43,39 +43,52 @@ public class ODLCapwapHeader {
     }
 
     /**This method decodes the network bytes into capwap header format.
-     * @param msg : Byte array of packets received from network
-     * @return : 0 for success, !=0 for failure
+     * @param bbuf : ByteBuf of packets received from network
+     * @return : true for success, false for failure
      */
-    public int decodeHeader(byte [] msg) {
-        preamble = msg[0];
+    public boolean decodeHeader(ByteBuf bbuf) {
+        int pktlen = bbuf.readableBytes();
+        
+        if ( pktlen < ODLCapwapConsts.ODL_CAPWAP_MIN_HDRLEN) {
+            System.out.println("Invalid packet recieved. Length " + pktlen);
+            return false;
+        }
 
+        preamble = bbuf.readByte();
+
+        byte b;
         /* Header length - Most significant 5bits*4 */
-        hlen = (byte)(((msg[1] >> 3) & 0x1F) << 2); 
-        if (hlen >= msg.length) {
-            System.out.println("Invalid packet hlen " + hlen + " more than packet length " + msg.length);
-            return 1;
+        b = bbuf.readByte(); /* Read second byte */
+        hlen = (byte)(((b >> 3) & 0x1F) << 2); 
+        if (hlen >= pktlen) {
+            System.out.println("Invalid packet hlen " + hlen + " more than packet length " + pktlen);
+            return false;
         }
         
+        byte bnext;
+        bnext = bbuf.readByte(); /* Read third byte */
         /* Lower order 3bits from byte2 and higher 2 bits from byte3 */
-        rid = (byte)(((msg[1] & 0x07) << 2) | ((msg[2] >> 6) & 0x03)); 
+        rid = (byte)(((b & 0x07) << 2) | ((bnext >> 6) & 0x03)); 
         /* Lower order 5 bits from byte 3 */
-        wbid = (byte)((msg[2] & 0x3E) >> 1); 
+        wbid = (byte)((bnext & 0x3E) >> 1);
+        
+        b = bnext;
+        bnext = bbuf.readByte(); /* Read 4th byte */
         /* Lower 1 bit from byte3 and higher 5bits from byte 4*/
-        flagBits = (byte)(((msg[2] & 0x01) << 5) | ((msg[3] & 0xF8) >> 3)); 
+        flagBits = (byte)(((b & 0x01) << 5) | ((bnext & 0xF8) >> 3)); 
 
         if (isSetTbit() && (wbid != ODLCapwapConsts.ODL_CAPWAP_WBID_80211)) {
             System.out.println("Invalid WBID " + wbid);
-            return 1;
+            return false;
         }
 
         this.resvFlags = 0;
 
-        ByteBuffer msgbuf = ByteBuffer.wrap(msg);
         /* Retrieves bytes 5 & 6 */
-        fragId = msgbuf.getShort(4); 
+        fragId = bbuf.readShort(); 
 
         /* Retrieves bytes 7 & 8 */
-        int tmpOffset = msgbuf.getShort();
+        int tmpOffset = bbuf.readShort();
         /*Higher order 13 bits */
         fragOffset = (short)(tmpOffset >> 3); 
 
@@ -88,13 +101,19 @@ public class ODLCapwapHeader {
             /* TODO : Handle WSI */ 
         }
 
-        return 0;
+        return true;
     }
 
     /**Method converts Capwap header encoder into byte array.
-     * @return byte[]: Byte array for sending over network
+     * @return true: success, false: failure
      */
-    public byte[] encodeHeader() {
+    public boolean encodeHeader(ByteBuf bbuf) {
+        if (bbuf.writableBytes() < ODLCapwapConsts.ODL_CAPWAP_MIN_HDRLEN) {
+            System.out.println("Byte Buffer do not have capacity to write " 
+                          + ODLCapwapConsts.ODL_CAPWAP_MIN_HDRLEN + " bytes");
+            return false;
+        }
+
         byte[] hdrbytes = new byte[ODLCapwapConsts.ODL_CAPWAP_MIN_HDRLEN];
         hdrbytes[0] = preamble;
         /* Converting the header len value */
@@ -118,7 +137,10 @@ public class ODLCapwapHeader {
         /* Least significant 5 bits (higher 5 bits of byte 8) */
         hdrbytes[7] = (byte)((fragOffset & 0x1F) << 3); 
 
-        return hdrbytes;
+        bbuf.resetWriterIndex();
+        bbuf.writeBytes(hdrbytes);
+        
+        return true;
     }
 
 
@@ -192,7 +214,7 @@ public class ODLCapwapHeader {
 
 
     /**Method checks and return Kbit(Keep Alive) status.
-     * @return: Boolean true if set else false
+     * @return: Boolean true if set else false.
      */
     public boolean isSetKbit() {
         return ((flagBits & 0x01) == 1);
@@ -202,5 +224,102 @@ public class ODLCapwapHeader {
      */
     public void setKbit() {
         flagBits |= 0x01;
+    }
+
+    /**Method sets flagBits.
+     */
+    public void setFlagBits(byte flagBits) {
+        this.flagBits = flagBits;
+    }
+    
+    /**Method sets Reserved Flags.
+     */
+    public void setResvFlags(byte resvFlags) {
+        this.resvFlags = resvFlags;
+    }
+    
+    /**Method to get capwap preamble.
+     * @return: capwap preamble.
+     */
+    public byte getPreamble() {
+        return preamble;
+    }
+    
+    /**Sets the preamble.
+     * @param preamble : Capwap preamble.
+     */
+    
+    public void setPreamble(byte preamble) {
+        this.preamble = preamble;
+    }
+    
+    /**Method to get hlen.
+     * @return: capwap header length
+     */
+    public int getHlen() {
+        return hlen;
+    }
+    
+    /**Sets the header length.
+     * @param hlen : Capwap header length
+     */
+    public void setHlen(int hlen) {
+        this.hlen = (byte)hlen;
+    }
+    
+    /**Method to get Radio ID.
+     * @return rid: Radio ID
+     */
+    public int getRid() {
+        return this.rid;
+    }
+    
+    /**Sets the Radio ID.
+     * @param rid : Raido ID
+     */
+    public void setRid(int rid) {
+        this.rid = (byte)rid;
+    }
+    
+    /**Method to get Wireless binding identifier.
+     * @return wbid: Wireless binding identifier
+     */
+    public int getWbid() {
+        return this.wbid;
+    }
+    
+    /**Sets the Wireless binding identifier.
+     * @param wbid : Wireless binding identifier
+     */
+    public void setWbid(int wbid) {
+        this.wbid = (byte)wbid;
+    }
+    
+    /**Method to get Fragment ID.
+     * @return fragId: Fragment ID
+     */
+    public int getFragId() {
+        return this.fragId;
+    }
+    
+    /**Sets the Fragment ID.
+     * @param fragId : Fragment Identifier
+     */
+    public void setFragId(int fragId) {
+        this.fragId = (byte)fragId;
+    }
+    
+    /**Method to get Fragment Offset.
+     * @return fragOffset: Fragment Offset
+     */
+    public int getFragOffset() {
+        return this.fragOffset;
+    }
+    
+    /**Sets the Fragment Offset.
+     * @param fragOffset : Fragment Offset
+     */
+    public void setFragOffset(int fragOffset) {
+        this.fragOffset = (byte)fragOffset;
     }
 }
