@@ -51,7 +51,7 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
         NONE, DTLS, USC
     }
 
-    private static final SecurityType security = SecurityType.NONE;
+    private static final SecurityType security = SecurityType.DTLS;
 
     private class CapwapPacketHandler extends SimpleChannelInboundHandler<DatagramPacket> {
         @Override
