@@ -28,5 +28,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>karaf</module>
     <module>features</module>
     <module>artifacts</module>
+    <module>test</module>
   </modules>
 </project>
