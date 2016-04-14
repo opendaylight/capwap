@@ -13,7 +13,8 @@ import io.netty.buffer.ByteBuf;
 import org.opendaylight.capwap.ODLCapwapConsts;
 
 public class ODLCapwapHeader {
-    private byte preamble;
+    private byte version;
+    private byte type;
     private byte hlen;
     private byte rid;
     private byte wbid;
@@ -32,7 +33,8 @@ public class ODLCapwapHeader {
     /**Capwap default constructor.
      */
     ODLCapwapHeader() {
-        preamble = 0;
+        version = 0;
+        type = 0;
         hlen = 0;
         rid = 0;
         wbid = 0;
@@ -48,6 +50,7 @@ public class ODLCapwapHeader {
      */
     public boolean decodeHeader(ByteBuf bbuf) {
         int pktlen = bbuf.readableBytes();
+        byte preamble;
         
         if ( pktlen < ODLCapwapConsts.ODL_CAPWAP_MIN_HDRLEN) {
             System.out.println("Invalid packet recieved. Length " + pktlen);
@@ -55,12 +58,14 @@ public class ODLCapwapHeader {
         }
 
         preamble = bbuf.readByte();
+        this.version = (byte)(preamble >>> 4);
+        this.type = (byte)(preamble & 0x0F);
 
         byte b;
         /* Header length - Most significant 5bits*4 */
         b = bbuf.readByte(); /* Read second byte */
-        hlen = (byte)(((b >> 3) & 0x1F) << 2); 
-        if (hlen >= pktlen) {
+        hlen = (byte)(((b >>> 3) & 0x1F) << 2);
+        if (hlen > pktlen) {
             System.out.println("Invalid packet hlen " + hlen + " more than packet length " + pktlen);
             return false;
         }
@@ -68,14 +73,14 @@ public class ODLCapwapHeader {
         byte bnext;
         bnext = bbuf.readByte(); /* Read third byte */
         /* Lower order 3bits from byte2 and higher 2 bits from byte3 */
-        rid = (byte)(((b & 0x07) << 2) | ((bnext >> 6) & 0x03)); 
+        rid = (byte)(((b & 0x07) << 2) | ((bnext >>> 6) & 0x03));
         /* Lower order 5 bits from byte 3 */
-        wbid = (byte)((bnext & 0x3E) >> 1);
+        wbid = (byte)((bnext & 0x3E) >>> 1);
         
         b = bnext;
         bnext = bbuf.readByte(); /* Read 4th byte */
         /* Lower 1 bit from byte3 and higher 5bits from byte 4*/
-        flagBits = (byte)(((b & 0x01) << 5) | ((bnext & 0xF8) >> 3)); 
+        flagBits = (byte)(((b & 0x01) << 5) | ((bnext & 0xF8) >>> 3));
 
         if (isSetTbit() && (wbid != ODLCapwapConsts.ODL_CAPWAP_WBID_80211)) {
             System.out.println("Invalid WBID " + wbid);
@@ -90,7 +95,7 @@ public class ODLCapwapHeader {
         /* Retrieves bytes 7 & 8 */
         int tmpOffset = bbuf.readShort();
         /*Higher order 13 bits */
-        fragOffset = (short)(tmpOffset >> 3); 
+        fragOffset = (short)(tmpOffset >>> 3);
 
         /* TODO - Handle RADIO MAC address and WSI later */
         if (isSetMbit()) {
@@ -115,7 +120,7 @@ public class ODLCapwapHeader {
         }
 
         byte[] hdrbytes = new byte[ODLCapwapConsts.ODL_CAPWAP_MIN_HDRLEN];
-        hdrbytes[0] = preamble;
+        hdrbytes[0] = (byte)((version<<4) | type);
         /* Converting the header len value */
         hdrbytes[1] = (byte)((hlen >> 2) & ODLCapwapConsts.ODL_CAPWAP_HLEN_MASK);
         /* Filling higher 3bits of RID */
@@ -125,19 +130,19 @@ public class ODLCapwapHeader {
         /* WBID - 5 bits - bits 3-7 */
         hdrbytes[2] |= (byte)(wbid & 0x3E); 
         /* Copying the T flag */
-        hdrbytes[2] |= (byte)((flagBits & 0x20) >> 5);
+        hdrbytes[2] |= (byte)((flagBits & 0x20) >>> 5);
         /* Copying other flag bits */
         hdrbytes[3] = (byte)((flagBits & 0x1F) << 3); 
         /* Filling first byte of fragment ID */
-        hdrbytes[4] = (byte)((fragId & 0xFF00) >> 8);
+        hdrbytes[4] = (byte)((fragId & 0xFF00) >>> 8);
         /* Filling the second byte of fragment ID */
         hdrbytes[5] = (byte)(fragId & 0x00FF); 
         /* Most significant 8 bits of 13 bits */
-        hdrbytes[6] = (byte)(((fragOffset) & 0x1FE0) >> 5);
+        hdrbytes[6] = (byte)(((fragOffset) & 0x1FE0) >>> 5);
         /* Least significant 5 bits (higher 5 bits of byte 8) */
         hdrbytes[7] = (byte)((fragOffset & 0x1F) << 3); 
 
-        bbuf.resetWriterIndex();
+        //bbuf.resetWriterIndex();
         bbuf.writeBytes(hdrbytes);
         
         return true;
@@ -238,21 +243,36 @@ public class ODLCapwapHeader {
         this.resvFlags = resvFlags;
     }
     
-    /**Method to get capwap preamble.
-     * @return: capwap preamble.
+    /**Method to get capwap version.
+     * @return: capwap version.
      */
-    public byte getPreamble() {
-        return preamble;
+    public byte getVersion() {
+        return version;
     }
     
     /**Sets the preamble.
-     * @param preamble : Capwap preamble.
+     * @param version : Capwap version.
      */
     
-    public void setPreamble(byte preamble) {
-        this.preamble = preamble;
+    public void setVersion(byte version) {
+        this.version = version;
     }
-    
+
+    /**Method to get capwap type.
+     * @return: capwap type.
+     */
+    public byte getType() {
+        return type;
+    }
+
+    /**Sets the capwap type.
+     * @param type : Capwap type.
+     */
+
+    public void setType(byte type) {
+        this.type = type;
+    }
+
     /**Method to get hlen.
      * @return: capwap header length
      */
@@ -321,5 +341,22 @@ public class ODLCapwapHeader {
      */
     public void setFragOffset(int fragOffset) {
         this.fragOffset = (byte)fragOffset;
+    }
+
+    public void printHeader() {
+        System.out.println("Version="+version);
+        System.out.println("Type="+type);
+        System.out.println("hlen="+hlen);
+        System.out.println("rid="+rid);
+        System.out.println("wbid="+wbid);
+        System.out.println("TFlag="+isSetTbit());
+        System.out.println("FFlag="+isSetFbit());
+        System.out.println("LFlag="+isSetLbit());
+        System.out.println("WFlag="+isSetWbit());
+        System.out.println("MFlag="+isSetMbit());
+        System.out.println("KFlag="+isSetKbit());
+        System.out.println("resvFlags="+resvFlags);
+        System.out.println("FragId="+fragId);
+        System.out.println("FragOffset="+fragOffset);
     }
 }
