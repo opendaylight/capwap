@@ -16,6 +16,7 @@ public class ODLCapwapMessageElement {
     private short type;
     private short length;
     private ByteBuf value;
+
     
     ODLCapwapMessageElement(short type, short length, ByteBuf value) {
         this.type = type;
@@ -39,10 +40,18 @@ public class ODLCapwapMessageElement {
         return value.array();
     }
     
+    public boolean encode(ByteBuf bbuf) {
+        bbuf.writeShort(type);
+        bbuf.writeShort(length);
+        bbuf.writeBytes(value);
+        return true;
+    }
+
     public static ODLCapwapMessageElement decodeFromByteBuf(ByteBuf bbuf) {
         short type, length;
         ByteBuf value;
-        
+
+        /* Read as short is sufficient as the MSB is not expected to be set */
         type = bbuf.readShort();
         length = bbuf.readShort();
         value = bbuf.readBytes(length); // TODO - Add validations

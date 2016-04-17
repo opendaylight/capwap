@@ -15,11 +15,8 @@ import org.opendaylight.capwap.ODLCapwapMessage;
 public class ODLCapwapJoinRequest extends ODLCapwapMessage{
 
     public ODLCapwapJoinRequest(ODLCapwapHeader header, 
-                                ODLCapwapControlMessage ctrlMsg, 
-                                ArrayList<ODLCapwapMessageElement> elements) {
-        this.header = header;
-        this.ctrlMsg = ctrlMsg;
-        this.elements = elements;
+                                ODLCapwapControlMessage ctrlMsg) {
+        super(header, ctrlMsg);
     }
     
     public boolean validate() {

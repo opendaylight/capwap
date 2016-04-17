@@ -59,43 +59,31 @@ public class ODLCapwapMessageFactory {
     }
 */
     public static ODLCapwapMessage createJoinRequestMessage(ODLCapwapHeader header, 
-        ODLCapwapControlMessage ctrlMsg, 
-        ArrayList<ODLCapwapMessageElement> elements) {
-        ODLCapwapMessage msg = new ODLCapwapJoinRequest(header, ctrlMsg, elements);
+        ODLCapwapControlMessage ctrlMsg) {
+        ODLCapwapMessage msg = new ODLCapwapJoinRequest(header, ctrlMsg);
+        if (!msg.validate()) {
+            /* Error logging */
+            return null;
+        }
         return msg;
     }
     
-    public static ODLCapwapMessage createJoinResponseMessage() {
-        
-        return null;
+    public static ODLCapwapMessage createJoinResponseMessage(ODLCapwapHeader header,
+                                                             ODLCapwapControlMessage ctrlMsg) {
+        ODLCapwapMessage msg = new ODLCapwapJoinResponse(header, ctrlMsg);
+        if (!msg.validate()) {
+            /* Error logging */
+            return null;
+        }
+        return msg;
     }
 
-    public static ODLCapwapMessage createJoinResponseMessage(ODLCapwapHeader header, 
-                                                             ODLCapwapControlMessage ctrlMsg, 
-                                                             ArrayList<ODLCapwapMessageElement> elements) {
-        ODLCapwapMessage msg = new ODLCapwapJoinResponse(header, ctrlMsg, elements);
-        return msg;
-    }
-    
-	
-    public static ODLCapwapMessage decodeFromByteArray(byte[] msg) {
-        ByteBuf bbuf = Unpooled.wrappedBuffer(msg);
-	    
-        ODLCapwapHeader header = ODLCapwapHeaderFactory.decodeFromByteBuf(bbuf);
-        ODLCapwapControlMessage ctrlMsg = ODLCapwapControlMessageFactory.decodeFromByteBuf(bbuf);
-        ArrayList<ODLCapwapMessageElement> elements = ODLCapwapMessageElementFactory.decodeFromByteBuf(bbuf);
-	
-        ODLCapwapMessage tmpmsg = null;
-		
-        switch (ctrlMsg.getMessageType()) {
-            case ODLCapwapConsts.ODL_CAPWAP_JOIN_REQUEST:
-	        tmpmsg = createJoinRequestMessage(header, ctrlMsg, elements);
-	        break;
-            case ODLCapwapConsts.ODL_CAPWAP_JOIN_RESPONSE:
-                tmpmsg = createJoinResponseMessage(header, ctrlMsg, elements);
-                break;
-        }	
-		
-        return tmpmsg;
+    public static ODLCapwapMessage decodeFromByteArray(ByteBuf bbuf) {
+        ODLCapwapHeader header = ODLCapwapHeader.decodeHeader(bbuf);
+        header.printHeader();
+        ODLCapwapControlMessage ctrlMsg = ODLCapwapControlMessage.decode(bbuf);
+
+
+        return  new ODLCapwapMessage(header, ctrlMsg);
     }
 }

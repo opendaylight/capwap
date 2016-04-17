@@ -14,14 +14,29 @@ import java.util.Iterator;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-public abstract class ODLCapwapMessage {
-    protected ODLCapwapHeader header;
-    protected ODLCapwapControlMessage ctrlMsg;
-    protected ArrayList<ODLCapwapMessageElement> elements;
-  
+public class ODLCapwapMessage {
+    protected ODLCapwapHeader header= null;
+    protected ODLCapwapControlMessage ctrlMsg = null;
 
-    public boolean encode(ByteBuf bbuf) {
-        return true;
+    public ODLCapwapMessage(ODLCapwapHeader header, ODLCapwapControlMessage ctrlMsg) {
+        this.header = header;
+        this.ctrlMsg = ctrlMsg;
+    }
+    public int encode(ByteBuf bbuf) {
+        int packet_size = 0;
+
+        int hdr_size;
+        if ((hdr_size = header.encodeHeader(bbuf)) < 0) {
+            /* Log error */
+            return -1;
+
+        }
+        if (ctrlMsg != null && ctrlMsg.encode(bbuf)) {
+            /* Log error */
+            return -1;
+        }
+
+        return packet_size;
     }
     
     public int getMessageType() {
@@ -29,15 +44,10 @@ public abstract class ODLCapwapMessage {
     }
     
     public ODLCapwapMessageElement findMessageElement(int elementType) {
-        Iterator<ODLCapwapMessageElement> iter = elements.iterator();
-        while (iter.hasNext()) {
-            ODLCapwapMessageElement element = iter.next();
-            if (element.getType() == elementType) {
-                return element;
-            }
-        }
-        return null;
+        return ctrlMsg.findMessageElement(elementType);
     }
     
-    public abstract boolean validate();
+    public boolean validate() {
+        return true;
+    }
 }

@@ -14,7 +14,10 @@ import io.netty.buffer.ByteBuf;
 
 public class ODLCapwapControlMessageFactory {
     public static ODLCapwapControlMessage decodeFromByteBuf(ByteBuf bbuf) {
+        /*
         ODLCapwapControlMessage ctrlMsg = new ODLCapwapControlMessage(bbuf);
         return ctrlMsg;
+        */
+        return null;
     }
 }

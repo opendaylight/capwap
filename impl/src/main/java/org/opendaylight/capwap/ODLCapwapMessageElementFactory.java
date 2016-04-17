@@ -11,6 +11,7 @@ package org.opendaylight.capwap;
 import java.util.ArrayList;
 
 import io.netty.buffer.ByteBuf;
+import java.util.Iterator;
 
 public class ODLCapwapMessageElementFactory {
     
@@ -31,6 +32,19 @@ public class ODLCapwapMessageElementFactory {
             tmp.add(element);
         }
         return tmp;
+    }
+
+    public static boolean encode(ArrayList<ODLCapwapMessageElement> elements, ByteBuf bbuf) {
+        Iterator<ODLCapwapMessageElement> iter = elements.iterator();
+
+        while (iter.hasNext()) {
+            ODLCapwapMessageElement element = iter.next();
+            if (element != null) {
+                element.encode(bbuf);
+            }
+        }
+
+        return true;
     }
     
     public static ODLCapwapMessageElement createMessageElement(int type, int length, byte [] value) {

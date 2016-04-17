@@ -11,13 +11,9 @@ package org.opendaylight.capwap;
 import java.util.ArrayList;
 
 public class ODLCapwapJoinResponse extends ODLCapwapMessage{
-    
-    public ODLCapwapJoinResponse(ODLCapwapHeader header, 
-        ODLCapwapControlMessage ctrlMsg, 
-        ArrayList<ODLCapwapMessageElement> elements) {
-        this.header = header;
-        this.ctrlMsg = ctrlMsg;
-        this.elements = elements;
+    public ODLCapwapJoinResponse(ODLCapwapHeader header,
+                                ODLCapwapControlMessage ctrlMsg) {
+        super(header, ctrlMsg);
     }
     
     public boolean validate() {

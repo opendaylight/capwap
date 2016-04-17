@@ -1,3 +1,6 @@
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Props;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -20,6 +23,7 @@ public class UdpServer {
 
     public void run() throws Exception {
         final NioEventLoopGroup group = new NioEventLoopGroup();
+        //Create Actor System
         try {
             final Bootstrap b = new Bootstrap();
             b.group(group).channel(NioDatagramChannel.class)

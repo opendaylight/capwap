@@ -95,4 +95,116 @@ public class ODLCapwapConsts {
     public static final int CAPWAP_ELMT_TYPE_WTP_REBOOT_STATS = 48;
     public static final int CAPWAP_ELMT_TYPE_WTP_STATIC_IP_ADDR_INFO = 49;
     /* Capwap Message Element Type Definition - End */
+
+    /*iee 802.11 RFC 5416 binding message elements */
+    public static final int IEEE_80211_ADD_WLAN                              = 1024;
+    public static final int IEEE_80211_ANTENNA                               = 1025;
+    public static final int IEEE_80211_ASSIGNED_WTP_BSSID                    = 1026;
+    public static final int IEEE_80211_DELETE_WLAN                           = 1027;
+    public static final int IEEE_80211_DIRECT_SEQUENCE_CONTROL               = 1028;
+    public static final int IEEE_80211_INFORMATION_ELEMENT                   = 1029;
+    public static final int IEEE_80211_MAC_OPERATION                         = 1030;
+    public static final int IEEE_80211_MIC_COUNTERMEASURES                   = 1031;
+    public static final int IEEE_80211_MULTI_DOMAIN_CAPABILITY               = 1032;
+    public static final int IEEE_80211_OFDM_CONTROL                          = 1033;
+    public static final int IEEE_80211_RATE_SET                              = 1034;
+    public static final int IEEE_80211_RSNA_ERROR_REPORT_FROM_STATION        = 1035;
+    public static final int IEEE_80211_STATION                               = 1036;
+    public static final int IEEE_80211_STATION_QOS_PROFILE                   = 1037;
+    public static final int IEEE_80211_STATION_SESSION_KEY                   = 1038;
+    public static final int IEEE_80211_STATISTICS                            = 1039;
+    public static final int IEEE_8021_SUPPORTED_RATES                        = 1040;
+    public static final int IEEE_80211_TX_POWER                              = 1041;
+    public static final int IEEE_80211_TX_POWER_LEVEL                        = 1042;
+    public static final int IEEE_80211_UPDATE_STATION_QOS                    = 1043;
+    public static final int IEEE_80211_UPDATE_WLAN                           = 1044;
+    public static final int IEEE_80211_WTP_QUALITY_OF_SERVICE                = 1045;
+    public static final int IEEE_80211_WTP_RADIO_CONFIGURATION               = 1046;
+    public static final int IEEE_80211_WTP_RADIO_FAIL_ALARM_INDICATION       = 1047;
+    public static final int IEEE_80211_WTP_RADIO_INFORMATION                 = 1048;
+
+    public static String msgTypetoString(int type){
+
+         if (type == ODL_CAPWAP_DISCOVERY_REQUEST )
+             return "ODL_CAPWAP_DISCOVERY_REQUEST";
+
+         if (type == ODL_CAPWAP_DISCOVERY_RESPONSE)
+             return "ODL_CAPWAP_DISCOVERY_RESPONSE";
+
+         if (type == ODL_CAPWAP_JOIN_REQUEST)
+            return "ODL_CAPWAP_JOIN_REQUEST";
+
+         if ( type ==ODL_CAPWAP_JOIN_RESPONSE)
+            return "ODL_CAPWAP_JOIN_RESPONSE";
+
+        if( type == ODL_CAPWAP_CONFIG_STATUS_REQUEST)
+            return "ODL_CAPWAP_CONFIG_STATUS_REQUEST";
+
+        if( type == ODL_CAPWAP_CONFIG_STATUS_RESPONSE)
+            return "ODL_CAPWAP_CONFIG_STATUS_RESPONSE";
+
+        if( type == ODL_CAPWAP_CONFIG_UPDATE_REQUEST)
+            return "ODL_CAPWAP_CONFIG_UPDATE_REQUEST";
+
+        if( type == ODL_CAPWAP_CONFIG_UPDATE_RESPONSE)
+            return "ODL_CAPWAP_CONFIG_UPDATE_RESPONSE";
+
+        if(type == ODL_CAPWAP_WTP_EVENT_REQUEST)
+            return "ODL_CAPWAP_WTP_EVENT_REQUEST";
+
+        if(type == ODL_CAPWAP_WTP_EVENT_RESPONSE)
+            return "ODL_CAPWAP_WTP_EVENT_RESPONSE";
+
+        if(type == ODL_CAPWAP_CHANGE_STATE_EVENT_REQUEST)
+            return "ODL_CAPWAP_CHANGE_STATE_EVENT_REQUEST";
+
+        if( type == ODL_CAPWAP_CHANGE_STATE_EVENT_RESPONSE)
+            return "ODL_CAPWAP_CHANGE_STATE_EVENT_RESPONSE";
+
+        if(type == ODL_CAPWAP_ECHO_REQUEST)
+            return "ODL_CAPWAP_ECHO_REQUEST";
+
+        if(type == ODL_CAPWAP_ECHO_RESPONSE)
+            return "ODL_CAPWAP_ECHO_RESPONSE";
+
+        if(type == ODL_CAPWAP_IMAGE_DATA_REQUEST)
+            return "ODL_CAPWAP_IMAGE_DATA_REQUEST";
+
+        if(type == ODL_CAPWAP_IMAGE_DATA_RESPONSE)
+            return "ODL_CAPWAP_IMAGE_DATA_RESPONSE";
+
+        if(type == ODL_CAPWAP_RESET_REQUEST)
+            return "ODL_CAPWAP_RESET_REQUEST";
+
+        if(type == ODL_CAPWAP_RESET_RESPONSE)
+            return "ODL_CAPWAP_PRIMARY_DISCOVERY_REQUEST";
+
+        if(type == ODL_CAPWAP_PRIMARY_DISCOVERY_REQUEST)
+            return "ODL_CAPWAP_PRIMARY_DISCOVERY_REQUEST";
+
+        if(type == ODL_CAPWAP_PRIMARY_DISCOVERY_RESPONSE)
+            return "ODL_CAPWAP_PRIMARY_DISCOVERY_RESPONSE";
+
+        if(type == ODL_CAPWAP_DATA_TRANSFER_REQUEST)
+            return "ODL_CAPWAP_DATA_TRANSFER_REQUEST";
+
+        if(type == ODL_CAPWAP_DATA_TRANSFER_RESPONSE)
+            return "ODL_CAPWAP_DATA_TRANSFER_RESPONSE";
+
+        if(type == ODL_CAPWAP_CLEAR_CONFIG_REQUEST)
+            return "ODL_CAPWAP_CLEAR_CONFIG_REQUEST";
+
+        if(type == ODL_CAPWAP_CLEART_CONFG_RESPONSE)
+            return "ODL_CAPWAP_CLEART_CONFG_RESPONSE";
+
+        if(type == ODL_CAPWAP_STATION_CONFIG_REQUEST)
+            return "ODL_CAPWAP_STATION_CONFIG_REQUEST";
+
+        if(type == ODL_CAPWAP_STATION_CONFIG_RESPONSE)
+            return "ODL_CAPWAP_STATION_CONFIG_RESPONSE";
+
+        if(type == ODL_CAPWAP_INVALID_MESSAGE)
+            return "ODL_CAPWAP_INVALID_MESSAGE";
+        return "";
+    }
 }
