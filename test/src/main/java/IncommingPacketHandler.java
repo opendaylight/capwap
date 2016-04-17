@@ -11,7 +11,6 @@ import org.opendaylight.capwap.ODLCapwapConsts;
 import org.opendaylight.capwap.ODLCapwapHeader;
 import org.opendaylight.capwap.ODLCapwapMessage;
 import org.opendaylight.capwap.ODLCapwapMessageFactory;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.CapwapHeader;
 
 import java.net.InetAddress;
 

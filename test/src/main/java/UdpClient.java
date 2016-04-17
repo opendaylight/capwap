@@ -8,7 +8,7 @@ import org.opendaylight.capwap.ODLCapwapConsts;
 import org.opendaylight.capwap.ODLCapwapControlMessageFactory;
 import org.opendaylight.capwap.ODLCapwapHeader;
 import org.opendaylight.capwap.ODLCapwapMessage;
-import org.opendaylight.capwap.utils.CapwapMessageCreator;
+//import org.opendaylight.capwap.utils.CapwapMessageCreator;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
