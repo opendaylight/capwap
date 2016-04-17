@@ -10,25 +10,25 @@ package org.opendaylight.capwap;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
-import java.io.File;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.security.SecureRandom;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.capwap.dtls.DtlsServer;
-import org.opendaylight.capwap.dtls.DtlsServerHandler;
-//import org.opendaylight.usc.plugin.UscPluginUdp;
+import org.opendaylight.usc.plugin.UscPluginUdp;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.impl.rev150217.CapwapAcRoot;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtps;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtpsBuilder;
@@ -51,45 +51,25 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
         NONE, DTLS, USC
     }
 
-    private static final SecurityType security = SecurityType.NONE;
-
-    ChannelOutboundHandler  setHandler(){
-        final SecureRandom secureRandom = new SecureRandom();
-        File privateKeyFile = null;
-        File publicCertChainFile = null;
-        File trustCertChainFile = null;
-        System.out.println("Using the default data to initialize");
-        File rootPath = new File("etc/usc/certificates");
-        privateKeyFile = new File(rootPath, "client.key.pem");
-        publicCertChainFile = new File(rootPath, "client.pem");
-        trustCertChainFile = new File(rootPath, "rootCA.pem");
-        final DtlsServer dtlsServer = new DtlsServer(trustCertChainFile,
-                publicCertChainFile, privateKeyFile);
-        return new DtlsServerHandler(dtlsServer, secureRandom);
-    }
+    private static final SecurityType security = SecurityType.DTLS;
 
     private class CapwapPacketHandler extends SimpleChannelInboundHandler<DatagramPacket> {
         @Override
-        protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket packet) throws Exception {
-
-            InetAddress srcAddr = null;
-            try {
-                 srcAddr = packet.sender().getAddress();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+        protected void channelRead0(ChannelHandlerContext channelHandlerContext, DatagramPacket packet) throws Exception {
+            System.out.println("Received packet from " + packet.sender());
+            final InetAddress srcAddr = packet.sender().getAddress();
             final ByteBuf buf = packet.content();
             final int rcvPktLength = buf.readableBytes();
             final byte[] rcvPktBuf = new byte[rcvPktLength];
             buf.readBytes(rcvPktBuf);
 
-            System.out.println("SimpleChannelInboundHandler!!!!!!!!!!!!!!!!!");
-            rcvPktProcessing(rcvPktBuf, rcvPktLength, srcAddr);
+            rcvPktProcessing(buf, rcvPktLength, srcAddr);
         }
     }
     
     private final int port;
-	private final NioEventLoopGroup group = new NioEventLoopGroup();
+    final Bootstrap b = new Bootstrap();
+    private final NioEventLoopGroup group = new NioEventLoopGroup();
 
     private DataBroker dataProvider;
 
@@ -99,7 +79,7 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
     private InstanceIdentifier<DiscoveredWtps> WTPS_IID;
 
     public ODLCapwapACServer(DataBroker dataProvider) throws SocketException {
-        this.port = 5556;
+        this.port = 5246;
 	this.dataProvider = dataProvider;
     }
 
@@ -112,7 +92,6 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
     @Override
     public void start() throws Exception {
 
-        final Bootstrap b = new Bootstrap();
         b.group(group);
         b.channel(NioDatagramChannel.class);
         b.option(ChannelOption.SO_BROADCAST, true);
@@ -122,12 +101,11 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
 
                 ChannelPipeline p = ch.pipeline();
                 if (security == SecurityType.DTLS) {
-                    p.addLast(new LoggingHandler("CapwapACServer Log 2", LogLevel.TRACE));
-                   //ChannelHandler dtlsHandler = UscPluginUdp.getSecureServerHandler(ch);
-                    ChannelHandler dtlsHandler = setHandler();
+                    //p.addLast(new LoggingHandler("CapwapACServer Log 2", LogLevel.TRACE));
+                    ChannelHandler dtlsHandler = UscPluginUdp.getSecureServerHandler(ch);
                     p.addLast(dtlsHandler);
                 }
-                p.addLast(new LoggingHandler("CapwapACServer Log 1", LogLevel.TRACE));
+                //p.addLast(new LoggingHandler("CapwapACServer Log 1", LogLevel.TRACE));
                 p.addLast(new CapwapPacketHandler());
             }
         });
@@ -175,14 +153,11 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
         } );
     }
 
-    private void rcvPktProcessing ( byte pktBuf[], int pktLength, InetAddress srcAddr ) {
-	byte buf[] = pktBuf;
+    private void rcvPktProcessing (ByteBuf pktBuf, int pktLength, InetAddress srcAddr ) {
 	int index;
 	int hlen;
 
 	System.out.print("rcvPktProcessing, pktLength: " + pktLength + "\n");
-    System.out.printf("Received packet %s" ,new String(buf,0,pktLength));
-
 
 	/* Basic packet validation */
 
@@ -190,16 +165,14 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
 	if (pktLength < 8) return;
 
 	/* Packet length smaller than header length specified in the capwap header */
-	hlen = (buf[1] >> 3) * 4;
+	//hlen = (buf[1] >> 3) * 4;
 	//System.out.print("rcvPktProcessing, hlen: " + hlen + "\n");
-	if (pktLength < hlen) return;
+	//if (pktLength < hlen) return;
 
-    ODLCapwapMessage msg = ODLCapwapMessageFactory.decodeFromByteArray(Unpooled.wrappedBuffer(buf));
+        ODLCapwapMessage msg = ODLCapwapMessageFactory.decodeFromByteArray(pktBuf);
 
 	addWTPEntryInDataStore (srcAddr.getHostAddress(), 0);
 
     }
-
-
 }
 

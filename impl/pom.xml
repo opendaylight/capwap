@@ -86,6 +86,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <artifactId>features-netconf-connector</artifactId>
       <version>${netconf.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.opendaylight.usc</groupId>
+      <artifactId>usc-channel-impl</artifactId>
+      <version>${usc.version}</version>
+    </dependency>
   </dependencies>
 
 </project>
