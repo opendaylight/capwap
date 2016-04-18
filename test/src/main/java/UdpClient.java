@@ -6,13 +6,11 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
+import java.net.*;
+import java.util.Scanner;
 
 public class UdpClient {
-    public static void main(String args[]){
+    public static void main(String args[]) {
 
         byte[] buf = new byte[256];
         DatagramSocket socket = null;
@@ -28,20 +26,25 @@ public class UdpClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        buf= "hello".getBytes();
+        buf = "hello".getBytes();
         ByteBuf nett_buf = Unpooled.buffer();
 
+        InetSocketAddress socketAddress = new InetSocketAddress(address,5246);
+        Scanner sc = new Scanner(System.in);
+        {
+            System.out.println("\nEnter Capwap Message ID");
+            //int longIn = 4294967294;
+            int longIn = 0XFFFFFFFE;
+            nett_buf.writeInt(longIn);
+            buf = nett_buf.array();
 
-        nett_buf.setInt(0,13);
-        nett_buf.setInt(4,16);
-        nett_buf.setByte(8,10);
-        buf = nett_buf.array();
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 5246);
-        try {
-            socket.send(packet);
-            System.out.println(buf.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
+            DatagramPacket packet = new DatagramPacket(buf, nett_buf.writerIndex(), address, 5246);
+            try {
+                socket.send(packet);
+                System.out.printf("\nSending Capwap Message %x ", longIn);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

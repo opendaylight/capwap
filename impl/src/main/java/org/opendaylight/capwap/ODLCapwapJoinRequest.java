@@ -10,16 +10,14 @@ package org.opendaylight.capwap;
 
 import java.util.ArrayList;
 
-import org.opendaylight.capwap.ODLCapwapMessage;
+public class ODLCapwapJoinRequest extends ODLCapwapMessage {
 
-public class ODLCapwapJoinRequest extends ODLCapwapMessage{
-
-    public ODLCapwapJoinRequest(ODLCapwapHeader header, 
-                                ODLCapwapControlMessage ctrlMsg, 
+    public ODLCapwapJoinRequest(ODLCapwapHeader header,
+                                ODLCapwapControlMessage ctrlMsg,
                                 ArrayList<ODLCapwapMessageElement> elements) {
         this.header = header;
         this.ctrlMsg = ctrlMsg;
-        this.elements = elements;
+        this.ctrlMsg.elements = elements;
     }
     
     public boolean validate() {

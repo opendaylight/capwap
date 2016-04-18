@@ -8,11 +8,9 @@
 
 package org.opendaylight.capwap;
 
-import java.util.ArrayList;
-
 import io.netty.buffer.ByteBuf;
-
-public class ODLCapwapMessageElement {
+/*
+public class ODLCapwapMessageElement   {
     private short type;
     private short length;
     private ByteBuf value;
@@ -38,7 +36,7 @@ public class ODLCapwapMessageElement {
     public byte[] getValueBytes() {
         return value.array();
     }
-    
+
     public static ODLCapwapMessageElement decodeFromByteBuf(ByteBuf bbuf) {
         short type, length;
         ByteBuf value;
@@ -49,4 +47,17 @@ public class ODLCapwapMessageElement {
         
         return new ODLCapwapMessageElement(type, length, value);
     }
+}
+
+*/
+
+public interface  ODLCapwapMessageElement{
+
+    // returns the length of the encoded buff
+    int encode(ByteBuf buf);
+
+
+    //Returns an ODLCapwapMessage Element
+    ODLCapwapMessageElement decode(ByteBuf buf);
+    int getType();
 }

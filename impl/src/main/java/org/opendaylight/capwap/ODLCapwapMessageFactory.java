@@ -8,11 +8,6 @@
 
 package org.opendaylight.capwap;
 
-import java.util.ArrayList;
-
-import io.netty.buffer.Unpooled;
-import io.netty.buffer.ByteBuf;
-
 /*
 import org.opendaylight.capwap.ODLCapwapDiscoveryRequest;
 import org.opendaylight.capwap.ODLCapwapDiscoveryResponse;
@@ -57,8 +52,7 @@ public class ODLCapwapMessageFactory {
         ODLCapwapMessage msg = new ODLCapwapDiscoveryResponse();
         return msg;
     }
-*/
-    public static ODLCapwapMessage createJoinRequestMessage(ODLCapwapHeader header, 
+    public static ODLCapwapMessage createJoinRequestMessage(ODLCapwapHeader header,
         ODLCapwapControlMessage ctrlMsg, 
         ArrayList<ODLCapwapMessageElement> elements) {
         ODLCapwapMessage msg = new ODLCapwapJoinRequest(header, ctrlMsg, elements);
@@ -83,7 +77,7 @@ public class ODLCapwapMessageFactory {
 	    
         ODLCapwapHeader header = ODLCapwapHeaderFactory.decodeFromByteBuf(bbuf);
         ODLCapwapControlMessage ctrlMsg = ODLCapwapControlMessageFactory.decodeFromByteBuf(bbuf);
-        ArrayList<ODLCapwapMessageElement> elements = ODLCapwapMessageElementFactory.decodeFromByteBuf(bbuf);
+        //ArrayList<ODLCapwapMessageElement> elements = ODLCapwapMessageElementFactory.decodeFromByteBuf(bbuf);
 	
         ODLCapwapMessage tmpmsg = null;
 		
@@ -98,4 +92,5 @@ public class ODLCapwapMessageFactory {
 		
         return tmpmsg;
     }
+*/
 }

@@ -8,27 +8,19 @@
 
 package org.opendaylight.capwap;
 
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-
-import java.net.InetAddress;
-import java.net.SocketException;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.usc.plugin.UscPluginUdp;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.impl.rev150217.CapwapAcRoot;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtps;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.capwap.model.rev150217.capwap.ac.DiscoveredWtpsBuilder;
@@ -39,8 +31,10 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
+import java.net.InetAddress;
+import java.net.SocketException;
+
+//import org.opendaylight.usc.plugin.UscPluginUdp;
 
 
 public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
@@ -113,8 +107,8 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
                 ChannelPipeline p = ch.pipeline();
                 if (security == SecurityType.DTLS) {
                     p.addLast(new LoggingHandler("CapwapACServer Log 2", LogLevel.TRACE));
-                    ChannelHandler dtlsHandler = UscPluginUdp.getSecureServerHandler(ch);
-                    p.addLast(dtlsHandler);
+                   // ChannelHandler dtlsHandler = UscPluginUdp.getSecureServerHandler(ch);
+                    //p.addLast(dtlsHandler);
                 }
                 p.addLast(new LoggingHandler("CapwapACServer Log 1", LogLevel.TRACE));
                 p.addLast(new CapwapPacketHandler());

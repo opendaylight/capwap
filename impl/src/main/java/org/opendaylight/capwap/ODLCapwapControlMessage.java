@@ -9,29 +9,32 @@
 package org.opendaylight.capwap;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 
-import org.opendaylight.capwap.ODLCapwapConsts;
+import java.util.ArrayList;
 
 public class ODLCapwapControlMessage {
     long msgType;
     short seqNo;
     int msgLen;
     short flags;
-    
+    protected ArrayList<ODLCapwapMessageElement> elements =null;
+
+
     ODLCapwapControlMessage() {
         this.msgType = 0;
         this.seqNo = 0;
         this.msgLen = 0;
         this.flags = 0;
+        this.elements = new ArrayList<ODLCapwapMessageElement>();
     }
-    
+   /*
     ODLCapwapControlMessage(ByteBuf bbuf) {
         this.msgType = 0;
         this.seqNo = 0;
         this.msgLen = 0;
         this.flags = 0;
     }
+    */
     
     int decode(ByteBuf buf) {
         //ByteBuf bbuf = Unpooled.wrappedBuffer(buf);
@@ -44,12 +47,84 @@ public class ODLCapwapControlMessage {
     
         return 0;
     }
-    
-    void encode(ByteBuf buf) {
-        buf.writeInt((int)msgType); 
-        buf.writeByte((byte)seqNo);
-        buf.writeShort((short)msgLen);
-        buf.writeByte((byte)flags);
+
+    /*
+     0                   1                   2                   3
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |                       Message Type                            |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |    Seq Num    |        Msg Element Length     |     Flags     |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     | Msg Element [0..N] ...
+     +-+-+-+-+-+-+-+-+-+-+-+-+
+
+     */
+    public  int encode(ByteBuf buf) {
+
+        int start = buf.writerIndex();
+        int end = 0;
+        int msgLengthIndex = 0;
+        int msgElemLength = 0;
+
+        buf.writeInt((int)this.msgType);
+        buf.writeByte((byte)this.seqNo);
+        msgLengthIndex = buf.writerIndex();
+        System.out.printf("\nWriter index @ function %d  %s",msgLengthIndex,"encodeCtrl");
+        buf.setIndex(buf.readerIndex(),buf.writerIndex()+2);
+        System.out.printf("\nWriter index @ function after incrementing %d  %s",buf.writerIndex(),"encodeCtrl");
+
+        buf.writeByte((byte)this.flags);
+
+        /* Start decoding message Element List */
+
+        //store the location to write the messageLength
+
+        msgElemLength = encodeMsgElements(buf);
+
+        //Set the Message lement length
+        buf.setShort(msgLengthIndex,msgElemLength);
+
+        end = buf.writerIndex();
+        System.out.printf("\nWriter index @ function %d  %s",msgLengthIndex,"encodeCtrl");
+        return end-start;
+
+    }
+
+    /*
+
+      0                   1                   2                   3
+      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |              Type             |             Length            |
+     +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     |   Value ...   |
+     +-+-+-+-+-+-+-+-+
+
+     */
+
+    private int encodeMsgElements(ByteBuf buf){
+
+        int start = buf.writerIndex();
+        System.out.printf("\nWriter index @ function %d  %s",buf.writerIndex(),"encodeMsgElements");
+        int end = 0;
+
+        for (ODLCapwapMessageElement element:this.elements ) {
+            int lengthIndex = 0;
+            int length = 0;
+
+            buf.writeShort(element.getType());
+            lengthIndex = buf.writerIndex();
+            buf.setIndex(buf.readerIndex(),buf.writerIndex()+2);
+
+            int len = element.encode(buf);
+
+            System.out.printf("\nLength of Msg element   %d",len);
+            buf.setShort(lengthIndex,len);
+        }
+        end = buf.writerIndex();
+        return end-start;
+
     }
 
     public int getMessageType() {
@@ -83,5 +158,11 @@ public class ODLCapwapControlMessage {
     public void setFlags(byte flags) {
         this.flags = flags;
     }
-      
+
+    public boolean addMessageElement(ODLCapwapMessageElement e) {
+        this.elements.add(e);
+
+        return true;
+    }
+
 }

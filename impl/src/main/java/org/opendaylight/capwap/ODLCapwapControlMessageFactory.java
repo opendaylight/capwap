@@ -8,13 +8,11 @@
 
 package org.opendaylight.capwap;
 
-import java.util.ArrayList;
-
 import io.netty.buffer.ByteBuf;
 
 public class ODLCapwapControlMessageFactory {
     public static ODLCapwapControlMessage decodeFromByteBuf(ByteBuf bbuf) {
-        ODLCapwapControlMessage ctrlMsg = new ODLCapwapControlMessage(bbuf);
+        ODLCapwapControlMessage ctrlMsg = null;
         return ctrlMsg;
     }
 }

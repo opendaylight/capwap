@@ -8,18 +8,13 @@
 
 package org.opendaylight.capwap;
 
-import java.util.ArrayList;
-
-import io.netty.buffer.ByteBuf;
-
 public class ODLCapwapMessageElementFactory {
     
     /*
      * 
-     */
     public static ArrayList<ODLCapwapMessageElement> decodeFromByteBuf(ByteBuf bbuf) {
         ArrayList<ODLCapwapMessageElement> tmp = new ArrayList<ODLCapwapMessageElement>();
-        
+
         while (bbuf.isReadable()) {
             ODLCapwapMessageElement element = ODLCapwapMessageElement.decodeFromByteBuf(bbuf);
             
@@ -32,13 +27,11 @@ public class ODLCapwapMessageElementFactory {
         }
         return tmp;
     }
-    
+
     public static ODLCapwapMessageElement createMessageElement(int type, int length, byte [] value) {
         ODLCapwapMessageElement tmp = null;
         return tmp;
     }
     
-    /* 
-     * Add various static functions for creating various message elements
-     */
+    */
 }

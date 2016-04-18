@@ -1,9 +1,13 @@
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Props;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import org.opendaylight.capwap.fsm.CapwapMsgProcActor;
 
 import java.net.InetAddress;
 
@@ -20,6 +24,9 @@ public class UdpServer {
 
     public void run() throws Exception {
         final NioEventLoopGroup group = new NioEventLoopGroup();
+        //Create Actor System
+        final ActorSystem system = ActorSystem.create("CapwapFSMActorSystem");
+        final ActorRef PacketProcessorActor = system.actorOf(Props.create(CapwapMsgProcActor.class,"MessageProcessorActor"),"MessageProcessorActor");
         try {
             final Bootstrap b = new Bootstrap();
             b.group(group).channel(NioDatagramChannel.class)
@@ -29,7 +36,7 @@ public class UdpServer {
                 public void initChannel(final NioDatagramChannel ch) throws Exception {
 
                     ChannelPipeline p = ch.pipeline();
-                    p.addLast(new IncommingPacketHandler());
+                    p.addLast(new IncommingPacketHandler(PacketProcessorActor));
                 }
             });
 

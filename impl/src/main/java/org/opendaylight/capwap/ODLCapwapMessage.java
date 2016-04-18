@@ -8,17 +8,19 @@
 
 package org.opendaylight.capwap;
 
-import java.util.ArrayList;
+import io.netty.buffer.ByteBuf;
+
 import java.util.Iterator;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+public class ODLCapwapMessage {
+    public ODLCapwapHeader header =null;
+    public ODLCapwapControlMessage ctrlMsg = null;
 
-public abstract class ODLCapwapMessage {
-    protected ODLCapwapHeader header;
-    protected ODLCapwapControlMessage ctrlMsg;
-    protected ArrayList<ODLCapwapMessageElement> elements;
-  
+    public ODLCapwapMessage(){
+        this.header = new ODLCapwapHeader();
+        this.ctrlMsg = new ODLCapwapControlMessage();
+
+    }
 
     public boolean encode(ByteBuf bbuf) {
         return true;
@@ -27,9 +29,9 @@ public abstract class ODLCapwapMessage {
     public int getMessageType() {
         return ctrlMsg.getMessageType();
     }
-    
+
     public ODLCapwapMessageElement findMessageElement(int elementType) {
-        Iterator<ODLCapwapMessageElement> iter = elements.iterator();
+        Iterator<ODLCapwapMessageElement> iter = ctrlMsg.elements.iterator();
         while (iter.hasNext()) {
             ODLCapwapMessageElement element = iter.next();
             if (element.getType() == elementType) {
@@ -38,6 +40,11 @@ public abstract class ODLCapwapMessage {
         }
         return null;
     }
+
+
+
     
-    public abstract boolean validate();
+    public  boolean validate(){
+        return false;
+    };
 }
