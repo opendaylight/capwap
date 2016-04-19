@@ -8,6 +8,11 @@
 
 package org.opendaylight.capwap;
 
+import io.netty.buffer.ByteBuf;
+import org.opendaylight.capwap.msgelements.subelem.MacAddress;
+import org.opendaylight.capwap.msgelements.subelem.WsiInfo;
+import org.opendaylight.capwap.utils.ByteManager;
+
 public class ODLCapwapMessageElementFactory {
     
     /*
@@ -34,4 +39,33 @@ public class ODLCapwapMessageElementFactory {
     }
     
     */
+
+    static public MacAddress decodeMacAddress(ByteBuf buf){
+        MacAddress mac = null;
+        byte []address = null;
+
+        mac= new MacAddress();
+        //Decode Length
+        mac.setLength(ByteManager.unsignedByteToshort(buf.readByte()));
+        address = new byte[mac.getLength()];
+        buf.readBytes(address);
+        mac.setAddress(address);
+        return mac;
+    }
+
+    static public WsiInfo decodeWsiInfo(ByteBuf buf){
+        WsiInfo wsi= null;
+        byte [] data = null;
+
+        wsi = new WsiInfo();
+        //Decode Length
+        wsi.setLength(ByteManager.unsignedByteToshort(buf.readByte()));
+        data = new byte[wsi.getLength()];
+        buf.readBytes(data);
+        wsi.setData(data);
+        return wsi;
+    }
+
+
+
 }

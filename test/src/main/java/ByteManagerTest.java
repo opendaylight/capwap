@@ -16,11 +16,11 @@ public class ByteManagerTest {
         if (!test.shortTester(intIN)) System.out.println("\nFailure");
 
         //long longIn = 0xFFFFFFFFL;
-        long longIn = 4294967295L ;
+        long longIn = 4294295L ;
         if (!test.intTester(longIn)) System.out.println("\nFailure");
 
         //largest 13 bit value 0x1FFF;
-        int fragOffset = 0x1FFF; ;
+        int fragOffset = 8191;; ;
         if (!test.short13Tester(fragOffset)) System.out.println("\nFailure");
     }
 

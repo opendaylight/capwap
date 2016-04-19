@@ -10,7 +10,9 @@
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import org.opendaylight.capwap.ODLCapwapConsts;
+import org.opendaylight.capwap.ODLCapwapControlMessage;
 import org.opendaylight.capwap.ODLCapwapMessage;
+import org.opendaylight.capwap.ODLCapwapMessageFactory;
 import org.opendaylight.capwap.msgelements.*;
 import org.opendaylight.capwap.msgelements.subelem.*;
 
@@ -19,11 +21,15 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by flat on 17/04/16.
  */
 public class DescriptorTester {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DescriptorTester.class);
 
     public ByteBuf ACDescriptorTest() {
         ODLCapwapMessage msg = null;
@@ -68,7 +74,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -110,7 +116,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -136,7 +142,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -162,7 +168,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -190,7 +196,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -221,7 +227,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -249,7 +255,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -275,7 +281,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -300,7 +306,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -320,7 +326,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -340,7 +346,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -362,7 +368,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -382,7 +388,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -401,7 +407,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -432,7 +438,7 @@ public class DescriptorTester {
         msg.ctrlMsg.addMessageElement(duplicateIPV4Addr);
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -451,7 +457,7 @@ public class DescriptorTester {
         msg.ctrlMsg.addMessageElement(timeOut);
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -469,7 +475,7 @@ public class DescriptorTester {
         msg.ctrlMsg.addMessageElement(ecn);
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -489,7 +495,7 @@ public class DescriptorTester {
         msg.ctrlMsg.addMessageElement(img);
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -510,7 +516,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -532,7 +538,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -550,7 +556,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -570,7 +576,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -590,7 +596,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -611,7 +617,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -633,7 +639,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -654,7 +660,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -675,7 +681,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -702,7 +708,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -731,7 +737,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -749,7 +755,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
@@ -769,7 +775,7 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        msg.header.setHlen(8);
+        
 
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
@@ -784,12 +790,17 @@ public class DescriptorTester {
         ByteBuf buf = Unpooled.buffer();
         msg = new ODLCapwapMessage();
         WtpFallBack fb = new WtpFallBack();
+        fb.setMode(2);
         msg.ctrlMsg.addMessageElement(fb);
-        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.addMessageElement(fb);
+        msg.ctrlMsg.addMessageElement(fb);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_JOIN_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        //msg.header.setHlen(8);
+        //
 
         msg.header.setMbit();
+        msg.header.setFragId(2);
+        msg.header.setFragOffset(8190);
         MacAddress mac = new MacAddress();
         byte[] address = new byte[6];
         address[0] = 12;
@@ -817,14 +828,345 @@ public class DescriptorTester {
         msg.header.setWsiInfo(wsi);
 
 
-        msg.header.encodeHeader2(buf);
+        msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
+    public boolean messageHederTester (){
+        StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
+
+        ODLCapwapMessage msg = null;
+
+        ByteBuf buf = Unpooled.buffer();
+        msg = new ODLCapwapMessage();
+        WtpFallBack fb = new WtpFallBack();
+        msg.ctrlMsg.addMessageElement(fb);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_JOIN_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        //
+
+        msg.header.setMbit();
+        msg.header.setFragId(2);
+        msg.header.setFragOffset(8190);
+        MacAddress mac = new MacAddress();
+        byte[] address = new byte[6];
+        address[0] = 12;
+        address[1] = 52;
+        address[2] = 32;
+        address[3] = 42;
+        address[4] = 72;
+        address[5] = 92;
+
+        mac.setAddress(address);
+        msg.header.setRadioMacAddress(mac);
+
+        WsiInfo wsi = new WsiInfo();
+        msg.header.setWbit();
+
+        byte[] wsiData = new byte[8];
+        address[0] = 12;
+        address[1] = 52;
+        address[2] = 32;
+        address[3] = 42;
+        address[4] = 72;
+        address[5] = 92;
+
+        wsi.setData(wsiData);
+        msg.header.setWsiInfo(wsi);
+
+
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+
+        ODLCapwapMessage n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        if (compareMessage(msg,n)){
+            LOG.info("Decoding  SUCCESS {}:",getFunctionName(bTop));
+            //encodeDecodeTester(msg,n);
+
+        }
+        {
+            LOG.error("Decoding  failed {}:",getFunctionName(bTop));
+
+            return false;
+        }
+
+
+    }
+
+    public void encodeDecodeTester(ODLCapwapMessage o, ODLCapwapMessage n){
+
+        //encode new message
+        //decode new message
+        //compare it new new message with old message
+        ByteBuf buf = Unpooled.buffer();
+        n.header.encodeHeader(buf);
+        n.ctrlMsg.encode(buf);
+        StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
+
+        ODLCapwapMessage nn = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        if (compareMessage(o,nn)){
+            LOG.info("Decoding  SUCCESS {}:",getFunctionName(bTop));
+
+        }
+        {
+            LOG.error("Decoding  failed {}:",getFunctionName(bTop));
+
+        }
 
 
 
+    }
+
+    public boolean compareMessage(ODLCapwapMessage o, ODLCapwapMessage n){
+        StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
+
+        //Compare header
+        if(o==null){
+            LOG.error("o is null {}",getFunctionName(bTop));
+
+            return false;
+        }
+        if(n==null){
+            LOG.error("n is null {}",getFunctionName(bTop));
+            return false;
+        }
+
+        if (n.header.getVersion() != o.header.getVersion()){
+            LOG.error("Version not equal o->{}   n ->{} , {}:",o.getMessageType(),n.getMessageType(),getFunctionName(bTop));
+            return false;
+        }
+
+        if(n.header.getType() != n.header.getType()){
+            LOG.error("Version not equal o->{}   n ->{} , {}:",o.getMessageType(),n.getMessageType(),getFunctionName(bTop));
+            return true;
+        }
+
+        if(n.header.getHlen() != o.header.getHlen()){
+            LOG.error("HLEN not equal o->{}   n ->{} , {}:",o.header.getHlen(),n.header.getHlen(),getFunctionName(bTop));
+            return false;
+        }
+        if(n.header.getRid() != o.header.getRid()){
+            LOG.error("Rid not equal o->{}   n ->{} , {}:",o.header.getRid(),n.header.getRid(),getFunctionName(bTop));
+            return false;
+        }
+
+        if(n.header.getWbid() != o.header.getWbid()){
+            LOG.error("Wbid not equal o->{}   n ->{} , {}:",o.header.getWbid(),n.header.getWbid(),getFunctionName(bTop));
+            return false;
+        }
+
+        if(n.header.isSetTbit() != o.header.isSetTbit()){
+            LOG.error("TBit not equal o->{}   n ->{} , {}:",o.header.isSetTbit(),n.header.isSetTbit(),getFunctionName(bTop));
+            return false;
+        }
+        if(n.header.isSetWbit() != o.header.isSetWbit()){
+            LOG.error("WBit not equal o->{}   n ->{} , {}:",o.header.isSetWbit(),n.header.isSetWbit(),getFunctionName(bTop));
+            return false;
+        }
+
+        if(n.header.isSetMbit() != o.header.isSetMbit()){
+            LOG.error("TMit not equal o->{}   n ->{} , {}:",o.header.isSetMbit(),n.header.isSetMbit(),getFunctionName(bTop));
+            return false;
+        }
+
+        if(n.header.isSetFbit() != o.header.isSetFbit()){
+            LOG.error("TFit not equal o->{}   n ->{} , {}:",o.header.isSetFbit(),n.header.isSetFbit(),getFunctionName(bTop));
+            return false;
+        }
+
+        if(n.header.isSetKbit() != o.header.isSetKbit()){
+            LOG.error("KBit not equal o->{}   n ->{} , {}:",o.header.isSetKbit(),n.header.isSetKbit(),getFunctionName(bTop));
+            return false;
+        }
+        if(n.header.isSetLbit() != o.header.isSetLbit()){
+            LOG.error("LBit not equal o->{}   n ->{} , {}:",o.header.isSetLbit(),n.header.isSetLbit(),getFunctionName(bTop));
+            return false;
+        }
+
+        if(n.header.getFragId() != o.header.getFragId()){
+            LOG.error("FragID not equal o->{}   n ->{} , {}:",o.header.getFragId(),n.header.getFragId(),getFunctionName(bTop));
+            return false;
+        }
+
+        if(n.header.getFragOffset() != o.header.getFragOffset()){
+            LOG.error("FragOff Set not equal o->{}   n ->{} , {}:",o.header.getFragOffset(),n.header.getFragOffset(),getFunctionName(bTop));
+            return false;
+        }
+
+        if(o.header.isSetMbit()){
+            boolean result =  compareMacAddress(o.header.getRadioMacAddress(),n.header.getRadioMacAddress());
+            if(result == false) {
+                LOG.error(" Error in  {} {}", getFunctionName(bTop), result);
+                return false;
+            }
+        }
+        if(o.header.isSetWbit()){
+            boolean result= compareWsiMac(o.header.getWsiInfo(), n.header.getWsiInfo());
+            if (result ==false) {
+                LOG.error(" Error in  {} {}", getFunctionName(bTop), result);
+                return false;
+            }
+        }
+
+        if(o.ctrlMsg !=null){
+            boolean result= compareCtrlMsg(o.ctrlMsg,n.ctrlMsg);
+            if (result ==false) {
+                LOG.error(" Error in  {} {}", getFunctionName(bTop), result);
+                return false;
+            }
+        }
+        //compare Message
+        return true;
+    }
+
+    // final StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
+    public String getFunctionName(StackTraceElement e){
+        final StackTraceElement aTop = e;
+        return  (aTop.getMethodName ());
+
+    }
+
+
+    boolean compareCtrlMsg(ODLCapwapControlMessage o, ODLCapwapControlMessage n){
+        StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
+        if(o==null){
+            LOG.error("o is null {}",getFunctionName(bTop));
+
+            return false;
+        }
+        if(n==null){
+            LOG.error("n is null {}",getFunctionName(bTop));
+            return false;
+        }
+        //Compare Message Type
+        if(o.getMsgType() != n.getMsgType()){
+            LOG.error("Message Type not equal o->{}   n ->{} , {}:",o.getMsgType(),n.getMsgType(),getFunctionName(bTop));
+            return false;
+        }
+
+        //Compare Message Length
+        if(o.getMsgLen() !=n.getMsgLen()){
+            LOG.error("Message Len not equal o->{}   n ->{} , {}:",o.getMsgLen(),n.getMsgLen(),getFunctionName(bTop));
+
+            return false;
+        }
+
+        //Compare Message SeqNum
+        if(o.getSeqNo() != n.getSeqNo()){
+            LOG.error("SeqNo not equal o->{}   n ->{} , {}:",o.getSeqNo(),n.getSeqNo(),getFunctionName(bTop));
+            return false;
+        }
+
+        boolean result = compareMsgElements(o,n);
+        if(!result){
+            LOG.error(" Error in comparing Message Elements  {} {}",getFunctionName(bTop),result);
+            return false;
+
+        }
+
+        //Compare Message Elements
+        return true;
+    }
+
+    boolean compareMsgElements(ODLCapwapControlMessage o, ODLCapwapControlMessage n){
+        StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
+        if(o==null){
+            LOG.error("o is null {}",getFunctionName(bTop));
+
+            return false;
+        }
+        if(n==null){
+            LOG.error("n is null {}",getFunctionName(bTop));
+            return false;
+        }
+
+        //Compare Message Elements
+        return true;
+    }
+
+    boolean compareMacAddress(MacAddress o,MacAddress n){
+        StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
+
+        if(o==null){
+            LOG.error("o is null {}",getFunctionName(bTop));
+
+            return false;
+        }
+        if(n==null){
+            LOG.error("n is null {}",getFunctionName(bTop));
+            return false;
+        }
+
+        if(o.getLength() != n.getLength()){
+            LOG.error("Length not equal o->{}   n ->{} , {}:",o.getLength(),n.getLength(),getFunctionName(bTop));
+            return false;
+        }
+
+        if(o.getLength()>0){
+            boolean result =  compareByteArray(o.getAddress(),n.getAddress());
+            if (result ==false) {
+                LOG.error(" Error in  {} {}", getFunctionName(bTop), result);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    boolean compareWsiMac(WsiInfo o,WsiInfo n){
+        StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
+
+        if(o==null){
+            LOG.error("o is null {}",getFunctionName(bTop));
+
+            return false;
+        }
+        if(n==null){
+            LOG.error("n is null {}",getFunctionName(bTop));
+            return false;
+        }
+        if(o.getLength() != n.getLength()){
+            LOG.error("Length not equal o->{}   n ->{} , {}:",o.getLength(),n.getLength(),getFunctionName(bTop));
+            return false;
+        }
+
+        if(o.getLength()>0){
+            boolean result = compareByteArray(o.getData(),n.getData());
+            if (result ==false) {
+                LOG.error(" Error in  {} {}", getFunctionName(bTop), result);
+                return false;
+            }
+
+
+        }
+
+        return true;
+    }
+
+
+
+    boolean compareByteArray(byte [] o, byte[] n){
+        StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
+
+        if(o==null){
+            LOG.error("o is null {}",getFunctionName(bTop));
+
+            return false;
+        }
+        if(n==null){
+            LOG.error("n is null {}",getFunctionName(bTop));
+            return false;
+        }
+
+        for (int i=0;i<o.length;i++){
+            if(o[i] !=n[i]){
+                LOG.error("Byte Array Content @ index {} o->{}   n ->{} , {}:",i,o[i],n[i],getFunctionName(bTop));
+                return false;
+            }
+        }
+        return true;
+    }
 
 
 
@@ -969,5 +1311,6 @@ public class DescriptorTester {
         //tester.sender(buf);
         buf = tester.fallBackModeTester();
         tester.sender(buf);
+        tester.messageHederTester();
     }
 }

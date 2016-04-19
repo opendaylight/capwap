@@ -26,8 +26,8 @@ public class ODLCapwapMessage {
         return true;
     }
     
-    public int getMessageType() {
-        return ctrlMsg.getMessageType();
+    public long getMessageType() {
+        return ctrlMsg.getMsgType();
     }
 
     public ODLCapwapMessageElement findMessageElement(int elementType) {

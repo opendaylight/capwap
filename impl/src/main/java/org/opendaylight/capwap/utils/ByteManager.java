@@ -65,7 +65,7 @@ public class ByteManager {
 
         return new byte[] {
                 (byte)(maskedIn >>> 5),
-                (byte)maskedIn};
+                (byte)((maskedIn & 0b00011111  )<< 3)};
 
     }
     public static int byteArrayToUnsingedShort(byte[] bytes){
@@ -80,7 +80,15 @@ public class ByteManager {
 
     public static int fromBytesto13(byte b1, byte b2) {
         int out = 0;
-        out =  (b1 << 5 |  (b2 & 0xFF))&0x00001FFF ;
+        // b1 11111111   b2 11111000
+        //shift b2 by 3
+
+        int byte1 =0, byte2 =0;
+
+        byte1 = ByteManager.unsignedByteToshort((byte)b1);
+        byte2 = ByteManager.unsignedByteToshort((byte)b2);
+
+        out = (byte1 <<5 )| (byte2 >>>3);
         return out;
     }
 

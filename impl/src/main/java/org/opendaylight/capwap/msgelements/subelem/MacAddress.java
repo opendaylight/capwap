@@ -22,6 +22,15 @@ public class MacAddress  implements ODLCapwapMessageElement {
 
 
     public byte [] address =null;
+
+    public short getLength() {
+        return length;
+    }
+
+    public void setLength(short length) {
+        this.length = length;
+    }
+
     public short length = 0;
 
     public MacAddress(short length){

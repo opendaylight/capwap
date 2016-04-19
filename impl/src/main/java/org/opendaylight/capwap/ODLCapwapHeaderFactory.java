@@ -14,7 +14,6 @@ public class ODLCapwapHeaderFactory {
 
     public static ODLCapwapHeader decodeFromByteBuf(ByteBuf bbuf) {
         ODLCapwapHeader header = new ODLCapwapHeader();
-        header.decodeHeader(bbuf);
         return header;
     }
 

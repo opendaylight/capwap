@@ -15,7 +15,7 @@ import org.opendaylight.capwap.utils.ByteManager;
 /**
  * Created by flat on 18/04/16.
  */
-public class WsiInfo {
+public class WsiInfo  implements ODLCapwapMessageElement{
 
     int msgElemeType = 0;
     public byte []  data=null;
@@ -50,7 +50,7 @@ public class WsiInfo {
         return buf.writerIndex()-start;
     }
 
-    public ODLCapwapMessageElement decode(ByteBuf buf) {
+     public ODLCapwapMessageElement decode(ByteBuf buf) {
         return null;
     }
 

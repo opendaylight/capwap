@@ -17,6 +17,8 @@ public class ODLCapwapControlMessage {
     short seqNo;
     int msgLen;
     short flags;
+
+
     protected ArrayList<ODLCapwapMessageElement> elements =null;
 
 
@@ -36,17 +38,9 @@ public class ODLCapwapControlMessage {
     }
     */
     
-    int decode(ByteBuf buf) {
-        //ByteBuf bbuf = Unpooled.wrappedBuffer(buf);
-        //ByteBuf tmpbuf = bbuf.readerIndex(pos);
-        
-        this.msgType = buf.readUnsignedInt();
-        this.seqNo = buf.readUnsignedByte();
-        this.msgLen = buf.readUnsignedShort();
-        this.flags = buf.readUnsignedByte();
-    
-        return 0;
-    }
+
+
+
 
     /*
      0                   1                   2                   3
@@ -76,11 +70,10 @@ public class ODLCapwapControlMessage {
 
         buf.writeByte((byte)this.flags);
 
-        /* Start decoding message Element List */
 
-        //store the location to write the messageLength
 
         msgElemLength = encodeMsgElements(buf);
+        this.msgLen = msgElemLength; //this is set to check automated decoding test cases. This will be available only after encoding
 
         //Set the Message lement length
         buf.setShort(msgLengthIndex,msgElemLength);
@@ -127,11 +120,20 @@ public class ODLCapwapControlMessage {
 
     }
 
-    public int getMessageType() {
-        return (int)msgType;
+
+    public boolean addMessageElement(ODLCapwapMessageElement e) {
+        this.elements.add(e);
+
+        return true;
     }
 
-    public void setMsgType(int msgType) {
+
+
+    public long getMsgType() {
+        return msgType;
+    }
+
+    public void setMsgType(long msgType) {
         this.msgType = msgType;
     }
 
@@ -143,26 +145,27 @@ public class ODLCapwapControlMessage {
         this.seqNo = seqNo;
     }
 
-    public short getMsgLen() {
-        return (short)msgLen;
+    public int getMsgLen() {
+        return msgLen;
     }
 
-    public void setMsgLen(short msgLen) {
+    public void setMsgLen(int msgLen) {
         this.msgLen = msgLen;
     }
 
-    public byte getFlags() {
-        return (byte)flags;
+    public short getFlags() {
+        return flags;
     }
 
-    public void setFlags(byte flags) {
+    public void setFlags(short flags) {
         this.flags = flags;
     }
 
-    public boolean addMessageElement(ODLCapwapMessageElement e) {
-        this.elements.add(e);
-
-        return true;
+    public ArrayList<ODLCapwapMessageElement> getElements() {
+        return elements;
     }
 
+    public void setElements(ArrayList<ODLCapwapMessageElement> elements) {
+        this.elements = elements;
+    }
 }

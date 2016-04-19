@@ -39,7 +39,6 @@ public class CapwapMessageCreator {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short)1);
-        msg.header.setHlen(8);
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
