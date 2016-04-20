@@ -33,10 +33,31 @@ public class BoardDataSubElem implements ODLCapwapMessageElement {
     int boardDataLength = 0;
     byte [] data = null;
 
+    public int getBoardDataLength() {
+        return boardDataLength;
+    }
+
+    public void setBoardDataLength(int boardDataLength) {
+        this.boardDataLength = boardDataLength;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
+        this.boardDataLength = data.length;
+    }
+
+
+
     public BoardDataSubElem(int type, int length){
         this.boardDataType = type;
         this.boardDataLength = length;
         this.data = new byte[length];
+    }
+    public BoardDataSubElem(){
     }
 
 

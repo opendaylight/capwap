@@ -10,8 +10,6 @@ package org.opendaylight.capwap;
 
 import java.util.HashMap;
 
-import org.opendaylight.capwap.ODLCapwapContext;
-
 public class ODLCapwapContextHandler {
     //A storage for contexts of all the WTPs controlled by this controller
     //ODLCapwapContexStore store;

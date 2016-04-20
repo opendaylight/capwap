@@ -158,7 +158,7 @@ public class ACDescriptor implements ODLCapwapMessageElement {
 
     }
 
-    public  ACInformationSubElement getAcInformationSubElem(long vendorInfo,int infoType){
+    public ACInformationSubElement getAcInformationSubElem(long vendorInfo, int infoType){
 
         for(ACInformationSubElement e: this.acInfolist ){
             if ((e.getAcInfoVendorId() == vendorInfo) && (e.getAcInfoType() == infoType))

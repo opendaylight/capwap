@@ -10,6 +10,7 @@ package org.opendaylight.capwap;
 
 import io.netty.buffer.ByteBuf;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ODLCapwapMessage {
@@ -19,6 +20,12 @@ public class ODLCapwapMessage {
     public ODLCapwapMessage(){
         this.header = new ODLCapwapHeader();
         this.ctrlMsg = new ODLCapwapControlMessage();
+
+    }
+
+    public ODLCapwapMessage(ODLCapwapHeader header, ArrayList<ODLCapwapMessageElement> l){
+        this.header = header;
+        this.ctrlMsg = new ODLCapwapControlMessage(l);
 
     }
 

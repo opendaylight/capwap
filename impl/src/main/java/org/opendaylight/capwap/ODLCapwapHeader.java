@@ -205,9 +205,10 @@ public class ODLCapwapHeader {
     /**Method to set the Tbit.
      * 
      */
-    public void setTbit() {
+    public ODLCapwapHeader setTbit() {
         //flagBits |= 0x20;
         this.tFlag = true;
+        return this;
     }
 
     /**Method checks and return Fbit(Fragment bit) status.
@@ -220,10 +221,11 @@ public class ODLCapwapHeader {
 
     /**Method sets Fbit.
      */
-    public void setFbit()
+    public ODLCapwapHeader setFbit()
     {
         //this.flagBits |= 0x10;
         this.fFlag = true;
+        return this;
     }
 
     /**Method checks and return Lbit(Last fragment) status.
@@ -236,9 +238,10 @@ public class ODLCapwapHeader {
 
     /**Method sets Fbit.
      */
-    public void setLbit() {
+    public ODLCapwapHeader setLbit() {
         //flagBits |= 0x08;
         this.lFlag = true;
+        return this;
     }
 
     /**Method checks and return Wbit(Wireless binding Identifier) status.
@@ -252,9 +255,10 @@ public class ODLCapwapHeader {
     /**Method sets Wbit.
      * 
      */
-    public void setWbit() {
+    public ODLCapwapHeader setWbit() {
         //flagBits |= 0x04;
         this.wFlag = true;
+        return this;
     }
 
     /**Method checks and return Mbit(Radio Mac Identifier) status.
@@ -267,9 +271,10 @@ public class ODLCapwapHeader {
 
     /**Method sets Mbit.
      */
-    public void setMbit() {
+    public ODLCapwapHeader setMbit() {
         //flagBits |= 0x02;
         this.mFlag = true;
+        return this;
     }
 
 
@@ -283,89 +288,100 @@ public class ODLCapwapHeader {
 
     /**Method sets Kbit.
      */
-    public void setKbit() {
+    public ODLCapwapHeader setKbit() {
         //flagBits |= 0x01;
         this.kFlag = true;
+        return this;
     }
 
     public byte getPreamble() {
         return preamble;
     }
 
-    public void setPreamble(byte preamble) {
+    public ODLCapwapHeader setPreamble(byte preamble) {
         this.preamble = preamble;
+        return this;
     }
 
     public byte getType() {
         return type;
     }
 
-    public void setType(byte type) {
+    public ODLCapwapHeader setType(byte type) {
         this.type = type;
+        return this;
     }
 
     public byte getVersion() {
         return version;
     }
 
-    public void setVersion(byte version) {
+    public ODLCapwapHeader setVersion(byte version) {
         this.version = version;
+        return this;
     }
 
     public byte getHlen() {
         return hlen;
     }
 
-    public void setHlen(byte hlen) {
+    public ODLCapwapHeader setHlen(byte hlen) {
         this.hlen = hlen;
+        return this;
     }
 
     public byte getRid() {
         return rid;
     }
 
-    public void setRid(byte rid) {
+    public ODLCapwapHeader setRid(byte rid) {
         this.rid = rid;
+        return this;
     }
 
     public byte getWbid() {
         return wbid;
     }
 
-    public void setWbid(byte wbid) {
+    public ODLCapwapHeader setWbid(byte wbid) {
         this.wbid = wbid;
+        return this;
     }
 
     public int getFragId() {
         return fragId;
     }
 
-    public void setFragId(int fragId) {
+    public ODLCapwapHeader setFragId(int fragId) {
         this.fragId = fragId;
+        return this;
     }
 
     public int getFragOffset() {
         return fragOffset;
     }
 
-    public void setFragOffset(int fragOffset) {
+    public ODLCapwapHeader setFragOffset(int fragOffset) {
         this.fragOffset = fragOffset;
+        return this;
     }
 
     public MacAddress getRadioMacAddress() {
         return radioMacAddress;
     }
 
-    public void setRadioMacAddress(MacAddress radioMacAddress) {
+    public ODLCapwapHeader setRadioMacAddress(MacAddress radioMacAddress) {
         this.radioMacAddress = radioMacAddress;
+        return this;
     }
 
     public WsiInfo getWsiInfo() {
         return wsiInfo;
     }
 
-    public void setWsiInfo(WsiInfo wsiInfo) {
+    public ODLCapwapHeader setWsiInfo(WsiInfo wsiInfo) {
         this.wsiInfo = wsiInfo;
+        return this;
     }
 
 }

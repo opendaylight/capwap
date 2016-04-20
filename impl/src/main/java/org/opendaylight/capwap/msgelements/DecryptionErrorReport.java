@@ -27,7 +27,7 @@ public class DecryptionErrorReport implements ODLCapwapMessageElement {
 
 
     short numEntries = 0;
-    ArrayList <MacAddress > macAddressList = null;
+    ArrayList <MacAddress> macAddressList = null;
 
     public DecryptionErrorReport(){
         this.msgElem = ODLCapwapConsts.CAPWAP_ELMT_TYPE_DECRYPTION_ERROR_REPORT;

@@ -74,7 +74,7 @@ public class ODLCapwapMessageFactory {
      +-+-+-+-+-+-+-+-+-+-+-+-+
       */
 
-     public static  ODLCapwapControlMessage decodeCtrlMsg(ByteBuf buf) {
+     public static ODLCapwapControlMessage decodeCtrlMsg(ByteBuf buf) {
 
          ODLCapwapControlMessage ctrlMsg = null;
          int msgElemLength = 0;
@@ -119,9 +119,9 @@ public class ODLCapwapMessageFactory {
              ODLCapwapMessageElement e = null;
 
              buf.readBytes(type_arr);
-             type=ByteManager.byteArrayToUnsingedShort(type_arr);
+             type= ByteManager.byteArrayToUnsingedShort(type_arr);
              buf.readBytes(length_arr);
-             length=ByteManager.byteArrayToUnsingedShort(length_arr);
+             length= ByteManager.byteArrayToUnsingedShort(length_arr);
              e = decodeEachMsgElement(buf,type,length);
 
              //add msg element to the list of msg elements
@@ -145,7 +145,7 @@ public class ODLCapwapMessageFactory {
              +-+-+-+-+-+-+-+-+
 */
 
-     public static  ODLCapwapMessageElement decodeEachMsgElement(ByteBuf buf , int dType , int length){
+     public static ODLCapwapMessageElement decodeEachMsgElement(ByteBuf buf , int dType , int length){
 
          ODLCapwapMessageElement elm= null;
          //Now we are at the begining of msg element value
@@ -154,16 +154,22 @@ public class ODLCapwapMessageFactory {
          }
 
          switch(dType){
-
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_DISCOVERY_TYPE:
+                 return ODLCapwapMessageElementFactory.decodeDiscoveryType(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_BOARD_DATA:
+                 return ODLCapwapMessageElementFactory.decodeWtpBoardData(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_DESCRIPTOR:
+                 return ODLCapwapMessageElementFactory.decodeWtpDescriptor(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_FRAME_TUNNEL_MODE:
+                 return ODLCapwapMessageElementFactory.decodeFrameTunnelModeDescriptor(buf,length);
              default:
+
                  return decodeUnknownMsgElm(buf,dType,length);
-
-
          }
 
      }
 
-     static ODLCapwapMessageElement decodeUnknownMsgElm(ByteBuf buf,int dType, int length){
+     static ODLCapwapMessageElement decodeUnknownMsgElm(ByteBuf buf, int dType, int length){
          UnknownMsgElm u= new UnknownMsgElm();
          byte [] val = new byte [length];
          u.setMsgElm(dType);
@@ -174,7 +180,7 @@ public class ODLCapwapMessageFactory {
 
 
 
-    public static  ODLCapwapHeader decodeHeader(ByteBuf buf) {
+    public static ODLCapwapHeader decodeHeader(ByteBuf buf) {
         ODLCapwapHeader capwapHeader =  null;
         MacAddress macAddress = null;
         WsiInfo wsiInfo = null;
@@ -217,7 +223,7 @@ public class ODLCapwapMessageFactory {
 
             buf.setIndex(buf.readerIndex()-1,buf.writerIndex());
 
-            capwapHeader.setRadioMacAddress(ODLCapwapMessageElementFactory.decodeMacAddress(buf));
+            capwapHeader.setRadioMacAddress(ODLCapwapMessageElementFactory.decodeMacAddress(buf,length));
             //Skip the padding
             buf.setIndex(buf.readerIndex()+numPadded,buf.writerIndex());
         }
@@ -233,12 +239,11 @@ public class ODLCapwapMessageFactory {
 
             buf.setIndex(buf.readerIndex()-1,buf.writerIndex());
 
-            capwapHeader.setWsiInfo(ODLCapwapMessageElementFactory.decodeWsiInfo(buf));
+            capwapHeader.setWsiInfo(ODLCapwapMessageElementFactory.decodeWsiInfo(buf,length));
             //Skip the padding
             buf.setIndex(buf.readerIndex()+numPadded,buf.writerIndex());
 
         }
-
         //make sure that Reader index is at the header length
 
         return capwapHeader;
@@ -250,7 +255,6 @@ public class ODLCapwapMessageFactory {
         // then number of bytes to be padded is  7%4  ie 3 . ie 3 bytes are there in the unaligned  word . we need to
         // add one more byte to get a 4 byte alingement
         numBytesToBepadded = word_size-(length_of_last_encoding % word_size);
-
         return  numBytesToBepadded;
     }
 

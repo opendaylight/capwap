@@ -56,9 +56,13 @@ public class WTP_Radio_Information {
 
 
     //Make the wtp information for this  WTP
-    WTP_Radio_Information(byte radioId){
+    public WTP_Radio_Information(byte radioId){
 
         this.radioId=radioId;
+    }
+
+    public WTP_Radio_Information(){
+
     }
 
     public byte getRadioId() {

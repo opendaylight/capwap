@@ -13,10 +13,10 @@ import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 
 public class ODLCapwapControlMessage {
-    long msgType;
-    short seqNo;
-    int msgLen;
-    short flags;
+    long msgType = 0;
+    short seqNo = 0;
+    int msgLen = 0;
+    short flags= 0;
 
 
     protected ArrayList<ODLCapwapMessageElement> elements =null;
@@ -28,6 +28,14 @@ public class ODLCapwapControlMessage {
         this.msgLen = 0;
         this.flags = 0;
         this.elements = new ArrayList<ODLCapwapMessageElement>();
+    }
+
+    ODLCapwapControlMessage(ArrayList<ODLCapwapMessageElement> l) {
+        this.msgType = 0;
+        this.seqNo = 0;
+        this.msgLen = 0;
+        this.flags = 0;
+        this.elements = l;
     }
    /*
     ODLCapwapControlMessage(ByteBuf bbuf) {

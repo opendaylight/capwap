@@ -35,8 +35,18 @@ public class WtpBoardDataMsgElem implements ODLCapwapMessageElement {
 
 
     long vendorId = 0;
+
     ArrayList<BoardDataSubElem> boardDataList = null;
     int msgElem = 0;
+
+
+    public ArrayList<BoardDataSubElem> getBoardDataList() {
+        return boardDataList;
+    }
+
+    public void setBoardDataList(ArrayList<BoardDataSubElem> boardDataList) {
+        this.boardDataList = boardDataList;
+    }
 
     public WtpBoardDataMsgElem(){
         this.msgElem = ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_BOARD_DATA;

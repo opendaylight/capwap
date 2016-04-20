@@ -15,7 +15,7 @@ import org.opendaylight.capwap.utils.ByteManager;
 /**
  * Created by flat on 18/04/16.
  */
-public class WsiInfo  implements ODLCapwapMessageElement{
+public class WsiInfo  implements ODLCapwapMessageElement {
 
     int msgElemeType = 0;
     public byte []  data=null;

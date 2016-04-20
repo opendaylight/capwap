@@ -9,20 +9,19 @@
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import org.opendaylight.capwap.ODLCapwapConsts;
-import org.opendaylight.capwap.ODLCapwapControlMessage;
-import org.opendaylight.capwap.ODLCapwapMessage;
-import org.opendaylight.capwap.ODLCapwapMessageFactory;
+import org.opendaylight.capwap.*;
 import org.opendaylight.capwap.msgelements.*;
 import org.opendaylight.capwap.msgelements.subelem.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by flat on 17/04/16.
@@ -30,6 +29,175 @@ import org.slf4j.LoggerFactory;
 public class DescriptorTester {
 
     private static final Logger LOG = LoggerFactory.getLogger(DescriptorTester.class);
+
+    public boolean WtpDesciptorTester(ByteBuf buf) {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+        DiscoveryType discoveryType = null;
+        ACDescriptor acDescriptor = null;
+
+        msg = new ODLCapwapMessage();
+
+        //create  Discovery Type
+        discoveryType = new DiscoveryType();
+        discoveryType.setDhcp();
+        msg.ctrlMsg.addMessageElement(discoveryType);
+
+        //create WtpDescriptor
+        WtpDescriptor wtpDescriptor = new WtpDescriptor();
+        wtpDescriptor.setMaxRadios((short) 12).
+                setRadioInUse((short) 4);
+        EncryptionSubElement e = new EncryptionSubElement((byte) 1, 12);
+        EncryptionSubElement e1 = new EncryptionSubElement((byte) 2, 10);
+
+        wtpDescriptor.addEncryptSubElement(e);
+        wtpDescriptor.addEncryptSubElement(e1);
+
+        DescriptorSubElement d = new DescriptorSubElement(128);
+        d.setVendorId(120).setDescType(13);
+
+        DescriptorSubElement d1 = new DescriptorSubElement(64);
+        d1.setVendorId(110).setDescType(10);
+
+        wtpDescriptor.addDescriptorSubElm(d);
+        wtpDescriptor.addDescriptorSubElm(d1);
+
+        msg.ctrlMsg.addMessageElement(wtpDescriptor);
+
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        if (compareMessage(msg, n)) {
+            LOG.info("Decoding  SUCCESS for {}:", getFunctionName(bTop));
+            //encodeDecodeTester(msg,n);
+
+        } else {
+            LOG.error("Decoding  failed {}:", getFunctionName(bTop));
+
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public boolean frameTunnelModeTester(ByteBuf buf) {
+
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+        WtpFrameTunnelModeMsgElem ft = new WtpFrameTunnelModeMsgElem();
+        ft.seteBit();
+        ft.setnBit();
+        ft.setrBit();
+        msg.ctrlMsg.addMessageElement(ft);
+
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+
+
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        if (compareMessage(msg, n)) {
+            LOG.info("Decoding  SUCCESS for {}:", getFunctionName(bTop));
+            //encodeDecodeTester(msg,n);
+
+        } else {
+            LOG.error("Decoding  failed {}:", getFunctionName(bTop));
+
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public boolean DiscoveryDescriptorTest(ByteBuf buf) {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+        DiscoveryType discoveryType = null;
+        ACDescriptor acDescriptor = null;
+
+        msg = new ODLCapwapMessage();
+
+        //create  Discovery Type
+        discoveryType = new DiscoveryType();
+        discoveryType.setDhcp();
+        msg.ctrlMsg.addMessageElement(discoveryType);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        if (compareMessage(msg, n)) {
+            LOG.info("Decoding  SUCCESS for {}:", getFunctionName(bTop));
+            //encodeDecodeTester(msg,n);
+
+        } else {
+            LOG.error("Decoding  failed {}:", getFunctionName(bTop));
+
+            return false;
+        }
+
+
+        return true;
+    }
+
+    public boolean WtpBoardDataDescriptorTest(ByteBuf buf) {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+        DiscoveryType discoveryType = null;
+        WtpBoardDataMsgElem wtpBoard = null;
+
+        msg = new ODLCapwapMessage();
+
+        //create  Discovery Type
+        discoveryType = new DiscoveryType();
+        discoveryType.setDhcp();
+        msg.ctrlMsg.addMessageElement(discoveryType);
+
+
+        //create a board data message elem
+        wtpBoard = new WtpBoardDataMsgElem();
+        BoardDataSubElem bs = new BoardDataSubElem(12, 64);
+
+        wtpBoard.setVendorId(120);
+        wtpBoard.addBoardData(bs);
+        wtpBoard.addBoardData(bs);
+        msg.ctrlMsg.addMessageElement(wtpBoard);
+
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+
+
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        if (compareMessage(msg, n)) {
+            LOG.info("Decoding  SUCCESS for {}:", getFunctionName(bTop));
+            //encodeDecodeTester(msg,n);
+
+        } else {
+            LOG.error("Decoding  failed {}:", getFunctionName(bTop));
+
+            return false;
+        }
+
+
+        return true;
+    }
+
 
     public ByteBuf ACDescriptorTest() {
         ODLCapwapMessage msg = null;
@@ -74,55 +242,14 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf WtpDesciptorTester() {
-        ODLCapwapMessage msg = null;
-        DiscoveryType discoveryType = null;
-        ACDescriptor acDescriptor = null;
 
-        ByteBuf buf = Unpooled.buffer();
-        msg = new ODLCapwapMessage();
-
-        //create  Discovery Type
-        discoveryType = new DiscoveryType();
-        discoveryType.setDhcp();
-        msg.ctrlMsg.addMessageElement(discoveryType);
-
-        //create WtpDescriptor
-        WtpDescriptor wtpDescriptor = new WtpDescriptor();
-        wtpDescriptor.setMaxRadios((short) 12).
-                setRadioInUse((short) 4);
-        EncryptionSubElement e = new EncryptionSubElement((byte) 1, 12);
-        EncryptionSubElement e1 = new EncryptionSubElement((byte) 2, 10);
-
-        wtpDescriptor.addEncryptSubElement(e);
-        wtpDescriptor.addEncryptSubElement(e1);
-
-        DescriptorSubElement d = new DescriptorSubElement(128);
-        d.setVendorId(120).setDescType(13);
-
-        DescriptorSubElement d1 = new DescriptorSubElement(64);
-        d1.setVendorId(110).setDescType(10);
-
-        wtpDescriptor.addDescriptorSubElm(d);
-        wtpDescriptor.addDescriptorSubElm(d1);
-
-        msg.ctrlMsg.addMessageElement(wtpDescriptor);
-
-        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
-        msg.ctrlMsg.setSeqNo((short) 1);
-        
-        msg.header.encodeHeader(buf);
-        msg.ctrlMsg.encode(buf);
-        return buf;
-    }
-
-    public ByteBuf WtpBoardDataTester(){
+    public ByteBuf WtpBoardDataTester() {
 
         ODLCapwapMessage msg = null;
         DiscoveryType discoveryType = null;
@@ -134,7 +261,7 @@ public class DescriptorTester {
         //create a Board data Dec
         WtpBoardDataMsgElem e = new WtpBoardDataMsgElem();
         e.setVendorId(12);
-        BoardDataSubElem se = new BoardDataSubElem(12,64);
+        BoardDataSubElem se = new BoardDataSubElem(12, 64);
         e.addBoardData(se);
 
         msg.ctrlMsg.addMessageElement(e);
@@ -142,13 +269,12 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf DeleteMacAclEntryTester(){
+    public ByteBuf DeleteMacAclEntryTester() {
 
         ODLCapwapMessage msg = null;
         DiscoveryType discoveryType = null;
@@ -158,9 +284,9 @@ public class DescriptorTester {
         msg = new ODLCapwapMessage();
 
 
-        DeleteMacAclEntry e= new DeleteMacAclEntry();
-        e.setMacAddrLength((short)6);
-        MacAddress mac = new MacAddress((short)6);
+        DeleteMacAclEntry e = new DeleteMacAclEntry();
+        e.setMacAddrLength((short) 6);
+        MacAddress mac = new MacAddress((short) 6);
         e.addMacAddress(mac);
 
         msg.ctrlMsg.addMessageElement(e);
@@ -168,13 +294,13 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf DeleteStationTester(){
+    public ByteBuf DeleteStationTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -182,28 +308,28 @@ public class DescriptorTester {
         msg = new ODLCapwapMessage();
 
 
-        MacAddress mac = new MacAddress((short)8);
-        mac.address[0]=12;
-        mac.address[1]=15;
-        mac.address[2]=12;
-        mac.address[3]=17;
-        mac.address[4]=12;
-        mac.address[7]=12;
-        DeleteStation e= new DeleteStation((short)12,mac);
+        MacAddress mac = new MacAddress((short) 8);
+        mac.address[0] = 12;
+        mac.address[1] = 15;
+        mac.address[2] = 12;
+        mac.address[3] = 17;
+        mac.address[4] = 12;
+        mac.address[7] = 12;
+        DeleteStation e = new DeleteStation((short) 12, mac);
 
         msg.ctrlMsg.addMessageElement(e);
 
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
 
-    public ByteBuf DecryptionErrorReportTester(){
+    public ByteBuf DecryptionErrorReportTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -211,15 +337,15 @@ public class DescriptorTester {
         msg = new ODLCapwapMessage();
 
 
-        MacAddress mac = new MacAddress((short)8);
-        mac.address[0]=12;
-        mac.address[1]=15;
-        mac.address[2]=12;
-        mac.address[3]=17;
-        mac.address[4]=12;
-        mac.address[7]=12;
-        DecryptionErrorReport e= new DecryptionErrorReport();
-        e.setRadioId((short)1);
+        MacAddress mac = new MacAddress((short) 8);
+        mac.address[0] = 12;
+        mac.address[1] = 15;
+        mac.address[2] = 12;
+        mac.address[3] = 17;
+        mac.address[4] = 12;
+        mac.address[7] = 12;
+        DecryptionErrorReport e = new DecryptionErrorReport();
+        e.setRadioId((short) 1);
         e.addMacAddress(mac);
 
         msg.ctrlMsg.addMessageElement(e);
@@ -227,13 +353,13 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf ControlIPV4Tester(){
+    public ByteBuf ControlIPV4Tester() {
 
         ODLCapwapMessage msg = null;
 
@@ -255,13 +381,13 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf LocalIPV4Tester(){
+    public ByteBuf LocalIPV4Tester() {
 
         ODLCapwapMessage msg = null;
 
@@ -281,12 +407,13 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
-    public ByteBuf LocalIPV6Tester(){
+
+    public ByteBuf LocalIPV6Tester() {
 
         ODLCapwapMessage msg = null;
 
@@ -295,7 +422,7 @@ public class DescriptorTester {
 
 
         IPV6Address ipv6 = new IPV6Address();
-        byte[] address = new byte[]{0,1, 2, 3, 4,6,7,8,9,10,11,12,13,14,15,16};
+        byte[] address = new byte[]{0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
         ipv6.setAddress(address);
 
         CapwapLocalIPV6Address ctrl = new CapwapLocalIPV6Address();
@@ -306,13 +433,13 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf CapwapTimerTester(){
+    public ByteBuf CapwapTimerTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -320,19 +447,19 @@ public class DescriptorTester {
         msg = new ODLCapwapMessage();
 
         CapwapTimers timers = new CapwapTimers();
-        timers.setDiscovery((short)255).setEchoReq((short)0);
+        timers.setDiscovery((short) 255).setEchoReq((short) 0);
         msg.ctrlMsg.addMessageElement(timers);
 
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf CapwapProtocolTester(){
+    public ByteBuf CapwapProtocolTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -346,13 +473,13 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf DataTransferDataTester(){
+    public ByteBuf DataTransferDataTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -361,20 +488,20 @@ public class DescriptorTester {
 
         DataTransferData data = new DataTransferData();
         data.setDataMode((short) 2).setDataType((short) 5);
-        byte [] dummy = new byte [128];
+        byte[] dummy = new byte[128];
         data.setData(dummy);
         msg.ctrlMsg.addMessageElement(data);
 
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf DataTransferModeTester(){
+    public ByteBuf DataTransferModeTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -382,18 +509,19 @@ public class DescriptorTester {
         msg = new ODLCapwapMessage();
 
         DataTransferMode mode = new DataTransferMode();
-        mode.setMode((byte)2);
+        mode.setMode((byte) 2);
         msg.ctrlMsg.addMessageElement(mode);
 
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
-    public ByteBuf DecryptionErrorReportPeriodTester (){
+
+    public ByteBuf DecryptionErrorReportPeriodTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -401,19 +529,18 @@ public class DescriptorTester {
         msg = new ODLCapwapMessage();
 
         DecryptionErrorPeriod period = new DecryptionErrorPeriod();
-        period.setRadioId((short)12).setReportInterval(36);
+        period.setRadioId((short) 12).setReportInterval(36);
         msg.ctrlMsg.addMessageElement(period);
 
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf DuplicateIPV4Tester (){
+    public ByteBuf DuplicateIPV4Tester() {
 
         ODLCapwapMessage msg = null;
 
@@ -427,24 +554,24 @@ public class DescriptorTester {
         ipv4.setAddress(address);
 
         //set
-        MacAddress mac = new MacAddress((short)8);
-        mac.address[0]=12;
-        mac.address[1]=15;
-        mac.address[2]=12;
-        mac.address[3]=17;
-        mac.address[4]=12;
-        mac.address[7]=12;
+        MacAddress mac = new MacAddress((short) 8);
+        mac.address[0] = 12;
+        mac.address[1] = 15;
+        mac.address[2] = 12;
+        mac.address[3] = 17;
+        mac.address[4] = 12;
+        mac.address[7] = 12;
         duplicateIPV4Addr.setIpv4(ipv4).setMacAddress(mac).setStatus((short) 1);
         msg.ctrlMsg.addMessageElement(duplicateIPV4Addr);
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf IdleTimeOutTester (){
+    public ByteBuf IdleTimeOutTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -457,31 +584,31 @@ public class DescriptorTester {
         msg.ctrlMsg.addMessageElement(timeOut);
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf EcnTester (){
+    public ByteBuf EcnTester() {
 
         ODLCapwapMessage msg = null;
 
         ByteBuf buf = Unpooled.buffer();
         msg = new ODLCapwapMessage();
 
-        ECNSupport ecn =new ECNSupport();
+        ECNSupport ecn = new ECNSupport();
         ecn.setEcn((byte) 1);
         msg.ctrlMsg.addMessageElement(ecn);
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf imageDataTester (){
+    public ByteBuf imageDataTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -489,19 +616,19 @@ public class DescriptorTester {
         msg = new ODLCapwapMessage();
 
         ImageData img = new ImageData();
-        byte [] dummy = new byte [1024];
+        byte[] dummy = new byte[1024];
         img.setData(dummy);
         img.setDataType((byte) 5);
         msg.ctrlMsg.addMessageElement(img);
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf imageIdentifierTester (){
+    public ByteBuf imageIdentifierTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -509,20 +636,20 @@ public class DescriptorTester {
         msg = new ODLCapwapMessage();
 
         ImageIdentifier id = new ImageIdentifier();
-        byte [] dummy = new byte [1024];
+        byte[] dummy = new byte[1024];
         id.setData(dummy);
-        id.setVendorID( 5);
+        id.setVendorID(5);
         msg.ctrlMsg.addMessageElement(id);
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf imageInfoTester (){
+    public ByteBuf imageInfoTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -530,59 +657,57 @@ public class DescriptorTester {
         msg = new ODLCapwapMessage();
 
         ImageInformation id = new ImageInformation();
-        byte [] dummy = new byte [16];
+        byte[] dummy = new byte[16];
         id.setFileSize(12345);
-        byte[] address = new byte[]{0,1, 2, 3, 4,6,7,8,9,10,11,12,13,14,15,16};
-        id.setHash(address );
+        byte[] address = new byte[]{0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+        id.setHash(address);
         msg.ctrlMsg.addMessageElement(id);
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf initiateDownloadTester (){
+    public ByteBuf initiateDownloadTester() {
 
         ODLCapwapMessage msg = null;
 
         ByteBuf buf = Unpooled.buffer();
         msg = new ODLCapwapMessage();
 
-        InitiateDownload  in = new InitiateDownload();
+        InitiateDownload in = new InitiateDownload();
         msg.ctrlMsg.addMessageElement(in);
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
-    public ByteBuf locationDataTester (){
+
+    public ByteBuf locationDataTester() {
 
         ODLCapwapMessage msg = null;
 
         ByteBuf buf = Unpooled.buffer();
         msg = new ODLCapwapMessage();
 
-        LocationData  l = new LocationData();
-        byte[] address = new byte[]{0,1, 2, 3, 4,6,7,8,9,10,11,12,13,14,15,16};
+        LocationData l = new LocationData();
+        byte[] address = new byte[]{0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
         l.setLocationData(address);
 
         msg.ctrlMsg.addMessageElement(l);
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf maxLenTester (){
+    public ByteBuf maxLenTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -596,13 +721,12 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf radioAdminStateTester (){
+    public ByteBuf radioAdminStateTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -617,13 +741,13 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
+
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf radioOperationalStateTester (){
+    public ByteBuf radioOperationalStateTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -639,14 +763,13 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
 
-    public ByteBuf resultCodeTester (){
+    public ByteBuf resultCodeTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -660,12 +783,12 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
-    public ByteBuf returnedMsgElementTester (){
+
+    public ByteBuf returnedMsgElementTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -674,20 +797,19 @@ public class DescriptorTester {
 
         ReturnedMessageElement r = new ReturnedMessageElement();
         r.setReason((short) 1);
-        byte[] address = new byte[]{0,1, 2, 3, 4,6,7,8,9,10,11,12,13,14,15,16};
+        byte[] address = new byte[]{0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
         r.setMsgElement(address);
 
         msg.ctrlMsg.addMessageElement(r);
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf sessionIdTester (){
+    public ByteBuf sessionIdTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -708,20 +830,19 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-        public ByteBuf VendorSpecificPayloadTester (){
+    public ByteBuf VendorSpecificPayloadTester() {
 
         ODLCapwapMessage msg = null;
 
         ByteBuf buf = Unpooled.buffer();
         msg = new ODLCapwapMessage();
         VendorSpecificPayload vsa = new VendorSpecificPayload();
-            vsa.setVendorId(119);
+        vsa.setVendorId(119);
         vsa.setElementID(120);
         byte[] address = new byte[512];
         address[12] = 32;
@@ -737,12 +858,12 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
-        public ByteBuf statisticsTimerTester (){
+
+    public ByteBuf statisticsTimerTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -755,35 +876,13 @@ public class DescriptorTester {
 
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
-        
         msg.header.encodeHeader(buf);
         msg.ctrlMsg.encode(buf);
         return buf;
     }
 
-    public ByteBuf frameTunnelModeTester (){
 
-        ODLCapwapMessage msg = null;
-
-        ByteBuf buf = Unpooled.buffer();
-        msg = new ODLCapwapMessage();
-        WtpFrameTunnelMode ft = new WtpFrameTunnelMode();
-        ft.seteBit();
-        ft.setnBit();
-        ft.setrBit();
-        msg.ctrlMsg.addMessageElement(ft);
-
-        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
-        msg.ctrlMsg.setSeqNo((short) 1);
-        
-
-        msg.header.encodeHeader(buf);
-        msg.ctrlMsg.encode(buf);
-
-        return buf;
-    }
-
-    public ByteBuf fallBackModeTester (){
+    public ByteBuf fallBackModeTester() {
 
         ODLCapwapMessage msg = null;
 
@@ -833,14 +932,15 @@ public class DescriptorTester {
         return buf;
     }
 
-    public boolean messageHederTester (){
-        StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
+    public boolean messageHederTester() {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
 
         ODLCapwapMessage msg = null;
 
         ByteBuf buf = Unpooled.buffer();
         msg = new ODLCapwapMessage();
         WtpFallBack fb = new WtpFallBack();
+        fb.setMode(2);
         msg.ctrlMsg.addMessageElement(fb);
         msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_JOIN_REQUEST);
         msg.ctrlMsg.setSeqNo((short) 1);
@@ -880,21 +980,21 @@ public class DescriptorTester {
         msg.ctrlMsg.encode(buf);
 
         ODLCapwapMessage n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
-        if (compareMessage(msg,n)){
-            LOG.info("Decoding  SUCCESS {}:",getFunctionName(bTop));
+        if (compareMessage(msg, n)) {
+            LOG.info("Decoding  SUCCESS {}:", getFunctionName(bTop));
             //encodeDecodeTester(msg,n);
 
-        }
-        {
-            LOG.error("Decoding  failed {}:",getFunctionName(bTop));
+        } else {
+            LOG.error("Decoding  failed {}:", getFunctionName(bTop));
 
             return false;
         }
 
 
+        return true;
     }
 
-    public void encodeDecodeTester(ODLCapwapMessage o, ODLCapwapMessage n){
+    public void encodeDecodeTester(ODLCapwapMessage o, ODLCapwapMessage n) {
 
         //encode new message
         //decode new message
@@ -902,116 +1002,115 @@ public class DescriptorTester {
         ByteBuf buf = Unpooled.buffer();
         n.header.encodeHeader(buf);
         n.ctrlMsg.encode(buf);
-        StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
 
         ODLCapwapMessage nn = ODLCapwapMessageFactory.decodeFromByteArray(buf);
-        if (compareMessage(o,nn)){
-            LOG.info("Decoding  SUCCESS {}:",getFunctionName(bTop));
+        if (compareMessage(o, nn)) {
+            LOG.info("Decoding  SUCCESS {}:", getFunctionName(bTop));
 
         }
         {
-            LOG.error("Decoding  failed {}:",getFunctionName(bTop));
+            LOG.error("Decoding  failed {}:", getFunctionName(bTop));
 
         }
-
 
 
     }
 
-    public boolean compareMessage(ODLCapwapMessage o, ODLCapwapMessage n){
-        StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
+    public boolean compareMessage(ODLCapwapMessage o, ODLCapwapMessage n) {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
 
         //Compare header
-        if(o==null){
-            LOG.error("o is null {}",getFunctionName(bTop));
+        if (o == null) {
+            LOG.error("o is null {}", getFunctionName(bTop));
 
             return false;
         }
-        if(n==null){
-            LOG.error("n is null {}",getFunctionName(bTop));
+        if (n == null) {
+            LOG.error("n is null {}", getFunctionName(bTop));
             return false;
         }
 
-        if (n.header.getVersion() != o.header.getVersion()){
-            LOG.error("Version not equal o->{}   n ->{} , {}:",o.getMessageType(),n.getMessageType(),getFunctionName(bTop));
+        if (n.header.getVersion() != o.header.getVersion()) {
+            LOG.error("Version not equal o->{}   n ->{} , {}:", o.getMessageType(), n.getMessageType(), getFunctionName(bTop));
             return false;
         }
 
-        if(n.header.getType() != n.header.getType()){
-            LOG.error("Version not equal o->{}   n ->{} , {}:",o.getMessageType(),n.getMessageType(),getFunctionName(bTop));
+        if (n.header.getType() != n.header.getType()) {
+            LOG.error("Version not equal o->{}   n ->{} , {}:", o.getMessageType(), n.getMessageType(), getFunctionName(bTop));
             return true;
         }
 
-        if(n.header.getHlen() != o.header.getHlen()){
-            LOG.error("HLEN not equal o->{}   n ->{} , {}:",o.header.getHlen(),n.header.getHlen(),getFunctionName(bTop));
+        if (n.header.getHlen() != o.header.getHlen()) {
+            LOG.error("HLEN not equal o->{}   n ->{} , {}:", o.header.getHlen(), n.header.getHlen(), getFunctionName(bTop));
             return false;
         }
-        if(n.header.getRid() != o.header.getRid()){
-            LOG.error("Rid not equal o->{}   n ->{} , {}:",o.header.getRid(),n.header.getRid(),getFunctionName(bTop));
-            return false;
-        }
-
-        if(n.header.getWbid() != o.header.getWbid()){
-            LOG.error("Wbid not equal o->{}   n ->{} , {}:",o.header.getWbid(),n.header.getWbid(),getFunctionName(bTop));
+        if (n.header.getRid() != o.header.getRid()) {
+            LOG.error("Rid not equal o->{}   n ->{} , {}:", o.header.getRid(), n.header.getRid(), getFunctionName(bTop));
             return false;
         }
 
-        if(n.header.isSetTbit() != o.header.isSetTbit()){
-            LOG.error("TBit not equal o->{}   n ->{} , {}:",o.header.isSetTbit(),n.header.isSetTbit(),getFunctionName(bTop));
-            return false;
-        }
-        if(n.header.isSetWbit() != o.header.isSetWbit()){
-            LOG.error("WBit not equal o->{}   n ->{} , {}:",o.header.isSetWbit(),n.header.isSetWbit(),getFunctionName(bTop));
+        if (n.header.getWbid() != o.header.getWbid()) {
+            LOG.error("Wbid not equal o->{}   n ->{} , {}:", o.header.getWbid(), n.header.getWbid(), getFunctionName(bTop));
             return false;
         }
 
-        if(n.header.isSetMbit() != o.header.isSetMbit()){
-            LOG.error("TMit not equal o->{}   n ->{} , {}:",o.header.isSetMbit(),n.header.isSetMbit(),getFunctionName(bTop));
+        if (n.header.isSetTbit() != o.header.isSetTbit()) {
+            LOG.error("TBit not equal o->{}   n ->{} , {}:", o.header.isSetTbit(), n.header.isSetTbit(), getFunctionName(bTop));
+            return false;
+        }
+        if (n.header.isSetWbit() != o.header.isSetWbit()) {
+            LOG.error("WBit not equal o->{}   n ->{} , {}:", o.header.isSetWbit(), n.header.isSetWbit(), getFunctionName(bTop));
             return false;
         }
 
-        if(n.header.isSetFbit() != o.header.isSetFbit()){
-            LOG.error("TFit not equal o->{}   n ->{} , {}:",o.header.isSetFbit(),n.header.isSetFbit(),getFunctionName(bTop));
+        if (n.header.isSetMbit() != o.header.isSetMbit()) {
+            LOG.error("TMit not equal o->{}   n ->{} , {}:", o.header.isSetMbit(), n.header.isSetMbit(), getFunctionName(bTop));
             return false;
         }
 
-        if(n.header.isSetKbit() != o.header.isSetKbit()){
-            LOG.error("KBit not equal o->{}   n ->{} , {}:",o.header.isSetKbit(),n.header.isSetKbit(),getFunctionName(bTop));
-            return false;
-        }
-        if(n.header.isSetLbit() != o.header.isSetLbit()){
-            LOG.error("LBit not equal o->{}   n ->{} , {}:",o.header.isSetLbit(),n.header.isSetLbit(),getFunctionName(bTop));
+        if (n.header.isSetFbit() != o.header.isSetFbit()) {
+            LOG.error("TFit not equal o->{}   n ->{} , {}:", o.header.isSetFbit(), n.header.isSetFbit(), getFunctionName(bTop));
             return false;
         }
 
-        if(n.header.getFragId() != o.header.getFragId()){
-            LOG.error("FragID not equal o->{}   n ->{} , {}:",o.header.getFragId(),n.header.getFragId(),getFunctionName(bTop));
+        if (n.header.isSetKbit() != o.header.isSetKbit()) {
+            LOG.error("KBit not equal o->{}   n ->{} , {}:", o.header.isSetKbit(), n.header.isSetKbit(), getFunctionName(bTop));
+            return false;
+        }
+        if (n.header.isSetLbit() != o.header.isSetLbit()) {
+            LOG.error("LBit not equal o->{}   n ->{} , {}:", o.header.isSetLbit(), n.header.isSetLbit(), getFunctionName(bTop));
             return false;
         }
 
-        if(n.header.getFragOffset() != o.header.getFragOffset()){
-            LOG.error("FragOff Set not equal o->{}   n ->{} , {}:",o.header.getFragOffset(),n.header.getFragOffset(),getFunctionName(bTop));
+        if (n.header.getFragId() != o.header.getFragId()) {
+            LOG.error("FragID not equal o->{}   n ->{} , {}:", o.header.getFragId(), n.header.getFragId(), getFunctionName(bTop));
             return false;
         }
 
-        if(o.header.isSetMbit()){
-            boolean result =  compareMacAddress(o.header.getRadioMacAddress(),n.header.getRadioMacAddress());
-            if(result == false) {
+        if (n.header.getFragOffset() != o.header.getFragOffset()) {
+            LOG.error("FragOff Set not equal o->{}   n ->{} , {}:", o.header.getFragOffset(), n.header.getFragOffset(), getFunctionName(bTop));
+            return false;
+        }
+
+        if (o.header.isSetMbit()) {
+            boolean result = compareMacAddress(o.header.getRadioMacAddress(), n.header.getRadioMacAddress());
+            if (result == false) {
                 LOG.error(" Error in  {} {}", getFunctionName(bTop), result);
                 return false;
             }
         }
-        if(o.header.isSetWbit()){
-            boolean result= compareWsiMac(o.header.getWsiInfo(), n.header.getWsiInfo());
-            if (result ==false) {
+        if (o.header.isSetWbit()) {
+            boolean result = compareWsiMac(o.header.getWsiInfo(), n.header.getWsiInfo());
+            if (result == false) {
                 LOG.error(" Error in  {} {}", getFunctionName(bTop), result);
                 return false;
             }
         }
 
-        if(o.ctrlMsg !=null){
-            boolean result= compareCtrlMsg(o.ctrlMsg,n.ctrlMsg);
-            if (result ==false) {
+        if (o.ctrlMsg != null) {
+            boolean result = compareCtrlMsg(o.ctrlMsg, n.ctrlMsg);
+            if (result == false) {
                 LOG.error(" Error in  {} {}", getFunctionName(bTop), result);
                 return false;
             }
@@ -1021,46 +1120,46 @@ public class DescriptorTester {
     }
 
     // final StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
-    public String getFunctionName(StackTraceElement e){
+    public String getFunctionName(StackTraceElement e) {
         final StackTraceElement aTop = e;
-        return  (aTop.getMethodName ());
+        return (aTop.getMethodName());
 
     }
 
 
-    boolean compareCtrlMsg(ODLCapwapControlMessage o, ODLCapwapControlMessage n){
-        StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
-        if(o==null){
-            LOG.error("o is null {}",getFunctionName(bTop));
+    boolean compareCtrlMsg(ODLCapwapControlMessage o, ODLCapwapControlMessage n) {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+        if (o == null) {
+            LOG.error("o is null {}", getFunctionName(bTop));
 
             return false;
         }
-        if(n==null){
-            LOG.error("n is null {}",getFunctionName(bTop));
+        if (n == null) {
+            LOG.error("n is null {}", getFunctionName(bTop));
             return false;
         }
         //Compare Message Type
-        if(o.getMsgType() != n.getMsgType()){
-            LOG.error("Message Type not equal o->{}   n ->{} , {}:",o.getMsgType(),n.getMsgType(),getFunctionName(bTop));
+        if (o.getMsgType() != n.getMsgType()) {
+            LOG.error("Message Type not equal o->{}   n ->{} , {}:", o.getMsgType(), n.getMsgType(), getFunctionName(bTop));
             return false;
         }
 
         //Compare Message Length
-        if(o.getMsgLen() !=n.getMsgLen()){
-            LOG.error("Message Len not equal o->{}   n ->{} , {}:",o.getMsgLen(),n.getMsgLen(),getFunctionName(bTop));
+        if (o.getMsgLen() != n.getMsgLen()) {
+            LOG.error("Message Len not equal o->{}   n ->{} , {}:", o.getMsgLen(), n.getMsgLen(), getFunctionName(bTop));
 
             return false;
         }
 
         //Compare Message SeqNum
-        if(o.getSeqNo() != n.getSeqNo()){
-            LOG.error("SeqNo not equal o->{}   n ->{} , {}:",o.getSeqNo(),n.getSeqNo(),getFunctionName(bTop));
+        if (o.getSeqNo() != n.getSeqNo()) {
+            LOG.error("SeqNo not equal o->{}   n ->{} , {}:", o.getSeqNo(), n.getSeqNo(), getFunctionName(bTop));
             return false;
         }
 
-        boolean result = compareMsgElements(o,n);
-        if(!result){
-            LOG.error(" Error in comparing Message Elements  {} {}",getFunctionName(bTop),result);
+        boolean result = compareMsgElements(o, n);
+        if (!result) {
+            LOG.error(" Error in comparing Message Elements  {} {}", getFunctionName(bTop), result);
             return false;
 
         }
@@ -1069,23 +1168,412 @@ public class DescriptorTester {
         return true;
     }
 
-    boolean compareMsgElements(ODLCapwapControlMessage o, ODLCapwapControlMessage n){
+
+    public boolean allDescriptorTester(int dType) {
+        switch (dType) {
+            case ODLCapwapConsts.CAPWAP_ELMT_TYPE_DISCOVERY_TYPE:
+                boolean result = discoveryTypeEncodeDecodeTest();
+                if (!result) {
+
+                    return false;
+                }
+            default:
+        }
+
+        return true;
+    }
+
+    boolean compareMsgElements(ODLCapwapControlMessage o, ODLCapwapControlMessage n) {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+        if (o == null) {
+            LOG.error("o is null {}", getFunctionName(bTop));
+
+            return false;
+        }
+        if (n == null) {
+            LOG.error("n is null {}", getFunctionName(bTop));
+            return false;
+        }
+
+        Iterator<ODLCapwapMessageElement> itr = n.getElements().iterator();
+        for (ODLCapwapMessageElement e_o : o.getElements()) {
+            ODLCapwapMessageElement e_n = itr.next();
+            boolean result = compareEachMessageElement(e_o, e_n);
+            if (!result) {
+                LOG.error("Comparison of message elements failed {}", getFunctionName(bTop));
+
+            }
+        }
+        //Compare Message Elements
+        return true;
+    }
+
+
+    boolean compareEachMessageElement(ODLCapwapMessageElement o, ODLCapwapMessageElement n) {
+
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        if (o == null) {
+            LOG.error("o is null {}", getFunctionName(bTop));
+
+            return false;
+        }
+        if (n == null) {
+            LOG.error("n is null {}", getFunctionName(bTop));
+            return false;
+        }
+
+        boolean result = false;
+        switch (o.getType()) {
+            case ODLCapwapConsts.CAPWAP_ELMT_TYPE_DISCOVERY_TYPE:
+                result = compareDiscoveryType(o, n);
+                if (!result) {
+                    LOG.error(" Error in comparing Message Elements  {} {}", getFunctionName(bTop), result);
+                    return false;
+
+                }
+                break;
+            case ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_BOARD_DATA:
+                result = compareWtpBoard(o, n);
+                if (!result) {
+                    LOG.error(" Error in comparing Message Elements  {} {}", getFunctionName(bTop), result);
+                    return false;
+
+                }
+                break;
+            case ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_DESCRIPTOR:
+                result = compareWtpDescriptor(o, n);
+                if (!result) {
+                    LOG.error(" Error in comparing Message Elements  {} {}", getFunctionName(bTop), result);
+                    return false;
+
+                }
+                break;
+            case ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_FRAME_TUNNEL_MODE:
+                result = compareFrameTunnelDescriptor(o, n);
+                if (!result) {
+                    LOG.error(" Error in comparing Message Elements  {} {}", getFunctionName(bTop), result);
+                    return false;
+
+                }
+
+                break;
+            default:
+
+        }
+        return true;
+    }
+
+    boolean compareFrameTunnelDescriptor(ODLCapwapMessageElement o, ODLCapwapMessageElement n) {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        if (o == null) {
+            LOG.error("o is null {}", getFunctionName(bTop));
+
+            return false;
+        }
+        WtpFrameTunnelModeMsgElem oo = (WtpFrameTunnelModeMsgElem) o;
+        WtpFrameTunnelModeMsgElem nn = (WtpFrameTunnelModeMsgElem) n;
+        if (n == null) {
+            LOG.error("n is null {}", getFunctionName(bTop));
+            return false;
+        }
+
+        if (oo.getType() != nn.getType()) {
+
+            LOG.error(" Wrong Type     {} {} {}  ", oo.getType(), nn.getType(), getFunctionName(bTop));
+            return false;
+        }
+        if (oo.iseBitSet() != nn.iseBitSet()) {
+
+            LOG.error(" eBitMisMatch     {} {} {}  ", oo.iseBitSet(), nn.iseBitSet(), getFunctionName(bTop));
+            return false;
+        }
+        if (oo.islBitSet() != nn.islBitSet()) {
+
+            LOG.error(" lBitMisMatch     {} {} {}  ", oo.islBitSet(), nn.islBitSet(), getFunctionName(bTop));
+            return false;
+        }
+
+        if (oo.isnBitSet() != nn.isnBitSet()) {
+
+            LOG.error(" nBitMisMatch     {} {} {}  ", oo.isnBitSet(), nn.isnBitSet(), getFunctionName(bTop));
+            return false;
+        }
+
+        if (oo.isrBitSet() != nn.isrBitSet()) {
+
+            LOG.error(" rBitMisMatch     {} {} {}  ", oo.isrBitSet(), nn.isrBitSet(), getFunctionName(bTop));
+            return false;
+        }
+
+
+
+
+        return true;
+    }
+
+    boolean compareWtpDescriptor(ODLCapwapMessageElement o, ODLCapwapMessageElement n) {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        if (o == null) {
+            LOG.error("o is null {}", getFunctionName(bTop));
+
+            return false;
+        }
+        WtpDescriptor oo = (WtpDescriptor) o;
+        WtpDescriptor nn = (WtpDescriptor) n;
+        if (n == null) {
+            LOG.error("n is null {}", getFunctionName(bTop));
+            return false;
+        }
+
+        if (oo.getType() != nn.getType()) {
+
+            LOG.error(" Wrong Type     {} {} {}  ", oo.getType(), nn.getType(), getFunctionName(bTop));
+            return false;
+        }
+        if (oo.getMaxRadios() != nn.getMaxRadios()) {
+
+            LOG.error(" Wrong Max Radios     {} {} {}  ", oo.getMaxRadios(), nn.getMaxRadios(), getFunctionName(bTop));
+            return false;
+        }
+        if (oo.getRadioInUse() != nn.getRadioInUse()) {
+
+            LOG.error(" Wrong    o-> {} n->{} : {}  ", oo.getRadioInUse(), nn.getRadioInUse(), getFunctionName(bTop));
+            return false;
+        }
+        if (oo.getNumEncrypt() != nn.getNumEncrypt()) {
+
+            LOG.error(" Wrong    o-> {} n->{} : {}  ", oo.getNumEncrypt(), nn.getNumEncrypt(), getFunctionName(bTop));
+            return false;
+        }
+        boolean result = compareEncryptionSubElements(oo.getEncysubElemList(), nn.getEncysubElemList());
+        if (!result) {
+            LOG.error(" Comparing Encryption Subelements failed  {} {}", getFunctionName(bTop), result);
+            return false;
+        }
+        result = false;
+        result = compareDescriptorSubElements(oo.getDescSubElemList(), nn.getDescSubElemList());
+        if (!result) {
+            LOG.error(" Comparing Descriptor Subelements failed  {} {}", getFunctionName(bTop), result);
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean compareDescriptorSubElements(ArrayList<DescriptorSubElement> o, ArrayList<DescriptorSubElement> n) {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        if (o == null) {
+            LOG.error("o is null {}", getFunctionName(bTop));
+            return false;
+        }
+        Iterator<DescriptorSubElement> itr = n.iterator();
+        for (DescriptorSubElement e_o : o) {
+            DescriptorSubElement e_n = itr.next();
+            boolean result = compareEachDescriptorSubElement(e_o, e_n);
+            if (!result) {
+                LOG.error("Comparison of Descriptor sub elements failed {}", getFunctionName(bTop));
+                return false;
+            }
+        }
+
+
+        return true;
+    }
+
+
+    private boolean compareEachDescriptorSubElement(DescriptorSubElement o, DescriptorSubElement n) {
+
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+        if (o == null) {
+            LOG.error("o is null {}", getFunctionName(bTop));
+
+            return false;
+        }
+        if (n == null) {
+            LOG.error("n is null {}", getFunctionName(bTop));
+            return false;
+        }
+        if (o.getVendorId() != n.getVendorId()) {
+            LOG.error(" Vendor ID    o->  {} n->{} {}  ", o.getVendorId(), n.getVendorId(), getFunctionName(bTop));
+
+        }
+        if (o.getDescType() != n.getDescType()) {
+            LOG.error(" Descriptor Type    o->  {} n->{} {}  ", o.getDescType(), n.getDescType(), getFunctionName(bTop));
+        }
+        if (o.getDescLength() != n.getDescLength()) {
+            LOG.error(" Descriptor Type    o->  {} n->{} {}  ", o.getDescLength(), n.getDescLength(), getFunctionName(bTop));
+        }
+
+        if (o.getDescLength() > 0) {
+            boolean result = compareByteArray(o.getDescData(), n.getDescData());
+            if (result == false) {
+                LOG.error(" Error in  {} {}", getFunctionName(bTop), result);
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    private boolean compareEncryptionSubElements(ArrayList<EncryptionSubElement> o, ArrayList<EncryptionSubElement> n) {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        if (o == null) {
+            LOG.error("o is null {}", getFunctionName(bTop));
+            return false;
+        }
+        Iterator<EncryptionSubElement> itr = n.iterator();
+        for (EncryptionSubElement e_o : o) {
+            EncryptionSubElement e_n = itr.next();
+            boolean result = compareEachEncryptionElement(e_o, e_n);
+            if (!result) {
+                LOG.error("Comparison of individual Board Sub elements failed {}", getFunctionName(bTop));
+                return false;
+            }
+        }
+
+
+        return true;
+    }
+
+    private boolean compareEachEncryptionElement(EncryptionSubElement o, EncryptionSubElement n) {
+
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+        if (o == null) {
+            LOG.error("o is null {}", getFunctionName(bTop));
+
+            return false;
+        }
+        if (n == null) {
+            LOG.error("n is null {}", getFunctionName(bTop));
+            return false;
+        }
+        if (o.getWbid() != n.getWbid()) {
+            LOG.error(" WBID    o->  {} n->{} {}  ", o.getWbid(), n.getWbid(), getFunctionName(bTop));
+
+        }
+        if (o.getEncryptioCapability() != n.getEncryptioCapability()) {
+            LOG.error(" Encryption Capability    o->  {} n->{} {}  ", o.getEncryptioCapability(), n.getEncryptioCapability(), getFunctionName(bTop));
+        }
+        return true;
+    }
+
+
+    boolean compareWtpBoard(ODLCapwapMessageElement o, ODLCapwapMessageElement n) {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        if (o == null) {
+            LOG.error("o is null {}", getFunctionName(bTop));
+
+            return false;
+        }
+        WtpBoardDataMsgElem oo = (WtpBoardDataMsgElem) o;
+        WtpBoardDataMsgElem nn = (WtpBoardDataMsgElem) n;
+        if (n == null) {
+            LOG.error("n is null {}", getFunctionName(bTop));
+            return false;
+        }
+
+        if (oo.getType() != nn.getType()) {
+            LOG.error(" Wrong Message Type   {} ", getFunctionName(bTop));
+            return false;
+        }
+
+        if (oo.getVendorId() != nn.getVendorId()) {
+            LOG.error(" Wrong VendorID     {} {} {}  ", oo.getVendorId(), nn.getVendorId(), getFunctionName(bTop));
+            return false;
+        }
+
+        boolean result = compareBoardSubElements(oo.getBoardDataList(), nn.getBoardDataList());
+        if (!result) {
+            LOG.error(" Comparing Board Subelements failed  {} {}", getFunctionName(bTop), result);
+            return false;
+
+        }
+        return true;
+    }
+
+    boolean compareBoardSubElements(ArrayList<BoardDataSubElem> o, ArrayList<BoardDataSubElem> n) {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+        if (o == null) {
+            LOG.error("o is null {}", getFunctionName(bTop));
+
+            return false;
+        }
+        if (n == null) {
+            LOG.error("n is null {}", getFunctionName(bTop));
+            return false;
+        }
+
+        Iterator<BoardDataSubElem> itr = n.iterator();
+        for (BoardDataSubElem e_o : o) {
+            BoardDataSubElem e_n = itr.next();
+            boolean result = compareEachBaordSubElement(e_o, e_n);
+            if (!result) {
+                LOG.error("Comparison of individual Board Sub elements failed {}", getFunctionName(bTop));
+
+            }
+        }
+        //Compare Message Elements
+        return true;
+    }
+
+
+    private boolean compareEachBaordSubElement(BoardDataSubElem o, BoardDataSubElem n) {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+        if (o == null) {
+            LOG.error("o is null {}", getFunctionName(bTop));
+
+            return false;
+        }
+        if (n == null) {
+            LOG.error("n is null {}", getFunctionName(bTop));
+            return false;
+        }
+        if(o.getBoardDataType() != n.getBoardDataType()){
+            LOG.error(" Wrong board type     {} {} {}  ", o.getBoardDataType(), n.getBoardDataType(), getFunctionName(bTop));
+
+        }
+        return true;
+    }
+
+
+    boolean compareDiscoveryType(ODLCapwapMessageElement o, ODLCapwapMessageElement n){
         StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
+
         if(o==null){
             LOG.error("o is null {}",getFunctionName(bTop));
 
             return false;
         }
+        DiscoveryType oo= (DiscoveryType) o;
+        DiscoveryType nn= (DiscoveryType) n;
         if(n==null){
             LOG.error("n is null {}",getFunctionName(bTop));
             return false;
         }
 
-        //Compare Message Elements
+        if(oo.getMsgElemeType() != nn.getMsgElemeType()){
+            LOG.error(" Wrong Message Type   {} ",getFunctionName(bTop));
+            return false;
+        }
+
+        if(oo.getType() != nn.getType()){
+            LOG.error(" Wrong Discovery  Type   {} {} {}  ",oo.getType(),nn.getType(),getFunctionName(bTop));
+            return false;
+        }
         return true;
     }
 
-    boolean compareMacAddress(MacAddress o,MacAddress n){
+
+
+
+
+    boolean compareMacAddress(MacAddress o, MacAddress n){
         StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
 
         if(o==null){
@@ -1114,7 +1602,7 @@ public class DescriptorTester {
         return true;
     }
 
-    boolean compareWsiMac(WsiInfo o,WsiInfo n){
+    boolean compareWsiMac(WsiInfo o, WsiInfo n){
         StackTraceElement bTop = Thread.currentThread ().getStackTrace ()[1];
 
         if(o==null){
@@ -1210,6 +1698,15 @@ public class DescriptorTester {
 
         }
     }
+
+    boolean discoveryTypeEncodeDecodeTest(){
+        //Encode
+        //Decode
+        //ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        //Compare
+        return true;
+    }
+
 
     public static void main(String args[]) {
 
@@ -1307,10 +1804,16 @@ public class DescriptorTester {
         //buf = tester.VendorSpecificPayloadTester();
         //tester.sender(buf);
 
+        buf = Unpooled.buffer();
        // buf = tester.frameTunnelModeTester();
         //tester.sender(buf);
-        buf = tester.fallBackModeTester();
+        //buf = tester.fallBackModeTester();
+        //tester.sender(buf);
+        //tester.messageHederTester();
+
+        tester.WtpDesciptorTester(buf);
         tester.sender(buf);
-        tester.messageHederTester();
+        //tester.DiscoveryDescriptorTest(buf);
+        //tester.sender(buf);
     }
 }

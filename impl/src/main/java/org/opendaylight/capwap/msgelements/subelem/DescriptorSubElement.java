@@ -45,6 +45,9 @@ public class DescriptorSubElement implements ODLCapwapMessageElement {
         this.descLength = descDataSize;
     }
 
+    public DescriptorSubElement(){
+    }
+
     @Override
     public int encode(ByteBuf buf) {
 

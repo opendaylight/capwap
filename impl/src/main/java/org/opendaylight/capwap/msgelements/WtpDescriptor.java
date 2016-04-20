@@ -38,6 +38,7 @@ public class WtpDescriptor implements ODLCapwapMessageElement {
 
     ArrayList <EncryptionSubElement> encysubElemList = null;
 
+
     ArrayList <DescriptorSubElement> descSubElemList = null;
 
     public WtpDescriptor(){
@@ -45,6 +46,23 @@ public class WtpDescriptor implements ODLCapwapMessageElement {
         this.encysubElemList = new ArrayList<EncryptionSubElement>();
         this.descSubElemList = new ArrayList<DescriptorSubElement>();
     }
+
+    public ArrayList<EncryptionSubElement> getEncysubElemList() {
+        return encysubElemList;
+    }
+
+    public void setEncysubElemList(ArrayList<EncryptionSubElement> encysubElemList) {
+        this.encysubElemList = encysubElemList;
+    }
+
+    public ArrayList<DescriptorSubElement> getDescSubElemList() {
+        return descSubElemList;
+    }
+
+    public void setDescSubElemList(ArrayList<DescriptorSubElement> descSubElemList) {
+        this.descSubElemList = descSubElemList;
+    }
+
 
     public int getMsgElemeType() {
         return msgElemeType;
@@ -92,7 +110,7 @@ public class WtpDescriptor implements ODLCapwapMessageElement {
 
     }
 
-    public  EncryptionSubElement getEncryptSubElement(byte wbid){
+    public EncryptionSubElement getEncryptSubElement(byte wbid){
 
         for(EncryptionSubElement e: this.encysubElemList ){
             if (e.getWbid()== wbid)
@@ -122,7 +140,7 @@ public class WtpDescriptor implements ODLCapwapMessageElement {
 
     }
 
-    public  DescriptorSubElement getDescriptorSubElm(int vendorId, int descType){
+    public DescriptorSubElement getDescriptorSubElm(int vendorId, int descType){
 
         for(DescriptorSubElement e: this.descSubElemList ){
             if ((e.getVendorId() == vendorId) && (e.getDescType() == descType))
