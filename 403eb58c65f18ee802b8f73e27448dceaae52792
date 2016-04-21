@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa57193c_8b82af50",
+        "filename": "impl/src/main/java/org/opendaylight/capwap/msgelements/WtpFrameTunnelModeMsgElem.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 3584
+      },
+      "writtenOn": "2016-04-21T15:58:08Z",
+      "side": 1,
+      "message": "This needs to be moved as a constant. Similar comment applicable throughout..",
+      "revId": "403eb58c65f18ee802b8f73e27448dceaae52792",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
