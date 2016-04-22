@@ -1772,8 +1772,40 @@ public class DescriptorTester {
                 }
                 sender(buf);
                 break;
+            case ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_DESCRIPTOR:
+                result = WtpDesciptorTester(buf);
+                if (!result) {
 
+                    return false;
+                }
+                sender(buf);
+                break;
+            case ODLCapwapConsts.CAPWAP_ELMT_TYPE_DISCOVERY_TYPE:
+                result = DiscoveryDescriptorTest(buf);
+                if (!result) {
 
+                    return false;
+                }
+                sender(buf);
+                break;
+
+            case ODLCapwapConsts.IEEE_80211_WTP_RADIO_INFORMATION:
+                result = wtpRadioInfoTester(buf);
+                if (!result) {
+
+                    return false;
+                }
+                sender(buf);
+                break;
+
+            case ODLCapwapConsts.CAPWAP_ELMT_TYPE_AC_DESCRIPTOR:
+                result = ACDescriptorTest(buf);
+                if (!result) {
+
+                    return false;
+                }
+                sender(buf);
+                break;
             default:
         }
 
@@ -3174,6 +3206,7 @@ public class DescriptorTester {
         DescriptorTester tester = new DescriptorTester();
         ByteBuf buf = null;
 
+        //buf = Unpooled.buffer();
         //buf = tester.ACDescriptorTest();
         //tester.sender(buf);
 
@@ -3267,6 +3300,7 @@ public class DescriptorTester {
         //buf = tester.fallBackModeTester();
         //tester.messageHederTester(buf);
         //tester.sender(buf);
+
 
         //tester.WtpDesciptorTester(buf);
         //tester.sender(buf);
