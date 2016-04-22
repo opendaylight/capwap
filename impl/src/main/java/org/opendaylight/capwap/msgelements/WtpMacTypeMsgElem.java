@@ -19,7 +19,10 @@ public class WtpMacTypeMsgElem implements ODLCapwapMessageElement {
     protected final byte local = 0;
     protected final byte split = 1;
     protected final byte both= 2;
-    protected  byte type= 2;
+
+
+
+    protected  byte type= 0;
 
     int msgElemType = 0;
 
@@ -31,6 +34,10 @@ public class WtpMacTypeMsgElem implements ODLCapwapMessageElement {
     }
     public void setTypeBoth(){
         this.type = this.both;
+    }
+
+    public void setType(byte type) {
+        this.type = type;
     }
 
     public WtpMacTypeMsgElem(){
@@ -51,6 +58,9 @@ public class WtpMacTypeMsgElem implements ODLCapwapMessageElement {
 
     @Override
     public int getType() {
-        return 0;
+        return this.msgElemType;
+    }
+    public int getmacType() {
+        return this.type;
     }
 }

@@ -38,6 +38,8 @@ public class ACDescriptor implements ODLCapwapMessageElement {
     byte dtlspolicyCMask = 0b00000010;
     byte dtlspolicyDMask = 0b00000100;
 
+
+
     ArrayList<ACInformationSubElement> acInfolist = null;
 
 
@@ -45,6 +47,19 @@ public class ACDescriptor implements ODLCapwapMessageElement {
         this.msgElm= ODLCapwapConsts.CAPWAP_ELMT_TYPE_AC_DESCRIPTOR;
         this.acInfolist = new ArrayList<ACInformationSubElement>();
     }
+
+    public byte getSecurity() {
+        return security;
+    }
+
+    public byte getDtlsPolicy() {
+        return dtlsPolicy;
+    }
+
+    public byte getReserved() {
+        return reserved;
+    }
+
 
     public int getStations() {
         return this.stations;
@@ -110,6 +125,16 @@ public class ACDescriptor implements ODLCapwapMessageElement {
 
     public short getRmac() {
         return this.rmac;
+    }
+
+    public ACDescriptor setSecurity(byte security) {
+        this.security = security;
+        return this;
+    }
+
+    public ACDescriptor setDtlsPolicy(byte dtlsPolicy) {
+        this.dtlsPolicy = dtlsPolicy;
+        return this;
     }
 
     public ACDescriptor setRmac(byte rmac) {
@@ -206,6 +231,15 @@ public class ACDescriptor implements ODLCapwapMessageElement {
         }
         return buf.writerIndex()-start;
     }
+
+    public ArrayList<ACInformationSubElement> getAcInfolist() {
+        return acInfolist;
+    }
+
+    public void setAcInfolist(ArrayList<ACInformationSubElement> acInfolist) {
+        this.acInfolist = acInfolist;
+    }
+
 
     @Override
     public ODLCapwapMessageElement decode(ByteBuf buf) {

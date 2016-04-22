@@ -8,6 +8,10 @@
 package org.opendaylight.capwap.binding_802_11;
 
 import io.netty.buffer.ByteBuf;
+import org.opendaylight.capwap.ODLCapwapConsts;
+import org.opendaylight.capwap.ODLCapwapMessageElement;
+import org.opendaylight.capwap.msgelements.subelem.ACInformationSubElement;
+import org.opendaylight.capwap.utils.ByteManager;
 
 /**
  * Created by flat on 14/04/16.
@@ -46,13 +50,15 @@ import io.netty.buffer.ByteBuf;
 
 
  */
-public class WTP_Radio_Information {
+public class WTP_Radio_Information implements ODLCapwapMessageElement {
     protected byte radioId = 0;
     protected byte radioType = 0;
     protected final byte nBitMask = 0b00001000;
     protected final byte gBitMask = 0b00000100;
     protected final byte aBitMask = 0b00000010;
     protected final byte bBitMask = 0b00000001;
+
+    int msgElem = 0;
 
 
     //Make the wtp information for this  WTP
@@ -62,6 +68,7 @@ public class WTP_Radio_Information {
     }
 
     public WTP_Radio_Information(){
+        this.msgElem = ODLCapwapConsts.IEEE_80211_WTP_RADIO_INFORMATION;
 
     }
 
@@ -119,17 +126,26 @@ public class WTP_Radio_Information {
     }
 
 
-    boolean encode(ByteBuf buf){
-        buf.setByte(0,this.radioId);
-        buf.setByte(1,0);
-        buf.setByte(2,0);
-        buf.setByte(3,0);
-        buf.setByte(4,this.radioType);
-        return true;
+    public int encode(ByteBuf buf) {
+
+        int start = buf.writerIndex();
+        //encode Radio ID
+        buf.writeByte(this.radioId); //radio id is  less than 32 , hence direct byte is fine
+        buf.writeBytes(new byte[] {0,0,0}); //3 bytes are  reserved
+        buf.writeByte(this.radioType); //again a byte enumeration
+        //encode stations
+        return buf.writerIndex()-start;
     }
 
+    @Override
+    public ODLCapwapMessageElement decode(ByteBuf buf) {
+        return null;
+    }
 
-
+    @Override
+    public int getType() {
+        return this.msgElem;
+    }
 
 
 }

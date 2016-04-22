@@ -60,6 +60,10 @@ public class ACInformationSubElement implements ODLCapwapMessageElement {
 
     }
 
+    public ACInformationSubElement(){
+
+    }
+
     @Override
     public int encode(ByteBuf buf) {
         int start = buf.writerIndex();

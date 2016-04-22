@@ -10,6 +10,7 @@ package org.opendaylight.capwap;
 
 
 import io.netty.buffer.ByteBuf;
+import org.opendaylight.capwap.binding_802_11.MsgElem802_11Factory;
 import org.opendaylight.capwap.msgelements.UnknownMsgElm;
 import org.opendaylight.capwap.msgelements.subelem.MacAddress;
 import org.opendaylight.capwap.msgelements.subelem.WsiInfo;
@@ -162,6 +163,41 @@ public class ODLCapwapMessageFactory {
                  return ODLCapwapMessageElementFactory.decodeWtpDescriptor(buf,length);
              case ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_FRAME_TUNNEL_MODE:
                  return ODLCapwapMessageElementFactory.decodeFrameTunnelModeDescriptor(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_MAC_TYPE:
+                 return ODLCapwapMessageElementFactory.decodeMacTypeMsgElm(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_AC_DESCRIPTOR:
+                 return ODLCapwapMessageElementFactory.decodeAcDescMsgElm(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_AC_NAME:
+                 return ODLCapwapMessageElementFactory.decodeAcNameMsgElm(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_CAPWAP_CONTROL_IPV4_ADDR:
+                 return ODLCapwapMessageElementFactory.decodeControlIPV4Address(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_ECN_SUPPORT:
+                 return ODLCapwapMessageElementFactory.decodeEcnSupport(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_CAPWAP_LOCAL_IPV4_ADDR:
+                 return ODLCapwapMessageElementFactory.decodeLocalIPV4(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_SESSION_ID:
+                 return ODLCapwapMessageElementFactory.decodeSessionID(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_NAME:
+                 return ODLCapwapMessageElementFactory.decodeWtpName(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_MAX_MESSAGE_LENGTH:
+                 return ODLCapwapMessageElementFactory.decodeMaxMessageLength(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_REBOOT_STATS:
+                 return ODLCapwapMessageElementFactory.decodeRebootStatistics(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_AC_IPV4_LIST:
+                 return ODLCapwapMessageElementFactory.decodeIPV4AddrList(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_CAPWAP_TRANSPORT_PROTO:
+                 return ODLCapwapMessageElementFactory.decodeTransportProtocol(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_IMAGE_IDENTIFIER:
+                 return ODLCapwapMessageElementFactory.decodeImageId(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_VENDOR_SPECIFIC_PAYLOAD:
+                 return ODLCapwapMessageElementFactory.decodeVendorSpecificPayload(buf,length);
+             case ODLCapwapConsts.CAPWAP_ELMT_TYPE_STATISTICS_TIMER:
+                 return ODLCapwapMessageElementFactory.decodeStaticsTimer(buf,length);
+
+             //Bindings -> Later this should be refactored to a plugabale module
+
+             case ODLCapwapConsts.IEEE_80211_WTP_RADIO_INFORMATION:
+                 return MsgElem802_11Factory.decodeWtpRadioInfoElm(buf,length);
              default:
 
                  return decodeUnknownMsgElm(buf,dType,length);

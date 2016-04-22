@@ -47,6 +47,13 @@ public class CapwapControlIPV4Addr implements ODLCapwapMessageElement {
         return this;
     }
 
+    public CapwapControlIPV4Addr setIpv4(byte [] ipv4) {
+        IPV4Address addr= new IPV4Address();
+        addr.setAddress(ipv4);
+        this.setIpv4(addr);
+        return this;
+    }
+
     @Override
     public int encode(ByteBuf buf) {
         int start =buf.writerIndex();

@@ -11,36 +11,45 @@ package org.opendaylight.capwap.msgelements;
 import io.netty.buffer.ByteBuf;
 import org.opendaylight.capwap.ODLCapwapConsts;
 import org.opendaylight.capwap.ODLCapwapMessageElement;
+import org.opendaylight.capwap.utils.ByteManager;
 
 /**
- * Created by flat on 15/04/16.
+ * Created by flat on 22/04/16.
  */
-public class WtpMacType  implements ODLCapwapMessageElement {
-    protected final byte local = 0;
-    protected final byte split = 1;
-    protected final byte both= 2;
-    protected  byte type= 2;
+public class ACName implements ODLCapwapMessageElement {
+    int msgElem = 0;
+    int length = 0;
+    byte [] name = null;
 
-    int msgElemType = 0;
 
-    public void setTypeLocal(){
-        this.type = this.local;
+    public ACName(){
+        this.msgElem = ODLCapwapConsts.CAPWAP_ELMT_TYPE_AC_NAME;
+
     }
-    public void setTypeSplit(){
-        this.type = this.split;
-    }
-    public void setTypeBoth(){
-        this.type = this.both;
+    public int getLength() {
+        return length;
     }
 
-    public WtpMacType(){
-        this.msgElemType = ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_MAC_TYPE;
+    public void setLength(int length) {
+        this.length = length;
     }
+
+    public byte[] getName() {
+        return name;
+    }
+
+    public void setName(byte[] name) {
+        this.name = name;
+        this.setLength(name.length);
+    }
+
+
+
 
     @Override
     public int encode(ByteBuf buf) {
         int start = buf.writerIndex();
-        buf.writeByte(this.type);
+        buf.writeBytes(this.name);
         return buf.writerIndex()-start;
     }
 
@@ -51,6 +60,6 @@ public class WtpMacType  implements ODLCapwapMessageElement {
 
     @Override
     public int getType() {
-        return 0;
+        return this.msgElem;
     }
 }
