@@ -16,7 +16,7 @@ import java.net.InetAddress;
 
 public class IncommingPacketFSMHandler extends SimpleChannelInboundHandler<DatagramPacket> {
     ActorRef msgProcessor = null;
-    IncommingPacketFSMHandler(){
+    public IncommingPacketFSMHandler(){
 
     }
 

@@ -7,15 +7,23 @@
  */
 
 package org.opendaylight.capwap.fsm;
+import akka.event.Logging;
+
+import io.netty.buffer.ByteBuf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CapwapContext {
-    String ctxId;
+    ByteBuf lastSendBuf  = null;
 
-    public String getCtxId() {
-        return ctxId;
+    public ByteBuf getLastSendBuf() {
+        return lastSendBuf;
     }
 
-    public void setCtxId(String ctxId) {
-        this.ctxId = ctxId;
+    public void setLastSendBuf(ByteBuf lastSendBuf) {
+        this.lastSendBuf = lastSendBuf;
     }
+
+    private static final Logger LOG = LoggerFactory.getLogger(CapwapContext.class);
+
 }

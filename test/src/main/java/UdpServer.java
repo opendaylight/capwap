@@ -7,6 +7,8 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import org.opendaylight.capwap.fsm.CapwapDecoderActor;
+import org.opendaylight.capwap.fsm.CapwapDiscoveryServiceActor;
 import org.opendaylight.capwap.fsm.CapwapMsgProcActor;
 
 import java.net.InetAddress;
@@ -20,6 +22,14 @@ public class UdpServer {
 
     public UdpServer(int port) {
         this.port = port;
+    }
+
+    void createActorAndHandler(ChannelPipeline p){
+        final ActorSystem system = ActorSystem.create("CapwapFSMActorSystem");
+        ActorRef discoveryActor= system.actorOf(Props.create(CapwapDiscoveryServiceActor.class,"discoveryActor"),"discoveryActor");
+        ActorRef decoder= system.actorOf(Props.create(CapwapDecoderActor.class,"MessageDecoderActor",discoveryActor),"MessageDecoderActor");
+        final ActorRef PacketProcessorActor = system.actorOf(Props.create(CapwapMsgProcActor.class,"MessageProcessorActor",decoder),"MessageProcessorActor");
+        p.addLast( new IncommingPacketHandler(PacketProcessorActor,decoder,discoveryActor));
     }
 
     public void run() throws Exception {
@@ -36,7 +46,8 @@ public class UdpServer {
                 public void initChannel(final NioDatagramChannel ch) throws Exception {
 
                     ChannelPipeline p = ch.pipeline();
-                    p.addLast(new IncommingPacketHandler(PacketProcessorActor));
+                    createActorAndHandler(p);
+                    //p.addLast(new IncommingPacketHandler(PacketProcessorActor));
                 }
             });
 

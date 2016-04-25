@@ -37,7 +37,6 @@ public class CapwapMsgSender {
         {
             System.out.println("\nEnter Capwap Message ID");
             int capwapMsg = sc.nextInt();
-            buf = CapwapMessageCreator.createDiscovery(null);
             System.out.printf("Capacity of ByteBuf  %d",buf.writableBytes());
             System.out.printf("Writer Index %d",buf.writerIndex());
             int packet_size = buf.writerIndex();

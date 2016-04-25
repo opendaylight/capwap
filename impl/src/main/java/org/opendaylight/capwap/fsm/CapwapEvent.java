@@ -18,9 +18,15 @@ import org.opendaylight.capwap.ODLCapwapMessage;
  */
 public class CapwapEvent {
     CapwapEventType dType ;
+    int timer = 0;
+
+
 
     ODLCapwapMessage dMessage = null;
     ByteBuf outGoingMsg = null;
+
+
+
     ByteBuf incomingBuf = null;
     CapwapDestination destination =null;
     DatagramPacket packet =null;
@@ -68,6 +74,13 @@ public class CapwapEvent {
         this.ctx = ctx;
     }
 
+    public ByteBuf getIncomingBuf() {
+        return incomingBuf;
+    }
+
+    public void setIncomingBuf(ByteBuf incomingBuf) {
+        this.incomingBuf = incomingBuf;
+    }
 
     public CapwapEventType getdType() {
         return dType;
@@ -124,4 +137,13 @@ public class CapwapEvent {
     public void setWtpID(String wtpID) {
         this.wtpID = wtpID;
     }
+
+    public int getTimer() {
+        return timer;
+    }
+
+    public void setTimer(int timer) {
+        this.timer = timer;
+    }
+
 }

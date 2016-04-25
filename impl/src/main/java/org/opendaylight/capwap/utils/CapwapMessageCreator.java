@@ -13,6 +13,8 @@ import io.netty.buffer.Unpooled;
 import org.opendaylight.capwap.ODLCapwapConsts;
 import org.opendaylight.capwap.ODLCapwapMessage;
 import org.opendaylight.capwap.msgelements.DiscoveryType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by flat on 15/04/16.
@@ -20,45 +22,26 @@ import org.opendaylight.capwap.msgelements.DiscoveryType;
 
 
 public class CapwapMessageCreator {
-    public static ByteBuf createDiscovery(ODLCapwapMessage msg) {
-        ByteBuf buf= Unpooled.buffer();
-
-        DiscoveryType discoveryType = null;
+    private static final Logger LOG = LoggerFactory.getLogger(CapwapMessageCreator.class);
 
 
-        if (msg ==null) {
-            msg = new ODLCapwapMessage();
-        }
-        /*msg.header.setLbit();
-        msg.header.setFbit();
 
-        */
-        discoveryType = new DiscoveryType();
-        discoveryType.setDhcp();
-        msg.ctrlMsg.addMessageElement(discoveryType);
+    public static ODLCapwapMessage createRequest(int dType){
+        ODLCapwapMessage m = null;
+        m = new ODLCapwapMessage();
+        m.ctrlMsg.setMsgType(dType);
+        LOG.info("Creating Capwap  Request Message {}:", ODLCapwapConsts.msgTypetoString(dType));
+        return m;
+    }
 
-        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
-        msg.ctrlMsg.setSeqNo((short)1);
-        msg.header.encodeHeader(buf);
-        msg.ctrlMsg.encode(buf);
-        return buf;
+    public static ODLCapwapMessage createResponse(ODLCapwapMessage inRequest){
+        ODLCapwapMessage m = null;
+        m = new ODLCapwapMessage();
+        m.ctrlMsg.setMsgType(inRequest.ctrlMsg.getMsgType()+1 );//Response is always 1+ request
+        LOG.info("Creating Capwap  Response Message {}:", ODLCapwapConsts.msgTypetoString((int) m.ctrlMsg.getMsgType()));
+        return m;
     }
 
 }
 
 
-/*
-    byte[] unsignedIntToArray(long)
-    long byteArrayToUnsingedInt(byte[])
-
-    byte[] unsignedShortToArray(int)
-    long byteArrayToUnsingedShort(byte[])
-
-    byte shortToUnsingedByte(short)
-    short unsignedByteToshort(byte)
-
-
-
-
-
- */
