@@ -89,4 +89,27 @@ public class DataTransferData implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElm;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if (!(o instanceof DataTransferData))
+            return false;
+
+        if ((msgElm == ((DataTransferData) o).getType()) &&
+            (dataType == ((DataTransferData) o).getDataType()) &&
+            (dataMode == ((DataTransferData) o).getDataMode())&&
+            (dataLength == ((DataTransferData) o).getDataLength()) )
+
+        {
+            byte[] tmp = ((DataTransferData) o).getData();
+            for (int i = 0; i <dataLength; i++)
+                if (data[i] != tmp[i])
+                   return false;
+            return true;
+        }
+        return false;
+    }
 }

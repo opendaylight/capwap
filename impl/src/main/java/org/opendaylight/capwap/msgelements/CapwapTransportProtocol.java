@@ -50,4 +50,20 @@ public class CapwapTransportProtocol implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElm;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if (!(o instanceof CapwapTransportProtocol))
+            return false;
+
+        if ((protocol == ((CapwapTransportProtocol) o).getProtocol()) &&
+            (msgElm == ((CapwapTransportProtocol) o).getType()))
+        {
+            return true;
+        }
+        return false;
+    }
 }

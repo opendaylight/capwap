@@ -88,5 +88,24 @@ public class VendorSpecificPayload implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElm;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if(o == this)
+            return true;
+        if(!(o instanceof VendorSpecificPayload))
+            return false;
+        if(!((msgElm == ((VendorSpecificPayload) o).getType()) &&
+          (vendorId == ((VendorSpecificPayload) o).getVendorId())&&
+          (elementID == ((VendorSpecificPayload) o).getElementID()) &&
+           (length == ((VendorSpecificPayload) o).getLength())))
+             return false;
+        byte [] tmp = ((VendorSpecificPayload) o).getData();
+        for (int i = 0; i < length; i++)
+            if(data[i] != tmp[i])
+                return false;
+        return true;
+    }
 }
 

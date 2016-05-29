@@ -45,6 +45,21 @@ public class WtpMacTypeMsgElem implements ODLCapwapMessageElement {
     }
 
     @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if(!(o instanceof WtpMacTypeMsgElem))
+            return false;
+        if((msgElemType == ((WtpMacTypeMsgElem) o).getType())&&
+          (type == ((WtpMacTypeMsgElem) o).getmacType()))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public int encode(ByteBuf buf) {
         int start = buf.writerIndex();
         buf.writeByte(this.type);

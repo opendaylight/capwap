@@ -31,6 +31,11 @@ public class DeleteStation implements ODLCapwapMessageElement {
         return radioId;
     }
 
+    public MacAddress getMacAddress ()
+    {
+        return macAddress;
+    }
+
     public DeleteStation setRadioId(short radioId) {
         this.radioId = radioId;
         return this;
@@ -56,5 +61,19 @@ public class DeleteStation implements ODLCapwapMessageElement {
     @Override
     public int getType() {
         return this.msgElm;
+    }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if (!(o instanceof DeleteStation))
+            return true;
+        if ((msgElm == ((DeleteStation) o).getType())&&
+           (radioId == ((DeleteStation) o).getRadioId()) &&
+           (macAddress.equals(((DeleteStation) o).getMacAddress())))
+                   return true;
+        return false;
     }
 }

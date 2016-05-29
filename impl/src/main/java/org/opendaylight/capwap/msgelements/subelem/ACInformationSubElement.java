@@ -65,6 +65,25 @@ public class ACInformationSubElement implements ODLCapwapMessageElement {
     }
 
     @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if (!(o instanceof ACInformationSubElement))
+            return false;
+        if (!(acInfoLength == ((ACInformationSubElement) o).getAcInfoLength()))
+            return false;
+
+        byte [] temp = ((ACInformationSubElement) o).getAcInfoData();
+
+        for (int i = 0; i < acInfoLength; i++)
+        {
+            if     (acInfoData[i] != temp [i])
+                return false;
+        }
+        return true;
+    }
+    @Override
     public int encode(ByteBuf buf) {
         int start = buf.writerIndex();
         //Vendor info

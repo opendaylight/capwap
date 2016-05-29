@@ -16,6 +16,7 @@ import org.opendaylight.capwap.msgelements.subelem.EncryptionSubElement;
 import org.opendaylight.capwap.utils.ByteManager;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by flat on 15/04/16.
@@ -201,5 +202,47 @@ public class WtpDescriptor implements ODLCapwapMessageElement {
         return this.getMsgElemeType();
     }
 
+    @Override
+    public boolean equals (Object o)
+    {
+        if ( o == this)
+          return true;
+        if (!(o instanceof WtpDescriptor))
+            return false;
+        if ((msgElemeType == ((WtpDescriptor) o).getType()) &&
+           (maxRadios == ((WtpDescriptor) o).getMaxRadios())&&
+            (radioInUse  == ((WtpDescriptor) o).getRadioInUse())&&
+            (numEncrypt == ((WtpDescriptor) o).getNumEncrypt()))
+        {
+            ArrayList <EncryptionSubElement> tmp1 = ((WtpDescriptor) o).getEncysubElemList();
+            Iterator<EncryptionSubElement> itr =  tmp1.iterator();
+            for (EncryptionSubElement e_o : encysubElemList)
+            {
 
-}
+                EncryptionSubElement e_n = itr.next();
+                if (!(e_o.equals(e_n)))
+                {
+                    return false;
+                }
+
+            }
+            ArrayList <DescriptorSubElement> tmp2 = ((WtpDescriptor) o).getDescSubElemList();
+            Iterator<DescriptorSubElement> itr1 =  tmp2.iterator();
+            for (DescriptorSubElement e_o : descSubElemList)
+            {
+
+                DescriptorSubElement e_n = itr1.next();
+                if (!(e_o.equals(e_n)))
+                {
+                    return false;
+                }
+
+            }
+
+           return true;
+        }
+        return false;
+
+    }
+
+    }

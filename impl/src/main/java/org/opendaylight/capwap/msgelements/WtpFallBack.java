@@ -40,7 +40,23 @@ public class WtpFallBack implements ODLCapwapMessageElement {
         this.msgElm = msgElm;
     }
 
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+        {
+            return true;
+        }
+        if (!(o instanceof WtpFallBack))
+            return false;
+        if ((msgElm == ((WtpFallBack) o).getMsgElm())&&
+        (mode == ((WtpFallBack) o).getMode()))
+        {
+            return true;
+        }
+        return false;
 
+    }
 
     @Override
     public int encode(ByteBuf buf) {

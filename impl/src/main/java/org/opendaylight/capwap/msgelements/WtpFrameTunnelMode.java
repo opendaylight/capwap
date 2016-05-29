@@ -46,6 +46,11 @@ public class WtpFrameTunnelMode  implements ODLCapwapMessageElement {
     public boolean isrBitSet() {
         return (1== (modes & this.rBitMask));
     }
+    public byte getModes()
+    {
+        return modes;
+    }
+
 
     public void setnBit() {
         this.modes |= this.nBitMask;
@@ -64,7 +69,22 @@ public class WtpFrameTunnelMode  implements ODLCapwapMessageElement {
        this.msgElmType = ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_FRAME_TUNNEL_MODE;
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == this)
+            return true;
 
+        if(!(o instanceof WtpFrameTunnelMode))
+            return false;
+
+        if ((msgElmType == getType()) &&
+            (modes == getModes()))
+        {
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public int encode(ByteBuf buf) {

@@ -104,6 +104,29 @@ public class ODLCapwapHeader {
         return word;
     }
 
+    @Override
+     public boolean equals(Object o)
+    {
+        if (o == this)
+             return true;
+        if(!(o instanceof ODLCapwapHeader))
+            return false;
+        if((preamble ==  ((ODLCapwapHeader) o).getPreamble())&&
+          (type == ((ODLCapwapHeader) o).getType()) &&
+          (version ==  ((ODLCapwapHeader) o).getVersion()) &&
+          (hlen == ((ODLCapwapHeader) o).getHlen() )&&
+          (rid == ((ODLCapwapHeader) o).getRid()) &&
+          (wbid == ((ODLCapwapHeader) o).getWbid()) &&
+          (fragId == ((ODLCapwapHeader) o).getFragId())&&
+          (fragOffset == ((ODLCapwapHeader) o).getFragOffset())&&
+          (wsiInfo == ((ODLCapwapHeader) o).getWsiInfo()) &&
+          (radioMacAddress == ((ODLCapwapHeader) o).radioMacAddress))
+        {
+           return true;
+        }
+        return false;
+
+    }
 
 
     byte[] createSecondWord(){

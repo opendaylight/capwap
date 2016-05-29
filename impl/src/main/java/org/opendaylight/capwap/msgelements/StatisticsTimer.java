@@ -38,8 +38,21 @@ public class StatisticsTimer implements ODLCapwapMessageElement {
     public void setTimer(int timer) {
         this.timer = timer;
     }
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+          return true;
+        if (!(o instanceof StatisticsTimer))
+            return false;
+        if ((msgElm == ((StatisticsTimer) o).getMsgElm())&&
+            (timer == ((StatisticsTimer) o).getTimer()))
+        {
+            return true;
 
-
+        }
+        return false;
+    }
 
     @Override
     public int encode(ByteBuf buf) {

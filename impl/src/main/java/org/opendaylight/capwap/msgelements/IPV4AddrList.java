@@ -16,6 +16,7 @@ import org.opendaylight.capwap.msgelements.subelem.IPV4Address;
 import org.opendaylight.capwap.utils.ByteManager;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by flat on 22/04/16.
@@ -41,7 +42,25 @@ public class IPV4AddrList implements ODLCapwapMessageElement{
         ipv4.setAddress(addr);
         this.list.add(ipv4);
     }
+    @Override
+    public boolean equals (Object obj)
+    {
+      	if(obj == this)
+        	return  true;
+      	if(!(obj instanceof IPV4AddrList))
+        	return false;
+      	if (list.size() != ((IPV4AddrList) obj).list.size() )
+        	return false;
 
+   	 	Iterator<IPV4Address> itr =   ((IPV4AddrList) obj).list.iterator();
+
+    	for (IPV4Address e_o : list) {
+        	IPV4Address e_n = itr.next();
+	 		return ( e_o.equals(e_n));
+    	}	
+		return false;
+    }
+       
 
 
     @Override

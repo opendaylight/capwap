@@ -23,4 +23,21 @@ public class CapwapLocalIPV4Address extends IPV4Address {
     public int getType() {
         return this.msgElemeType;
     }
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if (!(o instanceof CapwapLocalIPV4Address))
+            return false;
+
+
+        if ((msgElemeType == ((CapwapLocalIPV4Address) o).getType()) &&
+                ((getAddress()).equals(((CapwapLocalIPV4Address) o).getAddress()))
+                )
+        {
+            return true;
+        }
+        return false;
+    }
 }

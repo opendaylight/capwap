@@ -32,4 +32,16 @@ public class MtuDiscoveryPadding implements ODLCapwapMessageElement {
     public int getType() {
         return 0;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if(!(o instanceof MtuDiscoveryPadding))
+            return false;
+        if(msgElm == ((MtuDiscoveryPadding) o).getType())
+            return true;
+        return false;
+    }
 }

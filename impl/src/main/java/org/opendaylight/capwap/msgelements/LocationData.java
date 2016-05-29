@@ -48,4 +48,26 @@ public class LocationData implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElm;
     }
+    @Override
+    public boolean equals (Object o)
+    {
+        if ( o == this )
+            return true;
+        if(!(o instanceof LocationData))
+            return false;
+        byte [] tmp = ((LocationData) o).getLocationData();
+        if(!((msgElm == ((LocationData) o).getType())&&
+          (length == tmp.length)))
+        {
+            return false;
+        }
+        for( int i = 0; i < length; i++)
+        {
+            if (locationData[i] != tmp[i])
+                return false;
+        }
+        return true;
+    }
+
+
 }

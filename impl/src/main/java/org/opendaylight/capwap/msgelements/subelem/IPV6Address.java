@@ -47,4 +47,28 @@ public class IPV6Address implements ODLCapwapMessageElement {
     public int getType() {
         return 0;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+
+        if (o == this)
+        {
+            return true;
+        }
+        if (!(o instanceof IPV6Address))
+            return false;
+
+        byte [] tmpAddr = ((IPV6Address) o).getAddress();
+
+        if (tmpAddr.length != address.length)
+            return false;
+
+        for (int i = 0; i < address.length; i++)
+        {
+            if (address[i] != tmpAddr[i])
+                return false;
+        }
+        return true;
+    }
 }

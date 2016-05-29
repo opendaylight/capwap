@@ -59,4 +59,19 @@ public class ECNSupport implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElm;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+          return true;
+        if (!(o instanceof ECNSupport))
+            return false;
+        if ((msgElm == ((ECNSupport) o).getType()) &&
+            (ecn == ((ECNSupport) o).getEcn()))
+            return true;
+        return false;
+    }
+
+
 }

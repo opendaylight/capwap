@@ -69,6 +69,33 @@ public class BoardDataSubElem implements ODLCapwapMessageElement {
     public void setBoardDataType(int boardDataType) {
         this.boardDataType = boardDataType;
     }
+    @Override
+    public boolean equals     (Object o)
+    {
+        if ( o == this)
+        {
+            return true;
+        }
+        if  (!(o instanceof BoardDataSubElem))
+        {
+             return false;
+        }
+        if (boardDataLength != ((BoardDataSubElem) o).getBoardDataLength() )
+        {
+            return false;
+        }
+        byte [] tmp = ((BoardDataSubElem) o).getData();
+
+        for (int i = 0; i < boardDataLength; i++ )
+        {
+            if (data [i] != tmp[i] )
+            {
+                return false;
+            }
+
+        }
+        return true;
+    }
 
 
     @Override

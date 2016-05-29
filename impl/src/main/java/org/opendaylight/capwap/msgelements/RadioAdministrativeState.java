@@ -66,4 +66,20 @@ public class RadioAdministrativeState implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElm;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if(o ==this)
+            return true;
+        if(!(o instanceof RadioAdministrativeState))
+                return false;
+        if((msgElm == ((RadioAdministrativeState) o).getType()) &&
+          (radioId == ((RadioAdministrativeState) o).getRadioId()) &&
+          (adminState == ((RadioAdministrativeState) o).getAdminState()))
+            return true;
+        return false;
+
+    }
 }
+

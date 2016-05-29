@@ -102,6 +102,33 @@ public class DescriptorSubElement implements ODLCapwapMessageElement {
         return this;
     }
 
+    @Override
+    public boolean equals     (Object o)
+    {
+        if ( o == this)
+        {
+            return true;
+        }
+        if  (!(o instanceof DescriptorSubElement))
+        {
+            return false;
+        }
+        if (descLength != ((DescriptorSubElement) o).getDescLength() )
+        {
+            return false;
+        }
+        byte [] tmp = ((DescriptorSubElement)o).getDescData();
+
+        for (int i = 0; i< descLength; i++ )
+        {
+            if (descData [i] != tmp[i] )
+            {
+                return false;
+            }
+
+        }
+        return true;
+    }
 
 
     @Override

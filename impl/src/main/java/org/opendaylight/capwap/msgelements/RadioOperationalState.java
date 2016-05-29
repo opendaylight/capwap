@@ -76,4 +76,21 @@ public class RadioOperationalState implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElem;
     }
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == this)
+            return true;
+        if(!(o instanceof RadioOperationalState))
+            return false;
+        if((msgElem == ((RadioOperationalState) o).getType()) &&
+           (radioId == ((RadioOperationalState) o).getRadioId()) &&
+           (cause == ((RadioOperationalState) o).getCause())&&
+            (state == ((RadioOperationalState) o).getState()))
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

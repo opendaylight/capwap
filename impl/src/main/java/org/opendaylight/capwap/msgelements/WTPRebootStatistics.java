@@ -9,6 +9,7 @@
 package org.opendaylight.capwap.msgelements;
 
 import io.netty.buffer.ByteBuf;
+import org.opendaylight.capwap.ODLCapwapConsts;
 import org.opendaylight.capwap.ODLCapwapMessageElement;
 import org.opendaylight.capwap.utils.ByteManager;
 
@@ -40,6 +41,11 @@ public class WTPRebootStatistics implements ODLCapwapMessageElement {
     int otherFailure = 0;
     int unKnownFailure =0;
     short lastFailureType = 0;
+
+    public  WTPRebootStatistics ()
+    {
+        this.msgElem = ODLCapwapConsts.CAPWAP_ELMT_TYPE_WTP_REBOOT_STATS;
+    }
 
     public int getRebootCount() {
         return rebootCount;
@@ -141,4 +147,27 @@ public class WTPRebootStatistics implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElem;
     }
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if (!(o instanceof WTPRebootStatistics) )
+            return false;
+
+        if ((msgElem == ((WTPRebootStatistics)o).getType()) &&
+            (rebootCount == ((WTPRebootStatistics)o).getRebootCount()) &&
+            (acInitiated == ((WTPRebootStatistics)o).getAcInitiated())  &&
+            (linkFailure == ((WTPRebootStatistics)o).getLinkFailure() ) &&
+            (softwareFailure == ((WTPRebootStatistics)o).getSoftwareFailure())&&
+            (hwFailure == ((WTPRebootStatistics)o).getHwFailure())&&
+             (otherFailure == ((WTPRebootStatistics)o).getOtherFailure())&&
+             (unKnownFailure == ((WTPRebootStatistics)o).getUnKnownFailure())&&
+             (lastFailureType == ((WTPRebootStatistics)o).getLastFailureType()))
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

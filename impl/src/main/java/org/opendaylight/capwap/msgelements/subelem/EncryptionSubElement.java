@@ -50,6 +50,25 @@ public class EncryptionSubElement implements ODLCapwapMessageElement {
     }
 
 
+    @Override
+    public boolean equals     (Object o)
+    {
+        if ( o == this)
+        {
+            return true;
+        }
+        if  (!(o instanceof EncryptionSubElement))
+        {
+            return false;
+        }
+        if ((wbid == ((EncryptionSubElement) o).getWbid()) &&
+            (encryptioCapability == ((EncryptionSubElement) o).getEncryptioCapability()))
+        {
+            return true;
+        }
+
+        return false;
+    }
 
     @Override
     public int encode(ByteBuf buf) {

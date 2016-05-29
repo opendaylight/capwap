@@ -59,6 +59,22 @@ public class CapwapTimers implements ODLCapwapMessageElement {
     }
 
     @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if (!(o instanceof CapwapTimers))
+            return false;
+
+        if ((echoReq == ((CapwapTimers) o).getEchoReq()) &&
+            (discovery == ((CapwapTimers) o).getDiscovery()) &&
+            (msgElm == ((CapwapTimers) o).getType()))
+        {
+            return true;
+        }
+        return false;
+    }
+    @Override
     public int getType() {
         return this.msgElm;
     }

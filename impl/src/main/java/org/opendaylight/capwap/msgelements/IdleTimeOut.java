@@ -49,4 +49,18 @@ public class IdleTimeOut  implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElm;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+           return true;
+        if(!(o instanceof IdleTimeOut))
+            return false;
+        if ((msgElm == ((IdleTimeOut) o).getType()) &&
+           (timout == ((IdleTimeOut) o).getTimout()))
+            return true;
+        return false;
+    }
+
 }

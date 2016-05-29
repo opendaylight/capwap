@@ -87,6 +87,26 @@ public class WtpStaticIPAddressInfo implements ODLCapwapMessageElement {
         return this;
     }
 
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if (!(o instanceof WtpStaticIPAddressInfo))
+            return false;
+
+        if  ((msgElemType == ((WtpStaticIPAddressInfo) o).getType()) &&
+             (address.equals(((WtpStaticIPAddressInfo) o).getAddress())) &&
+             (netmask.equals(((WtpStaticIPAddressInfo) o).getNetmask()))&&
+             (gateway.equals(((WtpStaticIPAddressInfo) o).getGateway()))&&
+             (_static == ((WtpStaticIPAddressInfo) o).get_static()))
+
+        {
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public ODLCapwapMessageElement decode(ByteBuf buf) {

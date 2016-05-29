@@ -15,6 +15,7 @@ import org.opendaylight.capwap.msgelements.subelem.MacAddress;
 import org.opendaylight.capwap.utils.ByteManager;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by flat on 17/04/16.
@@ -43,6 +44,12 @@ public class DecryptionErrorReport implements ODLCapwapMessageElement {
 
     }
 
+    public short getNumEntries () {
+
+        return numEntries;
+    }
+
+
     public short getRadioId() {
         return radioId;
     }
@@ -69,8 +76,47 @@ public class DecryptionErrorReport implements ODLCapwapMessageElement {
         return null;
     }
 
+    public ArrayList<MacAddress> getMacAddressList()
+    {
+          return macAddressList;
+    }
+
+
     @Override
     public int getType() {
         return this.msgElem;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == this)
+            return true;
+        if (!(o instanceof DecryptionErrorReport))
+            return false;
+        if ((msgElem == ((DecryptionErrorReport) o).getType()) &&
+           (radioId == ((DecryptionErrorReport) o).getRadioId()))
+        {
+            ArrayList <MacAddress> tmp = ((DecryptionErrorReport) o).getMacAddressList();
+
+            if (numEntries != ((DecryptionErrorReport) o).getNumEntries())
+            {
+                 return false;
+            }
+            Iterator <MacAddress> itr = tmp.iterator();
+            for(MacAddress e_o : macAddressList)
+            {
+
+                MacAddress e_n = itr.next();
+                if (!(e_o.equals(e_n)))
+                {
+                    return false;
+                }
+
+            }
+            return true;
+        }
+        return false;
+
     }
 }
