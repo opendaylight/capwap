@@ -9,6 +9,7 @@
 package org.opendaylight.capwap;
 
 import io.netty.buffer.ByteBuf;
+import org.opendaylight.capwap.ODLCapwapControlMessage;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -48,6 +49,22 @@ public class ODLCapwapMessage {
         return null;
     }
 
+
+    @Override
+    public boolean equals(Object obj)
+    {
+
+        if (obj == this)
+            return true;
+        if (!(obj instanceof ODLCapwapMessage))
+            return true;
+        if((header.equals(((ODLCapwapMessage) obj).header)) &&  (ctrlMsg.equals(((ODLCapwapMessage) obj).ctrlMsg)))
+        {
+            return true;
+        }
+
+        return false;
+    }
 
 
     

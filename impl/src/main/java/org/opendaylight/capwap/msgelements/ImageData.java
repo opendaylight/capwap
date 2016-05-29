@@ -63,4 +63,26 @@ public class ImageData implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElm;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if( o == this)
+            return true;
+        if( !(o instanceof ImageData))
+            return false;
+        if (( msgElm == ((ImageData) o).getType())&&
+           (dataType == ((ImageData) o).getDataType()) &&
+           (length == ((ImageData) o).getLength()))
+        {
+            byte [] tmp = ((ImageData) o).getData() ;
+            for (int i = 0; i < length; i++)
+            {
+                  if (data[i] != tmp [i])
+                      return false;
+            }
+            return true;
+        }
+        return false;
+    }
 }

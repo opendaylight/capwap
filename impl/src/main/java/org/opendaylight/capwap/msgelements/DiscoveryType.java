@@ -97,6 +97,25 @@ public class DiscoveryType  implements ODLCapwapMessageElement {
 
         return end - start;
     }
+    @Override
+    public boolean equals (Object obj)
+    {
+
+	     if (obj == this)
+         {
+                return true;
+
+         }
+         if (!(obj instanceof DiscoveryType))
+         {
+            return false;
+         }
+         if (((DiscoveryType)obj).getDiscoveryType() == discoveryType)
+         {
+             return true;
+         }
+         return false;
+    }
 
     @Override
     public ODLCapwapMessageElement decode(ByteBuf buf) {

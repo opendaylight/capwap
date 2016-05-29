@@ -53,4 +53,27 @@ public class UnknownMsgElm implements ODLCapwapMessageElement {
     public int getType() {
         return this.getMsgElm();
     }
+
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if( !(o instanceof UnknownMsgElm))
+            return false;
+        if(msgElm != ((UnknownMsgElm) o).getType())
+            return false;
+        byte [] tmp = ((UnknownMsgElm) o).getVal();
+
+        if(val.length != tmp.length)
+            return false;
+        for (int i = 0; i < val.length; i++)
+            if(val[i] != tmp[i])
+                return false;
+        return true;
+
+
+
+    }
 }

@@ -15,6 +15,7 @@ import org.opendaylight.capwap.msgelements.subelem.MacAddress;
 import org.opendaylight.capwap.utils.ByteManager;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by flat on 17/04/16.
@@ -50,8 +51,11 @@ public class DeleteMacAclEntry  implements ODLCapwapMessageElement {
         this.macAddrLength = macAddrLength;
         return this;
     }
-
-    ///
+    public ArrayList<MacAddress> getMacList()
+    {
+       return macList;
+    }
+    
     public DeleteMacAclEntry addMacAddress(MacAddress e){
 
         this.macList.add(e);
@@ -59,7 +63,37 @@ public class DeleteMacAclEntry  implements ODLCapwapMessageElement {
         return this;
 
     }
-    ////
+    
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if (!(o instanceof DeleteMacAclEntry))
+            return false;
+        if (!((msgElm == ((DeleteMacAclEntry) o).getType())&&
+            (numEntries == ((DeleteMacAclEntry) o).getNumEntries())))
+            return false;
+        if(macAddrLength != ((DeleteMacAclEntry) o).getMacAddrLength())
+            return false;
+        ArrayList <MacAddress> tmp = ((DeleteMacAclEntry) o).getMacList();
+
+        if (numEntries != ((DecryptionErrorReport) o).getNumEntries())
+        {
+            return false;
+        }
+        Iterator<MacAddress> itr = tmp.iterator();
+        for(MacAddress e_o : macList)
+        {
+            MacAddress e_n = itr.next();
+            if (!(e_o.equals(e_n)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     @Override
     public int encode(ByteBuf buf) {

@@ -88,4 +88,24 @@ public class ReturnedMessageElement implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElm;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if (!(o instanceof ReturnedMessageElement))
+            return false;
+        if (!((msgElm == ((ReturnedMessageElement) o).getType()) &&
+           (length == ((ReturnedMessageElement) o).getLength())&&
+           (reason == ((ReturnedMessageElement) o).getReason())))
+            return false;
+        byte [] tmp = ((ReturnedMessageElement) o).getMsgElement();
+        for (int i=0; i < length; i++)
+        {
+            if (msgElement[i] != tmp[i])
+                return false;
+        }
+        return true;
+    }
 }

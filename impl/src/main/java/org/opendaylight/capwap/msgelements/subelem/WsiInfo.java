@@ -57,6 +57,31 @@ public class WsiInfo  implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElemeType;
     }
+    @Override
+    public boolean equals (Object o)
+    {
 
+        if (o == this)
+        {
+            return true;
+        }
+        if (!(o instanceof WsiInfo))
+            return false;
+
+        if(msgElemeType != getType())
+            return false;
+
+        byte [] tmp = ((WsiInfo) o).getData();
+
+        if (length != ((WsiInfo) o).getLength())
+            return false;
+
+        for (int i = 0; i < length; i++)
+        {
+            if (data[i] != tmp[i])
+                return false;
+        }
+        return true;
+    }
 
 }

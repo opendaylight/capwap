@@ -35,4 +35,16 @@ public class InitiateDownload implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElem;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if(o == this)
+            return true;
+        if(!(o instanceof InitiateDownload))
+            return false;
+        if(msgElem == ((InitiateDownload) o).getType())
+            return true;
+        return false;
+    }
 }

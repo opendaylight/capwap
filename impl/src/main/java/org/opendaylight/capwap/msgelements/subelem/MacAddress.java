@@ -70,4 +70,33 @@ public class MacAddress  implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElemeType;
     }
+    @Override
+    public boolean equals (Object o)
+    {
+
+        if (o == this)
+        {
+            return true;
+        }
+        if (!(o instanceof MacAddress))
+            return false;
+
+        if (length != ((MacAddress) o).getLength())
+            return false;
+
+        byte [] tmpAddr = ((MacAddress) o).getAddress();
+
+        if (msgElemeType != ((MacAddress) o).msgElemeType)
+            return false;
+
+        //if (tmpAddr.length != address.length)
+        //    return false;
+
+        for (int i = 0; i < length; i++)
+        {
+            if (address[i] != tmpAddr[i])
+                return false;
+        }
+        return true;
+    }
 }

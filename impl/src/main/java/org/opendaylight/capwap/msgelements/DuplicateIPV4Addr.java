@@ -79,4 +79,18 @@ public class DuplicateIPV4Addr implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElm;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if (!(o instanceof DuplicateIPV4Addr))
+            return false;
+        if ((msgElm == ((DuplicateIPV4Addr) o).getType()) &&
+           (ipv4.equals(((DuplicateIPV4Addr) o).getIpv4())) &&
+           (macAddress.equals(((DuplicateIPV4Addr) o).getMacAddress())))
+            return true;
+        return false;
+    }
 }

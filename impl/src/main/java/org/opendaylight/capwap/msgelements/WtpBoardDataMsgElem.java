@@ -15,6 +15,7 @@ import org.opendaylight.capwap.msgelements.subelem.BoardDataSubElem;
 import org.opendaylight.capwap.utils.ByteManager;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by flat on 17/04/16.
@@ -108,5 +109,30 @@ public class WtpBoardDataMsgElem implements ODLCapwapMessageElement {
     @Override
     public int getType() {
         return this.msgElem;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if(o == this)
+            return true;
+        if(!(o instanceof WtpBoardDataMsgElem))
+            return  false;
+        if(!((msgElem == ((WtpBoardDataMsgElem) o).getType() )&&
+         (vendorId == ((WtpBoardDataMsgElem) o).getVendorId())))
+            return false;
+        ArrayList <BoardDataSubElem> tmp = ((WtpBoardDataMsgElem) o).getBoardDataList();
+        Iterator <BoardDataSubElem> itr =  tmp.iterator();
+        for (BoardDataSubElem e_o : boardDataList)
+        {
+
+            BoardDataSubElem e_n = itr.next();
+            if (!(e_o.equals(e_n)))
+            {
+                return false;
+            }
+
+        }
+        return true;
     }
 }

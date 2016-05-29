@@ -19,6 +19,22 @@ public class CapwapLocalIPV6Address extends IPV6Address {
     public CapwapLocalIPV6Address(){
         this.msgElemeType = ODLCapwapConsts.CAPWAP_ELMT_TYPE_CAPWAP_LOCAL_IPV6_ADDR;
     }
+
+    @Override
+    public boolean  equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if (!(o instanceof CapwapLocalIPV6Address))
+            return false;
+        if ((msgElemeType ==((CapwapLocalIPV6Address) o).getType()) &&
+            (getAddress().equals (((CapwapLocalIPV6Address) o).getAddress())))
+        {
+            return true;
+        }
+        return false;
+    }
+
     public int getType() {
         return this.msgElemeType;
     }

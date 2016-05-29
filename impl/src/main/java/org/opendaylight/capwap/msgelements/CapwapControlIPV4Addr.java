@@ -69,6 +69,33 @@ public class CapwapControlIPV4Addr implements ODLCapwapMessageElement {
     }
 
     @Override
+    public boolean equals (Object o)
+    {
+
+        if (o == this)
+        {
+
+            return true;
+        }
+
+        if (!(o instanceof CapwapControlIPV4Addr))
+        {
+
+            return false;
+        }
+
+        if(!((wtpCount == ((CapwapControlIPV4Addr) o).getWtpCount())&&
+                 (msgElm == ((CapwapControlIPV4Addr) o).getType()) ))
+             return false;
+
+        if(!(ipv4.equals(((CapwapControlIPV4Addr) o).getIpv4())))
+        {
+                return false;
+        }
+        return true;
+    }
+
+    @Override
     public int getType() {
         return this.msgElm;
     }

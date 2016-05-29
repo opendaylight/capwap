@@ -56,4 +56,20 @@ public class MaxMsgLength implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElem;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if ( o == this)
+            return true;
+        if (!( o instanceof MaxMsgLength))
+            return false;
+
+        if((msgElem == (((MaxMsgLength) o).getType()))&&
+        (maxLength == ((MaxMsgLength) o).getMaxLength()))
+        {
+            return true;
+        }
+        return false;
+    }
 }

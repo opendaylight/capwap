@@ -72,4 +72,25 @@ public class ImageInformation implements ODLCapwapMessageElement {
     public int getType() {
         return this.msgElem;
     }
+
+    @Override
+    public boolean equals (Object o)
+    {
+        if ( o == this)
+            return true;
+        if(!(o instanceof  ImageInformation))
+            return false;
+        if (!((msgElem == ((ImageInformation) o).getType()) &&
+           (fileSize == ((ImageInformation) o).getFileSize())&&
+            (hash.length == (((ImageInformation) o).getHash()).length)))
+        {
+            return false;
+        }
+        byte [] tmp = ((ImageInformation) o).getHash();
+        for (int i = 0; i < hash.length; i++)
+            if(hash[i] != tmp[i])
+                return false;
+        return true;
+
+    }
 }

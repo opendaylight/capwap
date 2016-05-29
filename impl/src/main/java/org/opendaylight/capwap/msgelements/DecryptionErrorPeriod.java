@@ -43,6 +43,26 @@ public class DecryptionErrorPeriod implements ODLCapwapMessageElement {
         return this;
     }
 
+    @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+        {
+            return true;
+        }
+        if (!(o instanceof DecryptionErrorPeriod))
+        {
+            return false;
+        }
+        if ((msgElm == ((DecryptionErrorPeriod) o).getType())&&
+           (radioId == ((DecryptionErrorPeriod) o).getRadioId())&&
+            (reportInterval == ((DecryptionErrorPeriod) o).getReportInterval()))
+        {
+            return true;
+        }
+      return false;
+    }
+
 
 
     @Override

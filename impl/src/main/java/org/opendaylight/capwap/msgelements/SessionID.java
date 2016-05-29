@@ -51,6 +51,26 @@ public class SessionID implements ODLCapwapMessageElement {
     }
 
     @Override
+    public boolean equals (Object o)
+    {
+        if (o == this)
+            return true;
+        if(!(o instanceof SessionID))
+        {
+            return false;
+        }
+        byte [] temp = ((SessionID) o).getSessionid();
+        if (sessionid.length != temp.length)
+            return false;
+        for (int i=0;i<sessionid.length;i++){
+            if(sessionid[i] !=temp[i]){
+                //LOG.error("Byte Array Content @ index {} o->{}   n ->{} , {}:",i,o[i],n[i],getFunctionName(bTop));
+                return false;
+            }
+        }
+        return true;
+    }
+    @Override
     public ODLCapwapMessageElement decode(ByteBuf buf) {
         return null;
     }
