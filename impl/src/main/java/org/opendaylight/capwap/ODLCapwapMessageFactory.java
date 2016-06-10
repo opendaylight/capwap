@@ -198,6 +198,9 @@ public class ODLCapwapMessageFactory {
 
              case ODLCapwapConsts.IEEE_80211_WTP_RADIO_INFORMATION:
                  return MsgElem802_11Factory.decodeWtpRadioInfoElm(buf,length);
+
+             case ODLCapwapConsts.IEEE_80211_ADD_WLAN:
+                 return    MsgElem802_11Factory.decodeAddWlan(buf,length);
              default:
 
                  return decodeUnknownMsgElm(buf,dType,length);
