@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Abi Varghese and others.  All rights reserved.
+ * Copyright (c) 2016 Brunda R Rajagopala and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -12,6 +12,7 @@ import org.junit.Assert;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import org.opendaylight.capwap.*;
+import org.opendaylight.capwap.binding_802_11.AddWlan;
 import org.opendaylight.capwap.binding_802_11.WTP_Radio_Information;
 import org.opendaylight.capwap.msgelements.*;
 import org.opendaylight.capwap.msgelements.subelem.*;
@@ -40,6 +41,87 @@ private static final Logger LOG = LoggerFactory.getLogger(TestDescriptor.class);
 
     }
 
+@Test
+public void AddWlanTester ()
+{
+    StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+    ODLCapwapMessage msg = null;
+    ODLCapwapMessage n = null;
+
+    msg = new ODLCapwapMessage();
+    AddWlan addWlan = new AddWlan();
+    System.out.println("AddWlanTester: type = " +addWlan.getType());
+    addWlan.setRadioId((byte)2);
+    addWlan.setWlanId((byte)12);
+    //addWlan.setCapability(343);
+    addWlan.setCapabilityEbit();
+    System.out.println("Capability = " + addWlan.getCapability());
+    System.out.println("Capability set = " + addWlan.isCapabilityEbitSet());
+
+    addWlan.unsetCapabilityEbit();
+    System.out.println("Capability = " + addWlan.getCapability());
+    System.out.println("Capability set = " + addWlan.isCapabilityEbitSet());
+
+
+
+    addWlan.setCapabilityAbit();
+    addWlan.setCapabilityBbit();
+    addWlan.setCapabilityCbit();
+    addWlan.setCapabilityDbit();
+    addWlan.setCapabilityEbit();
+    addWlan.setCapabilityFbit();
+    addWlan.setCapabilityIbit();
+    addWlan.setCapabilityKbit();
+    addWlan.setCapabilityLbit();
+    addWlan.setCapabilityMbit();
+    addWlan.setCapabilityObit();
+    addWlan.setCapabilityPbit();
+    addWlan.setCapabilityQbit();
+    addWlan.setCapabilitySbit();
+    addWlan.setCapabilityTbit();
+    addWlan.setCapabilityVbit();
+    System.out.println("Capability = " + addWlan.getCapability());
+    addWlan.setKeyIndex((byte)78);
+    addWlan.setKeyStatus((byte)1);
+    byte [] key = new byte[4];
+    key[0] = 1;
+    key[1] = 2;
+    key[2] = 3;
+    key[3] = 4;
+    addWlan.setKey(key) ;
+    byte [] groupTsc = new byte[6];
+    groupTsc[0] = 1;
+    groupTsc[1] = 2;
+    groupTsc[2] = 3;
+    groupTsc[3] = 4;
+    groupTsc[4] = 5;
+    groupTsc[5] = 6;
+    addWlan.setGroupTsc(groupTsc);
+    addWlan.setQos((byte)2);
+    addWlan.setAuthType((byte)1);
+    addWlan.setMacMode((byte)0);
+    addWlan.setTunnelMode((byte)2);
+    addWlan.setSuppressSSID((byte)1);
+    byte [] ssId = new byte [4];
+    ssId[0] = 100;
+    ssId[1] = 101;
+    ssId[2] = 102;
+    ssId[3] = 104;
+    addWlan.setSsId(ssId);
+    msg.ctrlMsg.addMessageElement(addWlan);
+
+    msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+    msg.ctrlMsg.setSeqNo((short) 1);
+    ByteBuf buf = Unpooled.buffer();
+    msg.header.encodeHeader(buf);
+    msg.ctrlMsg.encode(buf);
+
+    n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+    sender(buf);
+    Assert.assertEquals(msg,n);
+}
+            
 @Test
 public void SessionIdTester ()
 {
@@ -102,9 +184,8 @@ public void  wtpNameTester() {
     n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
     sender(buf);
     Assert.assertEquals(msg,n);
-}
-
-                /*
+}             
+/*
     @Test
     public void wtpRadioInfoTester() {
 
@@ -131,7 +212,7 @@ public void  wtpNameTester() {
 }
 */
 
-
+        
        @Test
 
     public void WtpDesciptorTester() {
@@ -310,7 +391,7 @@ acDescriptor.addAcInformationSubElem(e);
             //LOG.info("Decoding  SUCCESS for {}:", getFunctionName(bTop));
             //encodeDecodeTester(msg,n);
 
-    }
+    }     
  // */
             /*
     @Test
@@ -411,7 +492,6 @@ acDescriptor.addAcInformationSubElem(e);
         Assert.assertEquals(msg,n);
 
     }    */
-
     @Test
     public void  ECNTest() {
         StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
@@ -481,7 +561,7 @@ acDescriptor.addAcInformationSubElem(e);
         n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
         sender(buf);
         Assert.assertEquals(msg,n);
-     }
+     }        
              /*
      @Test
     public void WtpBoardDataDescriptorTest() {
@@ -523,7 +603,7 @@ acDescriptor.addAcInformationSubElem(e);
 
 
 
-
+                /*
 
 
 
@@ -555,7 +635,7 @@ acDescriptor.addAcInformationSubElem(e);
         sender(buf);
         Assert.assertEquals(msg,n);
      }
-
+                  */
 
 
 
@@ -594,7 +674,6 @@ acDescriptor.addAcInformationSubElem(e);
 
       */
 
-
     @Test
     public void maxLenTester() {
         StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
@@ -617,7 +696,7 @@ acDescriptor.addAcInformationSubElem(e);
         n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
         sender(buf);
         Assert.assertEquals(msg,n);
-    }
+    }                 
     /*
     @Test
     public void VendorSpecificPayloadTester() {

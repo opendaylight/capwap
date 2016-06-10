@@ -10,6 +10,7 @@ package org.opendaylight.capwap;
 
 import io.netty.buffer.ByteBuf;
 import org.opendaylight.capwap.msgelements.*;
+import org.opendaylight.capwap.binding_802_11.*;
 import org.opendaylight.capwap.msgelements.subelem.ACInformationSubElement;
 import org.opendaylight.capwap.msgelements.subelem.EncryptionSubElement;
 
@@ -213,7 +214,7 @@ public class ODLCapwapControlMessage {
     boolean compareEachMessageElement(ODLCapwapMessageElement o, ODLCapwapMessageElement n) {
 
         StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
-      System.out.println("In func compareEachMessageElement");
+      System.out.println("In func compareEachMessageElement" + o.getType());
 
         boolean result = false;
         switch (o.getType()) {
@@ -601,6 +602,15 @@ public class ODLCapwapControlMessage {
                 WtpStaticIPAddressInfo wtpstIpAddrInfo2 = (WtpStaticIPAddressInfo)n;
                 result = wtpstIpAddrInfo1.equals(wtpstIpAddrInfo2);
                 System.out.println("In func compareEachMessageElement- WtpStaticIPAddressInfo result = " + result);
+
+                break;
+
+            case ODLCapwapConsts.IEEE_80211_ADD_WLAN:
+                System.out.println("In func compareEachMessageElement- AddWlan");
+                AddWlan addWlan1 = (AddWlan)o;
+                AddWlan addWlan2 = (AddWlan)n;
+                result = addWlan1.equals(addWlan2);
+                System.out.println("In func compareEachMessageElement- AddWlan result = " + result);
 
                 break;
             default:

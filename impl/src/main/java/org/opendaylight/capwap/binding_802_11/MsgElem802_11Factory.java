@@ -8,6 +8,7 @@
 package org.opendaylight.capwap.binding_802_11;
 
 import io.netty.buffer.ByteBuf;
+import org.opendaylight.capwap.utils.ByteManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,5 +35,49 @@ public class MsgElem802_11Factory {
         return radioInfo;
     }
 
+
+    static public   AddWlan decodeAddWlan(ByteBuf buf, int length)
+    {
+
+        if (buf == null) {
+            LOG.error("ByteBuf null AddWlan  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable AddWlan");
+            return null;
+        }
+        int startIndex = buf.readerIndex();
+        AddWlan addWlan = new AddWlan();
+        addWlan.setRadioId(buf.readByte());
+        addWlan.setWlanId (buf.readByte());
+        byte[] capability = new byte[]  {0,0};
+        buf.readBytes(capability);
+        addWlan.setCapability(ByteManager.byteArrayToUnsingedShort(capability));
+        addWlan.setKeyIndex(buf.readByte() );
+        addWlan.setKeyStatus(buf.readByte());
+        byte [] keyLength = new byte [] {0,0};
+        buf.readBytes(keyLength);
+        addWlan.setKeyLength(ByteManager.byteArrayToUnsingedShort(keyLength));
+        byte [] key = new byte[addWlan.getKeyLength()];
+        buf.readBytes(key);
+        addWlan.setKey(key);
+        byte []  groupTsc = new byte[6];
+        buf.readBytes(groupTsc);
+        addWlan.setGroupTsc(groupTsc);
+        addWlan.setQos(buf.readByte());
+        addWlan.setAuthType(buf.readByte());
+        addWlan.setMacMode(buf.readByte());
+        addWlan.setTunnelMode(buf.readByte());
+        addWlan.setSuppressSSID(buf.readByte());
+        int currentReadBytes =   buf.readerIndex()- startIndex;
+        System.out.println(" decode AddWlan - current bytes = " + currentReadBytes);
+        byte [] ssId = new byte[length-currentReadBytes];
+        buf.readBytes(ssId);
+        addWlan.setSsId(ssId);
+        return (addWlan);
+        //radioInfo.setRadioType(buf.readByte());
+        //return radioInfo;
+    }
 
 }
