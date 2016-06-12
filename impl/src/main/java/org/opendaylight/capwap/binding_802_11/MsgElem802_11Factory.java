@@ -76,8 +76,55 @@ public class MsgElem802_11Factory {
         buf.readBytes(ssId);
         addWlan.setSsId(ssId);
         return (addWlan);
-        //radioInfo.setRadioType(buf.readByte());
-        //return radioInfo;
     }
 
+    static public   UpdateWlan decodeUpdateWlan(ByteBuf buf, int length)
+    {
+
+        if (buf == null) {
+            LOG.error("ByteBuf null UpdateWlan  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable updateWlan");
+            return null;
+        }
+        int startIndex = buf.readerIndex();
+        UpdateWlan updateWlan = new UpdateWlan();
+        updateWlan.setRadioId(buf.readByte());
+        updateWlan.setWlanId (buf.readByte());
+        byte[] capability = new byte[]  {0,0};
+        buf.readBytes(capability);
+        updateWlan.setCapability(ByteManager.byteArrayToUnsingedShort(capability));
+        updateWlan.setKeyIndex(buf.readByte() );
+        updateWlan.setKeyStatus(buf.readByte());
+        byte [] keyLength = new byte [] {0,0};
+        buf.readBytes(keyLength);
+        updateWlan.setKeyLength(ByteManager.byteArrayToUnsingedShort(keyLength));
+        byte [] key = new byte[updateWlan.getKeyLength()];
+        buf.readBytes(key);
+        updateWlan.setKey(key);
+
+        return (updateWlan);
+
+    }
+    static public  DeleteWlan decodeDeleteWlan(ByteBuf buf, int length)
+    {
+
+        if (buf == null) {
+            LOG.error("ByteBuf null UpdateWlan  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable updateWlan");
+            return null;
+        }
+        int startIndex = buf.readerIndex();
+        DeleteWlan deleteWlan = new DeleteWlan();
+        deleteWlan.setRadioId(buf.readByte());
+        deleteWlan.setWlanId (buf.readByte());
+
+        return (deleteWlan);
+
+    }
 }

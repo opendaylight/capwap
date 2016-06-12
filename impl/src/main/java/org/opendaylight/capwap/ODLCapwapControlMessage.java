@@ -613,6 +613,23 @@ public class ODLCapwapControlMessage {
                 System.out.println("In func compareEachMessageElement- AddWlan result = " + result);
 
                 break;
+
+            case ODLCapwapConsts.IEEE_80211_UPDATE_WLAN:
+                System.out.println("In func compareEachMessageElement- UpdateWlan");
+                UpdateWlan updateWlan1 = (UpdateWlan)o;
+                UpdateWlan updateWlan2 = (UpdateWlan)n;
+                result = updateWlan1.equals(updateWlan2);
+                System.out.println("In func compareEachMessageElement- UpdateWlan result = " + result);
+
+                break;
+            case ODLCapwapConsts.IEEE_80211_DELETE_WLAN:
+                System.out.println("In func compareEachMessageElement- DeleteWlan");
+                DeleteWlan deleteWlan1 = (DeleteWlan)o;
+                DeleteWlan deleteWlan2 = (DeleteWlan)n;
+                result = deleteWlan1.equals(deleteWlan2);
+                System.out.println("In func compareEachMessageElement- DeleteWlan result = " + result);
+
+                break;
             default:
                 break;
         }
