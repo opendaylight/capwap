@@ -201,6 +201,10 @@ public class ODLCapwapMessageFactory {
 
              case ODLCapwapConsts.IEEE_80211_ADD_WLAN:
                  return    MsgElem802_11Factory.decodeAddWlan(buf,length);
+             case ODLCapwapConsts.IEEE_80211_UPDATE_WLAN:
+                 return    MsgElem802_11Factory.decodeUpdateWlan(buf,length);
+             case ODLCapwapConsts.IEEE_80211_DELETE_WLAN:
+                 return    MsgElem802_11Factory.decodeDeleteWlan(buf,length);
              default:
 
                  return decodeUnknownMsgElm(buf,dType,length);
