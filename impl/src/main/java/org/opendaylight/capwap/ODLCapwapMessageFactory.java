@@ -205,6 +205,24 @@ public class ODLCapwapMessageFactory {
                  return    MsgElem802_11Factory.decodeUpdateWlan(buf,length);
              case ODLCapwapConsts.IEEE_80211_DELETE_WLAN:
                  return    MsgElem802_11Factory.decodeDeleteWlan(buf,length);
+             case    ODLCapwapConsts.IEEE_80211_ANTENNA:
+                 return (MsgElem802_11Factory.decodeAntenna(buf,length));
+             case    ODLCapwapConsts.IEEE_80211_ASSIGNED_WTP_BSSID:
+                 return (MsgElem802_11Factory.decodeAssignedWtpBssid(buf,length));
+             case    ODLCapwapConsts.IEEE_80211_DIRECT_SEQUENCE_CONTROL:
+                 return (MsgElem802_11Factory.decodeDirectSeqCtrl(buf,length));
+             case    ODLCapwapConsts.IEEE_80211_MIC_COUNTERMEASURES:
+                 return (MsgElem802_11Factory.decodeMicCounterMeasures(buf,length));
+             case    ODLCapwapConsts.IEEE_80211_TX_POWER:
+                 return (MsgElem802_11Factory.decodeTxPower(buf,length));
+             case    ODLCapwapConsts.IEEE_80211_WTP_RADIO_CONFIGURATION:
+                 return (MsgElem802_11Factory.decodeWtpRadioConfiguration(buf,length));
+             case    ODLCapwapConsts.IEEE_80211_WTP_RADIO_FAIL_ALARM_INDICATION:
+                 System.out.println("calling alarm decode");
+                 return (MsgElem802_11Factory.decodeWtpRadioFailAlarmIndication(buf,length));
+
+
+
              default:
 
                  return decodeUnknownMsgElm(buf,dType,length);

@@ -147,5 +147,21 @@ public class WTP_Radio_Information implements ODLCapwapMessageElement {
         return this.msgElem;
     }
 
+    @Override
+    public boolean equals (Object o)
+    {
+        System.out.println("equals");
+        if (o == this)
+            return true;
+        if(!(o instanceof WTP_Radio_Information))
+            return false;
+        if(!((this.msgElem == ((WTP_Radio_Information) o).getType())&&
+        (this.radioId == ((WTP_Radio_Information) o).getRadioId())&&
+        (this.radioType == ((WTP_Radio_Information) o).getRadioType())))
+            return false;
+
+        return true;
+
+    }
 
 }
