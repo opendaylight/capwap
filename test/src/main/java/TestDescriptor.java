@@ -12,10 +12,7 @@ import org.junit.Assert;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import org.opendaylight.capwap.*;
-import org.opendaylight.capwap.binding_802_11.AddWlan;
-import org.opendaylight.capwap.binding_802_11.UpdateWlan;
-import org.opendaylight.capwap.binding_802_11.DeleteWlan;
-import org.opendaylight.capwap.binding_802_11.WTP_Radio_Information;
+import org.opendaylight.capwap.binding_802_11.*;
 import org.opendaylight.capwap.msgelements.*;
 import org.opendaylight.capwap.msgelements.subelem.*;
 
@@ -42,7 +39,245 @@ private static final Logger LOG = LoggerFactory.getLogger(TestDescriptor.class);
 
 
     }
-    
+
+    @Test
+    public void antennaTester ()
+    {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+        System.out.println("antennaTester");
+        Antenna antenna = new Antenna ();
+        System.out.println("antennaTester-1");
+        antenna.setRadioId((byte)31);
+        System.out.println("antennaTester-11");
+        antenna.setDiversity((byte)1);
+        System.out.println("antennaTester-12");
+        antenna.setCombiner((byte)1);
+        System.out.println("antennaTester-13");
+        antenna.setAntennaCount((byte)2);
+        byte [] antennaSelection = new byte [] {8,10};
+        System.out.println("antennaTester-14");
+        antenna.setAntennaSelection(antennaSelection);
+        System.out.println("antennaTester-2");
+        msg.ctrlMsg.addMessageElement(antenna);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+        System.out.println("antennaTester-3");
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        System.out.println("antennaTester-4");
+        sender(buf);
+        System.out.println("antennaTester-5");
+        Assert.assertEquals(msg,n);
+
+    }
+   // /*
+    @Test
+    public void assignedWtpBssIdTester ()
+    {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+        AssignedWtpBssid assignedWtpBssid  = new AssignedWtpBssid();
+        assignedWtpBssid.setRadioId((byte)14);
+        assignedWtpBssid.setWlanId((byte)13);
+        byte [] bssId = new byte[] {99,98,97,96,95,95};
+        assignedWtpBssid.setBssId(bssId);
+
+        msg.ctrlMsg.addMessageElement(assignedWtpBssid);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        sender(buf);
+        Assert.assertEquals(msg,n);
+        //return (assignedWtpBssid);
+    }
+   // */
+  //  /*
+    ///*
+    @Test
+    public void directSeqCtrlTester ()
+    {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+
+        DirectSeqCtrl directSeqCtrl = new        DirectSeqCtrl ();
+        directSeqCtrl.setRadioId((byte)10);
+        directSeqCtrl.setCurrentChannel((byte)122);
+        directSeqCtrl.setCurrentCCA((byte)4);
+        directSeqCtrl.setEnergyDetectThreshold(65535);
+        msg.ctrlMsg.addMessageElement(directSeqCtrl);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        sender(buf);
+        Assert.assertEquals(msg,n);
+        //return (directSeqCtrl);
+
+    }
+    ///*
+    @Test
+    public void MicCounterMeasuresTester ()
+    {
+
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+        MicCounterMeasures micCounterMeasures = new     MicCounterMeasures ();
+        System.out.println("MicCounterMeasures: type = " +micCounterMeasures.getType());
+        micCounterMeasures.setRadioId((byte)9);
+        micCounterMeasures.setWlanId((byte)15);
+        MacAddress macAddress = new MacAddress();
+        byte [] address = new byte[] {101,102,103,104,105,106};
+        //macAddress.setAddress(address);
+        micCounterMeasures.setMacAddress(address);
+        msg.ctrlMsg.addMessageElement(micCounterMeasures);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        sender(buf);
+        Assert.assertEquals(msg,n);
+        //return (micCounterMeasures);
+
+
+    }
+
+     // /*
+    @Test
+    public void txPowerTester()
+    {
+
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+
+        TxPower txPower = new TxPower();
+        System.out.println("TxPower: type = " +txPower.getType());
+        txPower.setRadioId((byte)8);
+        //txPower.setReserved(0);
+        txPower.setCurrentTxPower(78);
+        msg.ctrlMsg.addMessageElement(txPower);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        sender(buf);
+        Assert.assertEquals(msg,n);
+        //return (txPower);
+    }
+       ///*
+    @Test
+    public void wtpRadioConfTester ()
+    {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+        WtpRadioConfiguration wtpRadioConfiguration = new WtpRadioConfiguration ();
+        System.out.println("WtpRadioConfiguration: type = " +wtpRadioConfiguration.getType());
+        wtpRadioConfiguration.setRadioId((byte)4);
+        wtpRadioConfiguration.setShortPreamble((byte)1);
+        wtpRadioConfiguration.setNumOfBssIds((byte)2);
+        wtpRadioConfiguration.setDtimPeriod((byte)5);
+        //MacAddress macAddress = new MacAddress();
+        byte [] bssId = new byte[6];
+
+        bssId[0] = 1;
+        bssId[1] = 2;
+        bssId[2] = 3;
+        bssId[3] = 4;
+        bssId[4] = 5;
+        bssId[5] = 6;
+        //macAddress.setAddress(bssId);
+        wtpRadioConfiguration.setBssId(bssId);
+        wtpRadioConfiguration.setBeaconPeriod(20);
+        byte [] countryString = new byte[] {0,0,0,0};
+        countryString [0] = 68; ;
+        countryString [1] = 69;
+        countryString [2] = 70;
+        countryString [3] = 71;
+        wtpRadioConfiguration.setCountryString(countryString);
+        msg.ctrlMsg.addMessageElement(wtpRadioConfiguration);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        sender(buf);
+        Assert.assertEquals(msg,n);
+          //return (wtpRadioConfiguration);
+    }
+
+    @Test
+    public void wtpRadioFailAlarmIndicationTester ()
+    {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+        WtpRadioFailAlarmIndication wtpRadioFailAlarmIndication = new  WtpRadioFailAlarmIndication();
+        System.out.println("WtpRadioFailAlarmIndicationTester: type = " +wtpRadioFailAlarmIndication.getType());
+        wtpRadioFailAlarmIndication.setRadioId((byte)21);
+        //wtpRadioFailAlarmIndication.setRadioId((byte)1);
+        wtpRadioFailAlarmIndication.setFailureType((byte)2);
+        wtpRadioFailAlarmIndication.setStatus((byte)1);
+        msg.ctrlMsg.addMessageElement(wtpRadioFailAlarmIndication);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        if (n== null)
+            System.out.println("decodeWtpRadioFailAlarmIndication- returned null");
+        sender(buf);
+        Assert.assertEquals(msg,n);
+
+    }
+            //  */
+
+            /*
 	@Test
  	public void deleteWlanTester ()
  	{
@@ -275,7 +510,7 @@ public void  wtpNameTester() {
     n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
     sender(buf);
     Assert.assertEquals(msg,n);
-}    
+}               */
 /*
     @Test
     public void wtpRadioInfoTester() {
@@ -303,7 +538,7 @@ public void  wtpNameTester() {
 }
 */
 
-     
+        /*
        @Test
 
     public void WtpDesciptorTester() {
@@ -483,7 +718,7 @@ acDescriptor.addAcInformationSubElem(e);
             //encodeDecodeTester(msg,n);
 
     }   
- // */
+  */
             /*
     @Test
     public void  IPV4ControlDescriptorTest() {
@@ -765,7 +1000,7 @@ acDescriptor.addAcInformationSubElem(e);
     }
 
       */
-      
+ /*
     @Test
     public void maxLenTester() {
         StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
@@ -788,7 +1023,8 @@ acDescriptor.addAcInformationSubElem(e);
         n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
         sender(buf);
         Assert.assertEquals(msg,n);
-    }   
+    }
+      */
     /*
     @Test
     public void VendorSpecificPayloadTester() {

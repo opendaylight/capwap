@@ -12,6 +12,8 @@ import org.opendaylight.capwap.utils.ByteManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.opendaylight.capwap.ODLCapwapMessageElementFactory.decodeMacAddress;
+
 /**
  * Created by flat on 21/04/16.
  */
@@ -89,7 +91,7 @@ public class MsgElem802_11Factory {
             LOG.error("ByteBuf not readable updateWlan");
             return null;
         }
-        int startIndex = buf.readerIndex();
+//        int startIndex = buf.readerIndex();
         UpdateWlan updateWlan = new UpdateWlan();
         updateWlan.setRadioId(buf.readByte());
         updateWlan.setWlanId (buf.readByte());
@@ -119,7 +121,7 @@ public class MsgElem802_11Factory {
             LOG.error("ByteBuf not readable updateWlan");
             return null;
         }
-        int startIndex = buf.readerIndex();
+  //      int startIndex = buf.readerIndex();
         DeleteWlan deleteWlan = new DeleteWlan();
         deleteWlan.setRadioId(buf.readByte());
         deleteWlan.setWlanId (buf.readByte());
@@ -127,4 +129,180 @@ public class MsgElem802_11Factory {
         return (deleteWlan);
 
     }
+
+    static public   Antenna decodeAntenna(ByteBuf buf, int length)
+    {
+
+        if (buf == null) {
+            LOG.error("ByteBuf null Antenna  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable Antenna");
+            return null;
+        }
+
+        Antenna antenna = new Antenna();
+        int startIndex = buf.readerIndex();
+        antenna.setRadioId(buf.readByte());
+        antenna.setDiversity(buf.readByte());
+        antenna.setCombiner(buf.readByte());
+        antenna.setAntennaCount(buf.readByte());
+        int currentReadBytes =   buf.readerIndex()- startIndex;
+        System.out.println(" decode Antenna - current bytes = " + currentReadBytes);
+        byte [] antennaSelection = new byte[length-currentReadBytes];
+        buf.readBytes(antennaSelection);
+        antenna.setAntennaSelection(antennaSelection);
+
+        return antenna;
+    }
+
+    static public  AssignedWtpBssid decodeAssignedWtpBssid(ByteBuf buf, int length)
+    {
+        if (buf == null) {
+            LOG.error("ByteBuf null AssignedWtpBssid  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable AssignedWtpBssid");
+            return null;
+        }
+
+        AssignedWtpBssid assignedWtpBssid = new AssignedWtpBssid();
+
+        int startIndex = buf.readerIndex();
+        assignedWtpBssid.setRadioId(buf.readByte());
+        assignedWtpBssid.setWlanId(buf.readByte());
+        byte [] bssId = new byte []  {0,0,0,0,0,0};
+        buf.readBytes(bssId);
+        assignedWtpBssid.setBssId(bssId);
+        return (assignedWtpBssid);
+    }
+
+    static public   DirectSeqCtrl decodeDirectSeqCtrl(ByteBuf buf, int length)
+    {
+
+        if (buf == null) {
+            LOG.error("ByteBuf null DirectSeqCtrl  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable DirectSeqCtrl");
+            return null;
+        }
+        DirectSeqCtrl directSeqCtrl = new  DirectSeqCtrl ();
+        directSeqCtrl.setRadioId(buf.readByte());
+        directSeqCtrl.setCurrentChannel(buf.readByte());
+        directSeqCtrl.setCurrentCCA(buf.readByte());
+        byte [] edt = new byte[] {0,0,0,0};
+        buf.readBytes(edt);
+        directSeqCtrl.setEnergyDetectThreshold(ByteManager.byteArrayToUnsingedInt(edt));
+
+         return directSeqCtrl;
+    }
+
+    static public   MicCounterMeasures decodeMicCounterMeasures(ByteBuf buf, int length)
+    {
+        if (buf == null) {
+            LOG.error("ByteBuf null MicCounterMeasures  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable MicCounterMeasures");
+            return null;
+        }
+
+        MicCounterMeasures micCounterMeasures = new    MicCounterMeasures ();
+        micCounterMeasures.setRadioId(buf.readByte());
+        micCounterMeasures.setWlanId(buf.readByte());
+
+
+        byte [] macAddress = new byte[] {0,0,0,0,0,0};
+        buf.readBytes(macAddress);
+        micCounterMeasures.setMacAddress(macAddress);
+
+            return (micCounterMeasures);
+
+    }
+
+    static public   TxPower decodeTxPower(ByteBuf buf, int length)
+    {
+        if (buf == null) {
+            LOG.error("ByteBuf null TxPower  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable TxPower");
+            return null;
+        }
+
+        TxPower txPower = new TxPower();
+        txPower.setRadioId(buf.readByte());
+        buf.skipBytes(1);
+        byte [] curTxPower = new byte[] {0,0};
+        buf.readBytes(curTxPower);
+        txPower.setCurrentTxPower(ByteManager.byteArrayToUnsingedShort(curTxPower));
+        return txPower;
+    }
+
+    static public  WtpRadioConfiguration decodeWtpRadioConfiguration(ByteBuf buf, int length)
+    {
+
+        if (buf == null) {
+
+            LOG.error("ByteBuf null WtpRadioConfiguration  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable WtpRadioConfiguration");
+            return null;
+        }
+        WtpRadioConfiguration wtpRadioConfiguration = new     WtpRadioConfiguration ();
+        wtpRadioConfiguration.setRadioId(buf.readByte());
+        wtpRadioConfiguration.setShortPreamble(buf.readByte());
+        wtpRadioConfiguration.setNumOfBssIds(buf.readByte());
+        wtpRadioConfiguration.setDtimPeriod(buf.readByte());
+        byte [] bssId = new byte [] {0,0,0,0,0,0};
+        buf.readBytes(bssId);
+        //wtpRadioConfiguration.setBssId(decodeMacAddress(buf,length));
+        wtpRadioConfiguration.setBssId(bssId);
+        byte[] beaconPeriod = new byte[]  {0,0};
+        buf.readBytes(beaconPeriod);
+        wtpRadioConfiguration.setBeaconPeriod(ByteManager.byteArrayToUnsingedShort(beaconPeriod));
+        byte [] countryString = new byte[] {0,0,0,0};
+        buf.readBytes(countryString);
+        wtpRadioConfiguration.setCountryString(countryString);
+        return (wtpRadioConfiguration);
+    }
+
+    static public   WtpRadioFailAlarmIndication decodeWtpRadioFailAlarmIndication(ByteBuf buf, int length)
+    {
+        System.out.println("decodeWtpRadioFailAlarmIndication");
+        if (buf == null) {
+            System.out.println("decodeWtpRadioFailAlarmIndication-1");
+            LOG.error("ByteBuf null WtpRadioFailAlarmIndication  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            System.out.println("decodeWtpRadioFailAlarmIndication-2");
+            LOG.error("ByteBuf not readable WtpRadioFailAlarmIndication");
+            return null;
+        }
+    //    int startIndex = buf.readerIndex();
+        WtpRadioFailAlarmIndication wtpRadioFailAlarmIndication = new WtpRadioFailAlarmIndication();
+        wtpRadioFailAlarmIndication.setRadioId(buf.readByte());
+        wtpRadioFailAlarmIndication.setFailureType(buf.readByte());
+        wtpRadioFailAlarmIndication.setStatus(buf.readByte());
+        if(buf.readByte() != 0)
+        {
+            System.out.println("decodeWtpRadioFailAlarmIndication--3");
+            LOG.error("WtpRadioFailAlarmIndication pad should be 0");
+            return null;
+        }
+        //wtpRadioFailAlarmIndication.setPad (buf.readByte());
+        System.out.println("decodeWtpRadioFailAlarmIndication-4");
+        return (wtpRadioFailAlarmIndication);
+
+    }
+
 }

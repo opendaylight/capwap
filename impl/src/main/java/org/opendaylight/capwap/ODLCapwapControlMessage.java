@@ -50,7 +50,7 @@ public class ODLCapwapControlMessage {
         this.flags = 0;
     }
     */
-    
+
 
 
 
@@ -186,7 +186,7 @@ public class ODLCapwapControlMessage {
                 (msgLen == ((ODLCapwapControlMessage) o).getMsgLen()) &&
                 (flags == ((ODLCapwapControlMessage) o).getFlags()))
         {
-        
+
        		Iterator <ODLCapwapMessageElement> itr = ((ODLCapwapControlMessage) o).getElements().iterator();
         	for (ODLCapwapMessageElement e_c : elements) {
             	ODLCapwapMessageElement e_o = itr.next();
@@ -628,7 +628,66 @@ public class ODLCapwapControlMessage {
                 DeleteWlan deleteWlan2 = (DeleteWlan)n;
                 result = deleteWlan1.equals(deleteWlan2);
                 System.out.println("In func compareEachMessageElement- DeleteWlan result = " + result);
+                break;
+            case   ODLCapwapConsts.IEEE_80211_WTP_RADIO_FAIL_ALARM_INDICATION:
+                System.out.println("In func compareEachMessageElement- IEEE_80211_WTP_RADIO_FAIL_ALARM_INDICATION");
+                WtpRadioFailAlarmIndication alarmIndication1 =  (WtpRadioFailAlarmIndication)o;
+                WtpRadioFailAlarmIndication alarmIndication2 = (WtpRadioFailAlarmIndication)n;
+                result = alarmIndication1.equals(alarmIndication2);
+                System.out.println("In func compareEachMessageElement- IEEE_80211_WTP_RADIO_FAIL_ALARM_INDICATION result = " + result);
+                break;
+            case ODLCapwapConsts.IEEE_80211_WTP_RADIO_CONFIGURATION:
+                System.out.println("In func compareEachMessageElement- IEEE_80211_WTP_RADIO_CONFIGURATION");
+                WtpRadioConfiguration radioConfiguration1 =  (WtpRadioConfiguration)o;
+                WtpRadioConfiguration radioConfiguration2 = (WtpRadioConfiguration)n;
+                result = radioConfiguration1.equals(radioConfiguration2);
+                System.out.println("In func compareEachMessageElement- IEEE_80211_WTP_RADIO_CONFIGURATION result = " + result);
+                break;
+            case ODLCapwapConsts.IEEE_80211_TX_POWER:
+                System.out.println("In func compareEachMessageElement- TxPower");
+                TxPower txPower1 =  (TxPower)o;
+                TxPower txPower2 = (TxPower)n;
+                result = txPower1.equals(txPower2);
+                System.out.println("In func compareEachMessageElement- txPower result = " + result);
+            break;
+            case ODLCapwapConsts.IEEE_80211_MIC_COUNTERMEASURES:
+                System.out.println("In func compareEachMessageElement- micCounterMeasure");
+                MicCounterMeasures micCounterMeasures1 =  (MicCounterMeasures)o;
+                MicCounterMeasures micCounterMeasures2 = (MicCounterMeasures)n;
+                result = micCounterMeasures1.equals(micCounterMeasures2);
+                System.out.println("In func compareEachMessageElement- micCounterMeasure result = " + result);
 
+                    break;
+            case ODLCapwapConsts.IEEE_80211_DIRECT_SEQUENCE_CONTROL:
+                System.out.println("In func compareEachMessageElement- DirectSeqCtrl");
+                DirectSeqCtrl directSeqCtrl1 =  (DirectSeqCtrl)o;
+                DirectSeqCtrl directSeqCtrl2 = (DirectSeqCtrl)n;
+                result = directSeqCtrl1.equals(directSeqCtrl2);
+                System.out.println("In func compareEachMessageElement- DirectSeqCtrl result = " + result);
+
+                break;
+            case ODLCapwapConsts.IEEE_80211_ASSIGNED_WTP_BSSID:
+                System.out.println("In func compareEachMessageElement-AssignedWtpBssid" );
+                AssignedWtpBssid assignedWtpBssid1 =  (AssignedWtpBssid)o;
+                AssignedWtpBssid assignedWtpBssid2 = (AssignedWtpBssid)n;
+                result = assignedWtpBssid1.equals(assignedWtpBssid2);
+                System.out.println("In func compareEachMessageElement- AssignedWtpBssid result = " + result);
+
+                break;
+            case ODLCapwapConsts.IEEE_80211_ANTENNA:
+                System.out.println("In func compareEachMessageElement-Antenna" );
+                Antenna antenna1 =  (Antenna)o;
+                Antenna antenna2 = (Antenna)n;
+                result = antenna1.equals(antenna2);
+                System.out.println("In func compareEachMessageElement- Antenna result = " + result);
+                break;
+
+            case ODLCapwapConsts.IEEE_80211_WTP_RADIO_INFORMATION:
+                System.out.println("In func compareEachMessageElement-IEEE_80211_WTP_RADIO_INFORMATION" );
+                WTP_Radio_Information info1 =  (WTP_Radio_Information)o;
+                WTP_Radio_Information info2 = (WTP_Radio_Information)n;
+                result = info1.equals(info2);
+                System.out.println("In func compareEachMessageElement- IEEE_80211_WTP_RADIO_INFORMATION result = " + result);
                 break;
             default:
                 break;
