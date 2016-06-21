@@ -220,8 +220,12 @@ public class ODLCapwapMessageFactory {
              case    ODLCapwapConsts.IEEE_80211_WTP_RADIO_FAIL_ALARM_INDICATION:
                  System.out.println("calling alarm decode");
                  return (MsgElem802_11Factory.decodeWtpRadioFailAlarmIndication(buf,length));
-
-
+             case ODLCapwapConsts.IEEE_80211_MAC_OPERATION:
+                 return (MsgElem802_11Factory.decodeMacOperation(buf,length));
+             case ODLCapwapConsts.IEEE_80211_OFDM_CONTROL:
+                 return (MsgElem802_11Factory.decodeOFDMControl(buf,length));
+             case ODLCapwapConsts.IEEE_80211_MULTI_DOMAIN_CAPABILITY:
+                 return (MsgElem802_11Factory.decodeMultiDomainCapability(buf,length));
 
              default:
 
