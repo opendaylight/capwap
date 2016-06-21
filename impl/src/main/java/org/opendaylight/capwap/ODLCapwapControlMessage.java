@@ -689,6 +689,28 @@ public class ODLCapwapControlMessage {
                 result = info1.equals(info2);
                 System.out.println("In func compareEachMessageElement- IEEE_80211_WTP_RADIO_INFORMATION result = " + result);
                 break;
+            case ODLCapwapConsts.IEEE_80211_MAC_OPERATION:
+                System.out.println("In func compareEachMessageElement-MacOperation" );
+                MacOperation macOp1 =  (MacOperation)o;
+                MacOperation macOp2 = (MacOperation)n;
+                result = macOp1.equals(macOp2);
+                System.out.println("In func compareEachMessageElement- MacOperation result = " + result);
+                break;
+            case ODLCapwapConsts.IEEE_80211_MULTI_DOMAIN_CAPABILITY:
+                System.out.println("In func compareEachMessageElement-MultiDomainCapability" );
+                MultiDomainCapability multiDomainCapability1 =  (MultiDomainCapability)o;
+                MultiDomainCapability multiDomainCapability2 = (MultiDomainCapability)n;
+                result = multiDomainCapability1.equals(multiDomainCapability2);
+                System.out.println("In func compareEachMessageElement- MultiDomainCapability result = " + result);
+                break;
+            case ODLCapwapConsts.IEEE_80211_OFDM_CONTROL:
+                System.out.println("In func compareEachMessageElement-ofdmcontrol" );
+                OFDMControl ofdmControl1 =  (OFDMControl)o;
+                OFDMControl ofdmControl2 = (OFDMControl)n;
+                result = ofdmControl1.equals(ofdmControl2);
+                System.out.println("In func compareEachMessageElement- ofdmControl result = " + result);
+                break;
+
             default:
                 break;
         }

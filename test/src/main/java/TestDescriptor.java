@@ -39,7 +39,89 @@ private static final Logger LOG = LoggerFactory.getLogger(TestDescriptor.class);
 
 
     }
+    @Test
+    public void ofdmControlTester()
+    {
 
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+
+        OFDMControl ofdmControl = new OFDMControl();
+        ofdmControl.setRadioId((byte)28);
+        ofdmControl.setCurrentChannel((byte)20);
+        ofdmControl.setBandSupport((byte)6);
+        ofdmControl.setTiThreshold(788);
+        msg.ctrlMsg.addMessageElement(ofdmControl);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        sender(buf);
+        Assert.assertEquals(msg,n);
+    }
+
+    @Test
+    public void multiDomainCapabilityTester ()
+    {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+        MultiDomainCapability multiDomainCapability = new   MultiDomainCapability ();
+        multiDomainCapability.setRadioId((byte)30);
+        multiDomainCapability.setFirstChannelNumber(20);
+        multiDomainCapability.setNumberOfChannels(10);
+        multiDomainCapability.setMaxTxPowerLevel(200);
+
+        msg.ctrlMsg.addMessageElement(multiDomainCapability);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        sender(buf);
+        Assert.assertEquals(msg,n);
+    }
+
+
+    @Test
+    public void macOperationTester()
+    {
+        StackTraceElement bTop = Thread.currentThread().getStackTrace()[1];
+
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+
+        MacOperation macOp = new MacOperation();
+        macOp.setRadioId((byte)31);
+        macOp.setRtsThreshold(2);
+        macOp.setShortRetry(5);
+        macOp.setLongRetry(7);
+        macOp.setFragmentationThreshold(258);
+        macOp.setTxMsduLifeTime(529);
+        macOp.setRxMsduLifeTime(540);
+        msg.ctrlMsg.addMessageElement(macOp);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        sender(buf);
+        Assert.assertEquals(msg,n);
+    }
+    /*
     @Test
     public void antennaTester ()
     {
@@ -105,9 +187,9 @@ private static final Logger LOG = LoggerFactory.getLogger(TestDescriptor.class);
         Assert.assertEquals(msg,n);
         //return (assignedWtpBssid);
     }
-   // */
+   */
   //  /*
-    ///*
+    /*
     @Test
     public void directSeqCtrlTester ()
     {
@@ -275,7 +357,7 @@ private static final Logger LOG = LoggerFactory.getLogger(TestDescriptor.class);
         Assert.assertEquals(msg,n);
 
     }
-            //  */
+            */
 
             /*
 	@Test

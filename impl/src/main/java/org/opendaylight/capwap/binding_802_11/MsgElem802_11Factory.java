@@ -305,4 +305,87 @@ public class MsgElem802_11Factory {
 
     }
 
+    static public MacOperation decodeMacOperation(ByteBuf buf, int length)
+    {
+        if (buf == null) {
+            LOG.error("ByteBuf null decodeMacOperation  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable decodeMacOperation");
+            return null;
+        }
+        //    int startIndex = buf.readerIndex();
+        MacOperation macOperation = new MacOperation();
+        macOperation.setRadioId(buf.readByte());
+        buf.skipBytes(1);
+        byte [] rtsThreshold = new byte[] {0,0};
+        buf.readBytes(rtsThreshold) ;
+        macOperation.setRtsThreshold(ByteManager.byteArrayToUnsingedShort(rtsThreshold));
+        byte [] shortRetry = new byte[] {0,0};
+                buf.readBytes(shortRetry);
+        macOperation.setShortRetry(ByteManager.byteArrayToUnsingedShort(shortRetry));
+        byte [] longRetry = new byte[] {0,0};
+        buf.readBytes(longRetry);
+        macOperation.setLongRetry(ByteManager.byteArrayToUnsingedShort(longRetry));
+        byte [] fragmentationThreshold = new byte[] {0,0};
+        buf.readBytes(fragmentationThreshold);
+        macOperation.setFragmentationThreshold(ByteManager.byteArrayToUnsingedShort(fragmentationThreshold));
+        byte[] txMsduLifeTime = new byte[] {0,0,0,0};
+        buf.readBytes(txMsduLifeTime);
+        macOperation.setTxMsduLifeTime(ByteManager.byteArrayToUnsingedInt(txMsduLifeTime));
+        byte [] rxMsduLifeTime = new byte[] {0,0,0,0};
+        buf.readBytes(rxMsduLifeTime);
+        macOperation.setRxMsduLifeTime(ByteManager.byteArrayToUnsingedInt(rxMsduLifeTime));
+        return (macOperation);
+    }
+
+    static public MultiDomainCapability decodeMultiDomainCapability (ByteBuf buf, int length)
+    {
+
+         if (buf == null) {
+            LOG.error("ByteBuf null decodeMultiDomainCapability  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable decodeMultiDomainCapability");
+            return null;
+        }
+        MultiDomainCapability multiDomainCapability = new MultiDomainCapability();
+        multiDomainCapability.setRadioId(buf.readByte());
+        buf.skipBytes(1);
+        byte [] firstChannelNumber = new byte[] {0,0};
+        buf.readBytes(firstChannelNumber);
+        multiDomainCapability.setFirstChannelNumber(ByteManager.byteArrayToUnsingedShort(firstChannelNumber));
+        byte [] noOfChannels = new byte[] {0,0};
+        buf.readBytes(noOfChannels);
+        multiDomainCapability.setNumberOfChannels(ByteManager.byteArrayToUnsingedShort(noOfChannels));
+        byte [] maxTxPowerLevel = new byte [] {0,0};
+        buf.readBytes(maxTxPowerLevel);
+        multiDomainCapability.setMaxTxPowerLevel(ByteManager.byteArrayToUnsingedShort(maxTxPowerLevel));
+        return (multiDomainCapability);
+
+    }
+
+    static public OFDMControl decodeOFDMControl (ByteBuf buf, int length)
+    {
+         if (buf == null) {
+            LOG.error("ByteBuf null decodeOFDMControl  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable decodeOFDMControl");
+            return null;
+        }
+        OFDMControl ofdmControl = new OFDMControl();
+        ofdmControl.setRadioId(buf.readByte());
+        buf.skipBytes(1);
+        ofdmControl.setCurrentChannel(buf.readByte());
+        ofdmControl.setBandSupport(buf.readByte());
+        byte [] tiThreshold = new byte[] {0,0,0,0};
+        buf.readBytes(tiThreshold);
+        ofdmControl.setTiThreshold(ByteManager.byteArrayToUnsingedInt(tiThreshold));
+        return (ofdmControl);
+    }
+
 }
