@@ -49,17 +49,9 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
 
     private class CapwapPacketHandler extends SimpleChannelInboundHandler<DatagramPacket> {
         protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket packet) throws Exception {
-
-            final InetAddress srcAddr = packet.sender().getAddress();
-            final ByteBuf buf = packet.content();
-            final int rcvPktLength = buf.readableBytes();
-            final byte[] rcvPktBuf = new byte[rcvPktLength];
-            buf.readBytes(rcvPktBuf);
-
-            rcvPktProcessing(rcvPktBuf, rcvPktLength, srcAddr);
+            messageReceived(ctx, packet);
         }
 
-        @Override
         protected void messageReceived(ChannelHandlerContext channelHandlerContext, DatagramPacket packet) throws Exception {
             final InetAddress srcAddr = packet.sender().getAddress();
             final ByteBuf buf = packet.content();
