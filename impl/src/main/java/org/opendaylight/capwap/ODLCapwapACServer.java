@@ -33,7 +33,11 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.SocketException;
-
+import org.opendaylight.capwap.dtls.DtlsServerHandler;
+import org.opendaylight.capwap.dtls.DtlsServer;
+import java.io.File;
+import java.security.SecureRandom;
+import org.opendaylight.capwap.dtls.DtlsEngine;
 //import org.opendaylight.usc.plugin.UscPluginUdp;
 
 
@@ -45,7 +49,7 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
         NONE, DTLS, USC
     }
 
-    private static final SecurityType security = SecurityType.NONE;
+    private static final SecurityType security = SecurityType.DTLS;
 
     private class CapwapPacketHandler extends SimpleChannelInboundHandler<DatagramPacket> {
         protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket packet) throws Exception {
@@ -76,8 +80,25 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
 
     public ODLCapwapACServer(DataBroker dataProvider) throws SocketException {
         this.port = 5246;
-	this.dataProvider = dataProvider;
+	    this.dataProvider = dataProvider;
     }
+
+    ChannelOutboundHandler  setHandler(){
+        final SecureRandom secureRandom = new SecureRandom();
+        File privateKeyFile = null;
+        File publicCertChainFile = null;
+        File trustCertChainFile = null;
+        System.out.println("Using the default data to initialize");
+        File rootPath = new File("etc/usc/certificates");
+        privateKeyFile = new File(rootPath, "client.key.pem");
+        publicCertChainFile = new File(rootPath, "client.pem");
+        trustCertChainFile = new File(rootPath, "rootCA.pem");
+        final DtlsServer dtlsServer = new DtlsServer(trustCertChainFile,
+                publicCertChainFile, privateKeyFile);
+        DtlsEngine.setDtlsServer(dtlsServer);
+        return new DtlsServerHandler(dtlsServer, secureRandom);
+    }
+
 
     public void run() {
 	try {
@@ -99,8 +120,8 @@ public class ODLCapwapACServer implements ODLCapwapACBaseServer,Runnable {
                 ChannelPipeline p = ch.pipeline();
                 if (security == SecurityType.DTLS) {
                     p.addLast(new LoggingHandler("CapwapACServer Log 2", LogLevel.TRACE));
-                   // ChannelHandler dtlsHandler = UscPluginUdp.getSecureServerHandler(ch);
-                    //p.addLast(dtlsHandler);
+                    ChannelHandler dtlsHandler = setHandler();
+                    p.addLast(dtlsHandler);
                 }
                 p.addLast(new LoggingHandler("CapwapACServer Log 1", LogLevel.TRACE));
                 p.addLast(new CapwapPacketHandler());
