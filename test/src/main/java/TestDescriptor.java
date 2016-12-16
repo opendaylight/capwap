@@ -38,7 +38,157 @@ private static final Logger LOG = LoggerFactory.getLogger(TestDescriptor.class);
 
 
 
+
     }
+
+    @Test
+    public void RsnaErrorTester ()
+    {
+
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+
+        RsnaErrReportFrmStn rsnaErrReportFrmStn = new RsnaErrReportFrmStn();
+
+        byte [] clientMacAddress = new byte[] {0,0,0,8,9,7};
+        rsnaErrReportFrmStn.setClientMacAddress(clientMacAddress);
+        byte [] bssId = new byte[] {0,9,8,7,6,5};
+        rsnaErrReportFrmStn.setBssId(bssId);
+        rsnaErrReportFrmStn.setRadioId((byte)15);
+        rsnaErrReportFrmStn.setWlanId((byte)25);
+        rsnaErrReportFrmStn.setTxIpICVErrors(87);
+        rsnaErrReportFrmStn.setTxIpLocalMICFailures(76);
+        rsnaErrReportFrmStn.setTxIpRemoteMICFailures(65);
+        rsnaErrReportFrmStn.setCcmpReplays(43);                  x
+        rsnaErrReportFrmStn.setCcmpDecryptErrors(52);
+        rsnaErrReportFrmStn.setTxIpReplays(342);
+
+        msg.ctrlMsg.addMessageElement(rsnaErrReportFrmStn);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        sender(buf);
+        Assert.assertEquals(msg,n);
+
+    }
+                             /*
+    @Test
+    public void StatisticsTester ()
+    {
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+
+        Statistics statistics = new Statistics();
+        statistics.setRadioId((byte)15);
+        statistics.setTxFragmentCount(3400);
+        statistics.setMulticastTxCount(9877);
+        statistics.setFailedCount(8);
+        statistics.setRetryCount(3);
+        statistics.setMultipleRetryCount(2);
+        statistics.setFrameDuplicateCount(1);
+        statistics.setRtsSuccessCount(5);
+        statistics.setRtsFailureCount(4);
+        statistics.setAckFailureCount(2);
+        statistics.setRxFragmentCount(3);
+        statistics.setMulticastRxCount(5);
+        statistics.setFcsErrorCount(9);
+        statistics.setTxFrameCount(10);
+        statistics.setDecryptionErrors(32);
+        statistics.setDiscardedQosFragmentCount(56);
+        statistics.setAssociatedStationCount(98);
+        statistics.setQosCfPollsReceivedCount(456);
+        statistics.setQosCfPollsUnusedCount(876);
+        statistics.setQosCfPollsUnusableCount(8765);
+
+
+        msg.ctrlMsg.addMessageElement(statistics);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        sender(buf);
+        Assert.assertEquals(msg,n);
+    }                          */
+
+    /*
+    @Test
+    public void TxPowerLevelTetser()
+    {
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+
+        TxPowerLevel txPowerLevel = new TxPowerLevel();
+        txPowerLevel.setRadioId((byte)28);
+        txPowerLevel.setNumLevels((byte)3);
+        int [] powerLevels = new int[] {3,40,5};
+        txPowerLevel.setPowerLevel(powerLevels);
+        msg.ctrlMsg.addMessageElement(txPowerLevel);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        sender(buf);
+        Assert.assertEquals(msg,n);
+    } */
+    /*@Test
+    public void rateSetTetser()
+    {
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+
+        RateSet rateSet = new RateSet();
+        rateSet.setRadioId((byte)27);
+        byte [] rate = new byte[] {3,40,5};
+        rateSet.setRateSet(rate);
+        msg.ctrlMsg.addMessageElement(rateSet);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        sender(buf);
+        Assert.assertEquals(msg,n);
+    }*/
+
+    /*@Test
+    public void supportedRatesTetser()
+    {
+        ODLCapwapMessage msg = null;
+        ODLCapwapMessage n = null;
+
+        msg = new ODLCapwapMessage();
+
+        SupportedRates supportedRates = new SupportedRates();
+        supportedRates.setRadioId((byte)22);
+        byte [] rate = new byte[] {3,40,5};
+        supportedRates.setSupportedRates(rate);
+        msg.ctrlMsg.addMessageElement(supportedRates);
+        msg.ctrlMsg.setMsgType(ODLCapwapConsts.ODL_CAPWAP_DISCOVERY_REQUEST);
+        msg.ctrlMsg.setSeqNo((short) 1);
+        ByteBuf buf = Unpooled.buffer();
+        msg.header.encodeHeader(buf);
+        msg.ctrlMsg.encode(buf);
+        n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
+        sender(buf);
+        Assert.assertEquals(msg,n);
+    } */
+                       /*
     @Test
     public void ofdmControlTester()
     {
@@ -120,7 +270,7 @@ private static final Logger LOG = LoggerFactory.getLogger(TestDescriptor.class);
         n = ODLCapwapMessageFactory.decodeFromByteArray(buf);
         sender(buf);
         Assert.assertEquals(msg,n);
-    }
+    }                    */
     /*
     @Test
     public void antennaTester ()

@@ -226,7 +226,16 @@ public class ODLCapwapMessageFactory {
                  return (MsgElem802_11Factory.decodeOFDMControl(buf,length));
              case ODLCapwapConsts.IEEE_80211_MULTI_DOMAIN_CAPABILITY:
                  return (MsgElem802_11Factory.decodeMultiDomainCapability(buf,length));
-
+             case ODLCapwapConsts.IEEE_80211_RATE_SET:
+                 return (MsgElem802_11Factory.decodeRateSet(buf, length));
+             case ODLCapwapConsts.IEEE_80211_SUPPORTED_RATES:
+                 return (MsgElem802_11Factory.decodeSupportedRates(buf, length));
+             case ODLCapwapConsts.IEEE_80211_TX_POWER_LEVEL:
+                 return (MsgElem802_11Factory.decodeTxPowerLevel(buf,length));
+             case  ODLCapwapConsts.IEEE_80211_STATISTICS:
+                 return (MsgElem802_11Factory.decodeStatistics (buf,length));
+             case ODLCapwapConsts.IEEE_80211_RSNA_ERROR_REPORT_FROM_STATION:
+                 return (MsgElem802_11Factory.decodeRsnaErrorReportFromStation (buf,length));
              default:
 
                  return decodeUnknownMsgElm(buf,dType,length);
@@ -360,7 +369,6 @@ public class ODLCapwapMessageFactory {
         byte2[1] = word[3];
         capwapHeader.setFragOffset(ByteManager.byteArrayToUnsinged13(byte2));
     }
-
 
 
 }

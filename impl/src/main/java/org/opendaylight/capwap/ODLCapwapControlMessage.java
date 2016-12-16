@@ -710,7 +710,41 @@ public class ODLCapwapControlMessage {
                 result = ofdmControl1.equals(ofdmControl2);
                 System.out.println("In func compareEachMessageElement- ofdmControl result = " + result);
                 break;
-
+            case ODLCapwapConsts.IEEE_80211_RATE_SET:
+                System.out.println("In func compareEachMessageElement-Rateset" );
+                RateSet rateSet =  (RateSet)o;             
+                RateSet rateSet2 = (RateSet)n;            
+                result = rateSet.equals(rateSet2);
+                System.out.println("In func compareEachMessageElement- RateSet result = " + result);
+                break;
+            case    ODLCapwapConsts.IEEE_80211_SUPPORTED_RATES:
+                System.out.println("In func compareEachMessageElement-SupportedRateS" );
+                SupportedRates supportedRates =  (SupportedRates)o;                
+                SupportedRates supprtedRates2 = (SupportedRates)n;                
+                result = supportedRates.equals(supprtedRates2);
+                System.out.println("In func compareEachMessageElement- SupportedRateS result = " + result);
+                break;
+            case ODLCapwapConsts.IEEE_80211_TX_POWER_LEVEL:
+                System.out.println("In func compareEachMessageElement-TxpoerLevel" );
+                TxPowerLevel tx1 = (TxPowerLevel)n;
+                TxPowerLevel tx2 = (TxPowerLevel)o;
+                result = tx1.equals (tx2);
+                System.out.println("In func compareEachMessageElement- Tx power level result = " + result);
+                break;
+            case ODLCapwapConsts.IEEE_80211_STATISTICS:
+                System.out.println("In func compareEachMessageElement-Statistics" );
+                Statistics stats = (Statistics)o;
+                Statistics stats2 = (Statistics)n;
+                result = stats.equals(stats2);
+                System.out.println("In func compareEachMessageElement-Statistics result = " + result );
+                break;
+            case ODLCapwapConsts.IEEE_80211_RSNA_ERROR_REPORT_FROM_STATION:
+                System.out.println("In func RSNA error report from station" );
+                RsnaErrReportFrmStn rsnaErrReport =      (RsnaErrReportFrmStn) o;
+                RsnaErrReportFrmStn rsnaErrReport2 =     (RsnaErrReportFrmStn) n;
+                result =  rsnaErrReport.equals(rsnaErrReport2);
+                System.out.println("In func RSNA error report from station result = " + result );
+                break;
             default:
                 break;
         }

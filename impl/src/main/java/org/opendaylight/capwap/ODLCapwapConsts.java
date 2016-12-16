@@ -113,7 +113,7 @@ public class ODLCapwapConsts {
     public static final int IEEE_80211_STATION_QOS_PROFILE                   = 1037;
     public static final int IEEE_80211_STATION_SESSION_KEY                   = 1038;
     public static final int IEEE_80211_STATISTICS                            = 1039;
-    public static final int IEEE_8021_SUPPORTED_RATES                        = 1040;
+    public static final int IEEE_80211_SUPPORTED_RATES                       = 1040;
     public static final int IEEE_80211_TX_POWER                              = 1041;
     public static final int IEEE_80211_TX_POWER_LEVEL                        = 1042;
     public static final int IEEE_80211_UPDATE_STATION_QOS                    = 1043;

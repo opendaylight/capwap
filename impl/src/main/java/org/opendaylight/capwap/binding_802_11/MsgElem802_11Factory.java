@@ -8,6 +8,7 @@
 package org.opendaylight.capwap.binding_802_11;
 
 import io.netty.buffer.ByteBuf;
+import org.opendaylight.capwap.ODLCapwapHeader;
 import org.opendaylight.capwap.utils.ByteManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -387,5 +388,232 @@ public class MsgElem802_11Factory {
         ofdmControl.setTiThreshold(ByteManager.byteArrayToUnsingedInt(tiThreshold));
         return (ofdmControl);
     }
+
+    static public RateSet decodeRateSet (ByteBuf buf, int length)
+    {
+        if (buf == null) {
+            LOG.error("ByteBuf null decodeRateSet  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable decodeRateSet");
+            return null;
+        }
+        RateSet rateSet = new RateSet();
+        int startIndex = buf.readerIndex();
+        rateSet.setRadioId(buf.readByte());
+        int currentReadBytes =   buf.readerIndex()- startIndex;
+  //      System.out.println(" decode decodeRateSet - current bytes = " + currentReadBytes +"length = " + length + "startIndex =" + startIndex);
+        byte [] rate = new byte[length-currentReadBytes];
+        buf.readBytes(rate);
+        rateSet.setRateSet(rate);
+        return (rateSet);
+
+    }
+
+    static public SupportedRates decodeSupportedRates (ByteBuf buf, int length)
+    {
+        if (buf == null) {
+            LOG.error("ByteBuf null decodeSupportedRates  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable decodeSupportedRates");
+            return null;
+        }
+        SupportedRates supportedRates = new SupportedRates();
+        int startIndex = buf.readerIndex();
+        supportedRates.setRadioId(buf.readByte());
+        int currentReadBytes =   buf.readerIndex()- startIndex;
+//        System.out.println(" decode decodeSupportedRates - current bytes = " + currentReadBytes +"length = " + length + "startIndex =" + startIndex);
+        byte [] rate = new byte[length-currentReadBytes];
+        buf.readBytes(rate);
+        supportedRates.setSupportedRates(rate);
+        return (supportedRates);
+
+    }
+
+    static public TxPowerLevel decodeTxPowerLevel (ByteBuf buf, int length)
+    {
+        if (buf == null) {
+            LOG.error("ByteBuf null decodeTxPowerLevel  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable decodeTxPowerLevel");
+            return null;
+        }
+        TxPowerLevel txPowerLevel = new TxPowerLevel();
+        int startIndex = buf.readerIndex();
+        txPowerLevel.setRadioId(buf.readByte());
+        txPowerLevel.setNumLevels(buf.readByte());
+        //System.out.println(" decode TxPowerLevel - current bytes = " + currentReadBytes +"length = " + length + "startIndex =" + startIndex);
+        int [] powerLevels = new int[(int)txPowerLevel.getNumLevels()];
+        for (int i = 0; i < (int)txPowerLevel.getNumLevels();i++)
+        {
+
+
+        byte[] powerLevel = new byte[]  {0,0};
+        buf.readBytes(powerLevel);
+        powerLevels[i] = ByteManager.byteArrayToUnsingedShort(powerLevel);
+        }
+        txPowerLevel.setPowerLevel(powerLevels);
+        return (txPowerLevel);
+
+    }
+
+
+    static public Statistics  decodeStatistics (ByteBuf buf, int length)
+    {
+
+        if (buf == null) {
+            LOG.error("ByteBuf null decodeStatistics  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable decodeStatistics");
+            return null;
+        }
+        Statistics statistics = new Statistics();
+        int startIndex = buf.readerIndex();
+        statistics.setRadioId(buf.readByte());
+        byte [] reserved = new byte [] {0,0,0};
+        buf.readBytes(reserved);
+        byte [] txFragmentCount = new byte [] {0,0,0,0};
+        buf.readBytes(txFragmentCount);
+        statistics.setTxFragmentCount(ByteManager.byteArrayToUnsingedInt(txFragmentCount));
+
+        byte [] multicastTxCount = new byte [] {0,0,0,0};
+        buf.readBytes(multicastTxCount);
+        statistics.setMulticastTxCount(ByteManager.byteArrayToUnsingedInt(multicastTxCount));
+
+        byte []failedCount = new byte [] {0,0,0,0};
+        buf.readBytes(failedCount);
+        statistics.setFailedCount(ByteManager.byteArrayToUnsingedInt(failedCount));
+
+        byte []retryCount = new byte [] {0,0,0,0};
+        buf.readBytes(retryCount);
+        statistics.setRetryCount(ByteManager.byteArrayToUnsingedInt(retryCount));
+
+        byte [] multipleRetryCount = new byte [] {0,0,0,0};
+        buf.readBytes(multipleRetryCount);
+        statistics.setMultipleRetryCount(ByteManager.byteArrayToUnsingedInt(multipleRetryCount));
+
+        byte [] frameDuplicateCount = new byte [] {0,0,0,0};
+        buf.readBytes(frameDuplicateCount);
+        statistics.setFrameDuplicateCount(ByteManager.byteArrayToUnsingedInt(frameDuplicateCount));
+
+        byte [] rtsSuccessCount = new byte [] {0,0,0,0};
+        buf.readBytes(rtsSuccessCount);
+        statistics.setRtsSuccessCount(ByteManager.byteArrayToUnsingedInt(rtsSuccessCount));
+
+        byte [] rtsFailureCount = new byte [] {0,0,0,0};
+        buf.readBytes(rtsFailureCount);
+        statistics.setRtsFailureCount(ByteManager.byteArrayToUnsingedInt(rtsFailureCount));
+
+        byte []ackFailureCount = new byte [] {0,0,0,0};
+        buf.readBytes(ackFailureCount);
+        statistics.setAckFailureCount(ByteManager.byteArrayToUnsingedInt(ackFailureCount));
+
+        byte [] rxFragmentCount = new byte [] {0,0,0,0};
+        buf.readBytes(rxFragmentCount);
+        statistics.setRxFragmentCount(ByteManager.byteArrayToUnsingedInt(rxFragmentCount));
+
+        byte [] multicastRxCount = new byte [] {0,0,0,0};
+        buf.readBytes(multicastRxCount);
+        statistics.setMulticastRxCount(ByteManager.byteArrayToUnsingedInt(multicastRxCount));
+
+        byte [] fcsErrorCount = new byte [] {0,0,0,0};
+        buf.readBytes(fcsErrorCount);
+        statistics.setFcsErrorCount(ByteManager.byteArrayToUnsingedInt(fcsErrorCount));
+
+        byte [] txFrameCount = new byte [] {0,0,0,0};
+        buf.readBytes(txFrameCount);
+        statistics.setTxFrameCount(ByteManager.byteArrayToUnsingedInt(txFrameCount));
+
+        byte []decryptionErrors = new byte [] {0,0,0,0};
+        buf.readBytes(decryptionErrors);
+        statistics.setDecryptionErrors(ByteManager.byteArrayToUnsingedInt(decryptionErrors));
+
+        byte []discardedQosFragmentCount = new byte [] {0,0,0,0};
+        buf.readBytes(discardedQosFragmentCount);
+        statistics.setDiscardedQosFragmentCount(ByteManager.byteArrayToUnsingedInt(discardedQosFragmentCount));
+
+        byte [] associatedStationCount = new byte [] {0,0,0,0};
+        buf.readBytes(associatedStationCount);
+        statistics.setAssociatedStationCount(ByteManager.byteArrayToUnsingedInt(associatedStationCount));
+
+        byte [] qosCfPollsReceivedCount = new byte [] {0,0,0,0};
+        buf.readBytes(qosCfPollsReceivedCount);
+        statistics.setQosCfPollsReceivedCount(ByteManager.byteArrayToUnsingedInt(qosCfPollsReceivedCount));
+
+        byte [] qosCfPollsUnusedCount = new byte [] {0,0,0,0};
+        buf.readBytes(qosCfPollsUnusedCount);
+        statistics.setQosCfPollsUnusedCount(ByteManager.byteArrayToUnsingedInt(qosCfPollsUnusedCount));
+
+        byte [] qosCfPollsUnusableCount = new byte [] {0,0,0,0};
+        buf.readBytes(qosCfPollsUnusableCount);
+        statistics.setQosCfPollsUnusableCount(ByteManager.byteArrayToUnsingedInt(qosCfPollsUnusableCount));
+
+
+        return (statistics)    ;
+
+    }
+
+    static public RsnaErrReportFrmStn decodeRsnaErrorReportFromStation (ByteBuf buf, int length)
+    {
+
+
+        if (buf == null) {
+            LOG.error("ByteBuf null decodeRsnaErrorReportFromStation  ");
+            return null;
+        }
+        if (!buf.isReadable()) {
+            LOG.error("ByteBuf not readable decodeRsnaErrorReportFromStation");
+            return null;
+        }
+        RsnaErrReportFrmStn rsnaErrReportFrmStn  = new RsnaErrReportFrmStn();
+        int startIndex = buf.readerIndex();
+        byte [] clientMacAddress = {0,0,0,0,0,0};
+        buf.readBytes(clientMacAddress);
+        rsnaErrReportFrmStn.setClientMacAddress(clientMacAddress);
+
+        byte [] bssId = {0,0,0,0,0,0};
+        buf.readBytes(bssId);
+        rsnaErrReportFrmStn.setBssId(bssId);
+        rsnaErrReportFrmStn.setRadioId(buf.readByte());
+        rsnaErrReportFrmStn.setWlanId(buf.readByte());
+        byte [] reserved = new byte [] {0,0};
+        buf.readBytes(reserved);
+
+        byte []  txIpICVErrors = new byte[] {0,0,0,0};
+        buf.readBytes(txIpICVErrors);
+        rsnaErrReportFrmStn.setTxIpICVErrors(ByteManager.byteArrayToUnsingedInt(txIpICVErrors));
+
+        byte [] txIpLocalMICFailures = new byte [] {0,0,0,0};
+        buf.readBytes(txIpLocalMICFailures);
+        rsnaErrReportFrmStn.setTxIpLocalMICFailures(ByteManager.byteArrayToUnsingedInt(txIpLocalMICFailures));
+
+        byte [] txIpRemoteMICFailures = new byte[] {0,0,0,0};
+        buf.readBytes(txIpRemoteMICFailures);
+        rsnaErrReportFrmStn.setTxIpRemoteMICFailures(ByteManager.byteArrayToUnsingedInt(txIpRemoteMICFailures));
+
+        byte [] ccmpReplays = new byte[] {0,0,0,0};
+        buf.readBytes(ccmpReplays);
+        rsnaErrReportFrmStn.setCcmpReplays(ByteManager.byteArrayToUnsingedInt(ccmpReplays));
+
+        byte [] ccmpDecryptErrors = new byte[] {0,0,0,0};
+        buf.readBytes(ccmpDecryptErrors);
+        rsnaErrReportFrmStn.setCcmpDecryptErrors(ByteManager.byteArrayToUnsingedInt(ccmpDecryptErrors));
+
+        byte [] txIpReplays = new byte[] {0,0,0,0};
+        buf.readBytes(txIpReplays);
+        rsnaErrReportFrmStn.setTxIpReplays(ByteManager.byteArrayToUnsingedInt(txIpReplays));
+
+        return (rsnaErrReportFrmStn);
+
+
+    }
+
 
 }
