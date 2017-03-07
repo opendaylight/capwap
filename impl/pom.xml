@@ -40,7 +40,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
                            <codeGenerators>
                                <generator>
                                    <codeGeneratorClass>
-                                       org.opendaylight.yangtools.maven.sal.api.gen.plugin.CodeGeneratorImpl
+                                       org.opendaylight.mdsal.binding.maven.api.gen.plugin.CodeGeneratorImpl
                                    </codeGeneratorClass>
                                    <outputBaseDir>
                                        ${salGeneratorPath}
