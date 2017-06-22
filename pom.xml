@@ -10,12 +10,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>odlparent</artifactId>
-    <version>1.7.4-SNAPSHOT</version>
+    <version>1.7.5-SNAPSHOT</version>
     <relativePath/>
   </parent>
   <groupId>org.opendaylight.capwap</groupId>
   <artifactId>capwap-aggregator</artifactId>
-  <version>0.3.4-SNAPSHOT</version>
+  <version>0.3.5-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>capwap</name>
   <!-- Used by Sonar to set project name -->
